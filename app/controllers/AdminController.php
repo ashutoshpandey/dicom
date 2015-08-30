@@ -25,6 +25,38 @@ class AdminController extends BaseController {
         return View::make('admin.dashboard');
     }
 
+    public function institutes(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return Redirect::to('/');
+
+        return View::make('admin.institutes');
+    }
+
+    public function viewInstitute($id){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return Redirect::to('/');
+
+        if(isset($id)){
+            $institute = Institute::find($id);
+
+            if(isset($institute)){
+
+                Session::put('institute_id', $id);
+
+                return View::make('admin.view-institute')
+                    ->with('institute', $institute);
+            }
+            else
+                return Redirect::to('/');
+        }
+        else
+            return Redirect::to('/');
+    }
+
     public function adminSection(){
 
         $adminId = Session::get('admin_id');
@@ -1013,130 +1045,6 @@ class AdminController extends BaseController {
         }
     }
     /************************** users *************************/
-    public function institutes(){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return Redirect::to('/');
-
-        return View::make('admin.institutes');
-    }
-
-    public function viewInstitute($id){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return Redirect::to('/');
-
-        if(isset($id)){
-            $institute = Institute::find($id);
-
-            if(isset($institute)){
-
-                Session::put('institute_id', $id);
-
-                return View::make('admin.view-institute')
-                    ->with('institute', $institute);
-            }
-            else
-                return Redirect::to('/');
-        }
-        else
-            return Redirect::to('/');
-    }
-
-    public function listInstitutes($status, $page){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $institutes = Institute::where('status','=',$status)->get();
-
-        if(isset($institutes) && count($institutes)>0){
-
-            return json_encode(array('message'=>'found', 'institutes' => $institutes->toArray()));
-        }
-        else
-            return json_encode(array('message'=>'empty'));
-    }
-
-
-    public function removeInstitute($id){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $institute = Institute::find($id);
-
-        if(is_null($institute))
-            return json_encode(array('message'=>'invalid'));
-        else{
-            $institute->status = 'removed';
-            $institute->save();
-
-            return json_encode(array('message'=>'done'));
-        }
-    }
-
-    public function saveInstitute(){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $institute = new Institute();
-
-        $institute->name = Input::get('name');
-        $institute->establish_date = date('Y-m-d h:i:s', strtotime(Input::get('establish_date')));
-        $institute->address = Input::get('address');
-        $institute->location_id = Input::get('city');
-        $institute->about = Input::get('about');
-        $institute->land_mark = Input::get('land_mark');
-        $institute->contact_number_1 = Input::get('contact_number_1');
-        $institute->contact_number_2 = Input::get('contact_number_2');
-        $institute->latitude = Input::get('latitude');
-        $institute->longitude = Input::get('longitude');
-        $institute->status = 'active';
-
-        $institute->save();
-
-        return json_encode(array('message'=>'done'));
-    }
-
-    public function updateInstitute(){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $id = Session::get('institute_id');
-
-        $institute = Institute::find($id);
-
-        if(is_null($institute))
-            return json_encode(array('message'=>'invalid'));
-        else{
-            $institute->name = Input::get('name');
-            $institute->establish_date = date('Y-m-d h:i:s', strtotime(Input::get('establish_date')));
-            $institute->address = Input::get('address');
-            $institute->city = Input::get('city');
-            $institute->state = Input::get('state');
-            $institute->about = Input::get('about');
-            $institute->country = Input::get('country');
-            $institute->zip = Input::get('zip');
-            $institute->land_mark = Input::get('land_mark');
-            $institute->contact_number_1 = Input::get('contact_number_1');
-            $institute->contact_number_2 = Input::get('contact_number_2');
-            $institute->latitude = Input::get('latitude');
-            $institute->longitude = Input::get('longitude');
-
-            $institute->save();
-
-            return json_encode(array('message'=>'done'));
-        }
-    }
 
     public function locations(){
 

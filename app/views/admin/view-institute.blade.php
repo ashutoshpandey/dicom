@@ -46,7 +46,18 @@
                             <div class='form-row'>
                                 <div class='form-label'>Address</div>
                                 <div class='form-data'>
-                                    <textarea name='address'>{{$institute->contact_number_1}}</textarea>
+                                    <textarea name='address'>{{$institute->address}}</textarea>
+                                </div>
+                                <div class='form-label'>Landmark</div>
+                                <div class='form-data'>
+                                    <textarea name='land_mark'>{{$institute->land_mark}}</textarea>
+                                </div>
+                                <div class='clear'></div>
+                            </div>
+                            <div class='form-row'>
+                                <div class='form-label'>State</div>
+                                <div class='form-data'>
+                                    <input type='text' name='state' value='{{$institute->state}}'/>
                                 </div>
                                 <div class='form-label'>City</div>
                                 <div class='form-data'>
@@ -55,9 +66,9 @@
                                 <div class='clear'></div>
                             </div>
                             <div class='form-row'>
-                                <div class='form-label'>State</div>
+                                <div class='form-label'>Zip</div>
                                 <div class='form-data'>
-                                    <input type='text' name='state' value='{{$institute->state}}'/>
+                                    <input type='text' name='zip' value='{{$institute->zip}}'/>
                                 </div>
                                 <div class='form-label'>Country</div>
                                 <div class='form-data'>
@@ -317,17 +328,6 @@
                                 <div class='clear'></div>
                             </div>
                             <div class='form-row'>
-                                <div class='form-label'>Zip</div>
-                                <div class='form-data'>
-                                    <input type='text' name='zip' value='{{$institute->zip}}'/>
-                                </div>
-                                <div class='form-label'>Landmark</div>
-                                <div class='form-data'>
-                                    <input type='text' name='land_mark' value='{{$institute->land_mark}}'/>
-                                </div>
-                                <div class='clear'></div>
-                            </div>
-                            <div class='form-row'>
                                 <div class='form-label'>Contact number 1</div>
                                 <div class='form-data'>
                                     <input type='text' name='contact_number_1' value='{{$institute->contact_number_1}}'/>
@@ -362,7 +362,7 @@
     </div><!-- /.content-wrapper -->
 
 </div><!-- ./wrapper -->
-
+<span style="display: none;" id="cityspan" value="{{$institute->city}}"></span>
 @include('includes/common_js_bottom')
 {{HTML::script(asset("/public/js/site/admin/view-institute.js"))}}
 </body>

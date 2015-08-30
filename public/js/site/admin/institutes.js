@@ -2,8 +2,6 @@ $(function(){
     $("input[name='btn-create']").click(createInstitute);
 
     listInstitutes(1);
-
-    loadCities();
 });
 
 function createInstitute(){
@@ -13,7 +11,7 @@ function createInstitute(){
         var data = $("#form-create-institute").serialize();
 
         $.ajax({
-            url: root + '/save-institute-admin',
+            url: root + '/save-institute',
             type: 'post',
             data: data,
             dataType: 'json',
@@ -95,7 +93,6 @@ function showGrid(data){
             {
                 var str = '<a target="_blank" href="' + root + '/admin-view-institute/' + row.id + '">View</a>';
                 str = str + '&nbsp;&nbsp; <a class="remove" href="#" rel="' + row.id + '">Remove</a>';
-                str = str + '&nbsp;&nbsp; <a href="' + root + '/admin-courses/' + row.id + '">Courses</a>';
 
                 return str;
             }

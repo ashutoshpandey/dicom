@@ -99,7 +99,7 @@ Route::get('/admin-users', 'AdminController@users');
 Route::get('/admin-software-users', 'AdminController@softwareUsers');
 Route::get('/admin-locations', 'LocationController@locations');
 
-Route::get('/admin-list-institutes/{status}/{page}', 'AdminController@listInstitutes');
+Route::get('/admin-list-institutes/{status}/{page}', 'InstituteController@adminListInstitutes');
 Route::get('/admin-list-orders/{status}/{page}', 'AdminController@listOrders');
 Route::get('/admin-list-courses/{status}/{page}', 'AdminController@listCourses');
 Route::get('/admin-list-products/{status}/{page}', 'AdminController@listProducts');
@@ -133,7 +133,6 @@ Route::get('/edit-location', 'LocationController@edit');
 Route::post('/update-location', 'LocationController@update');
 Route::post('/save-location', 'LocationController@save');
 
-Route::get('/add-institute', 'InstituteController@add');
 Route::post('/save-institute', 'InstituteController@save');
 Route::get('/edit-institute', 'InstituteController@edit');
 Route::post('/update-institute', 'InstituteController@update');

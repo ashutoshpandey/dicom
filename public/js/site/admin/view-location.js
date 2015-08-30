@@ -1,5 +1,7 @@
 $(function(){
     $("input[name='btn-update']").click(updateLocation);
+
+    loadCities();
 });
 
 function updateLocation(){
@@ -29,4 +31,30 @@ function updateLocation(){
 }
 function isLocationFormValid(){
     return true;
+}
+
+
+function loadCities(){
+
+    var state = $("select[name='state']").val();
+
+    $.ajax({
+        url: root + '/admin-get-cities/' + state,
+        type: 'get',
+        dataType: 'json',
+        success: function(result){
+
+            $("select[name='city']").find('option').remove();
+
+            if(result.message=="found"){
+
+                for(var i=0; i<result.locations.length; i++){
+
+                    var location = result.locations[i];
+
+                    $("select[name='city']").append('<option value="' + location.id + '">' + location.city + '</option>');
+                }
+            }
+        }
+    });
 }

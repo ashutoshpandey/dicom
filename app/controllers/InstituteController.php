@@ -10,6 +10,112 @@ class InstituteController extends BaseController {
         });
     }
 
+    public function save(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $institute = new Institute();
+
+        $institute->name = Input::get('name');
+        $institute->establish_date = date('Y-m-d h:i:s', strtotime(Input::get('establish_date')));
+        $institute->address = Input::get('address');
+        $institute->location_id = Input::get('city');
+        $institute->land_mark = Input::get('land_mark');
+        $institute->contact_number_1 = Input::get('contact_number_1');
+        $institute->contact_number_2 = Input::get('contact_number_2');
+        $institute->latitude = Input::get('latitude');
+        $institute->longitude = Input::get('longitude');
+        $institute->status = 'active';
+
+        $institute->save();
+
+        return json_encode(array('message'=>'done'));
+    }
+
+    public function update(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $id = Session::get('institute_id');
+
+        $institute = Institute::find($id);
+
+        if(is_null($institute))
+            return json_encode(array('message'=>'invalid'));
+        else{
+            $institute->name = Input::get('name');
+            $institute->establish_date = date('Y-m-d h:i:s', strtotime(Input::get('establish_date')));
+            $institute->address = Input::get('address');
+            $institute->city = Input::get('city');
+            $institute->state = Input::get('state');
+            $institute->country = Input::get('country');
+            $institute->zip = Input::get('zip');
+            $institute->land_mark = Input::get('land_mark');
+            $institute->contact_number_1 = Input::get('contact_number_1');
+            $institute->contact_number_2 = Input::get('contact_number_2');
+            $institute->latitude = Input::get('latitude');
+            $institute->longitude = Input::get('longitude');
+
+            $institute->save();
+
+            return json_encode(array('message'=>'done'));
+        }
+    }
+
+    public function adminListInstitutes($status, $page){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $institutes = Institute::where('status','=',$status)->with('location')->get();
+
+        if(isset($institutes) && count($institutes)>0){
+
+            return json_encode(array('message'=>'found', 'institutes' => $institutes->toArray()));
+        }
+        else
+            return json_encode(array('message'=>'empty'));
+    }
+
+    public function listInstitutes($status, $page){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $institutes = Institute::where('status','=',$status)->get();
+
+        if(isset($institutes) && count($institutes)>0){
+
+            return json_encode(array('message'=>'found', 'institutes' => $institutes->toArray()));
+        }
+        else
+            return json_encode(array('message'=>'empty'));
+    }
+
+    public function remove($id){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $institute = Institute::find($id);
+
+        if(is_null($institute))
+            return json_encode(array('message'=>'invalid'));
+        else{
+            $institute->status = 'removed';
+            $institute->save();
+
+            return json_encode(array('message'=>'done'));
+        }
+    }
+
     public function dashboard(){
 
         $institute_id = Session::get('institute_id');
@@ -128,54 +234,6 @@ class InstituteController extends BaseController {
 
     public function setExpertAppointments(){
         return View::make('institute.set-appointments');
-    }
-
-    public function saveInstituteExpertAppointments(){
-
-        $institute_id = Session::get('institute_id');
-
-        if(!isset($institute_id))
-            return 'not logged';
-
-        $appointments = Input::get('appointments');
-        $expert_id = Input::get('expert_id');
-
-        if(is_null($appointments) || count($appointments)==0)
-            return 'invalid';
-        else{
-
-            $start_time = Input::get('start_time');
-            $start = date('Y-m-d H:i:s', strtotime($start_time));
-
-            $end_time = Input::get('end_time');
-            $end = date("Y-m-d H:i:s", strtotime($end_time));
-
-            $gap = Input::get('gap');       # in minutes
-
-//            DB::table('appointments')->where('institute_id', '=', $institute_id)
-//                              ->where('status', '=', 'pending')
-//                              ->where('appointment_date', '>=', $start)
-//                              ->where('appointment_date', '<=', $end)->delete();
-
-            $current = $start;
-
-            for($i=strtotime($current); $i<strtotime($end); $i++){
-
-                $appointment = new Appointment();
-
-                $appointment->appointment_date = $current;
-                $appointment->created_at = date("Y-m-d H:i:s");
-                $appointment->updated_at = date("Y-m-d H:i:s");
-                $appointment->status = "pending";
-                $appointment->expert_id = $expert_id;
-
-                $appointment->save();
-
-                $current = date('Y-m-d h:i:s',  strtotime("+ $gap minutes", strtotime( $current ) ));
-            }
-
-            return 'done';
-        }
     }
 
     public function profile(){

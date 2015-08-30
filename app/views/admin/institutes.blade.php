@@ -54,7 +54,7 @@
                                 </div>
                                 <div class='form-label'>Establish Date</div>
                                 <div class='form-data'>
-                                    <input type='date' name='establish_date'/>
+                                    <input type='date' name='establish_date' style='line-height:20px'/>
                                 </div>
                                 <div class='clear'></div>
                             </div>
@@ -72,47 +72,11 @@
                             <div class='form-row'>
                                 <div class='form-label'>State</div>
                                 <div class='form-data'>
-                                    <select name="state" onchange="loadCities()">
-                                        <option>Andaman and Nicobar Islands</option>
-                                        <option>Andhra Pradesh</option>
-                                        <option>Arunachal Pradesh</option>
-                                        <option>Assam</option>
-                                        <option>Bihar</option>
-                                        <option>Chandigarh</option>
-                                        <option>Chhattisgarh</option>
-                                        <option>Dadar and Nagar Haveli</option>
-                                        <option>Daman and Diu</option>
-                                        <option>Delhi</option>
-                                        <option>Goa</option>
-                                        <option>Gujarat</option>
-                                        <option>Haryana</option>
-                                        <option>Himachal Pradesh</option>
-                                        <option>Jammu and Kashmir</option>
-                                        <option>Jharkhand</option>
-                                        <option>Karnataka</option>
-                                        <option>Kerala</option>
-                                        <option>Lakshadeep</option>
-                                        <option>Madya Pradesh</option>
-                                        <option>Maharashtra</option>
-                                        <option>Manipur</option>
-                                        <option>Meghalaya</option>
-                                        <option>Mizoram</option>
-                                        <option>Nagaland</option>
-                                        <option>Orissa</option>
-                                        <option>Pondicherry</option>
-                                        <option>Punjab</option>
-                                        <option>Rajasthan</option>
-                                        <option>Sikkim</option>
-                                        <option>Tamil Nadu</option>
-                                        <option>Tripura</option>
-                                        <option>Uttaranchal</option>
-                                        <option>Uttar Pradesh</option>
-                                        <option>West Bengal</option>
-                                    </select>
+                                    <input type="text" name="state"/>
                                 </div>
                                 <div class='form-label'>City</div>
                                 <div class='form-data'>
-                                    <select name="city"></select>
+                                    <input type="text" name="city"/>
                                 </div>
                                 <div class='clear'></div>
                             </div>

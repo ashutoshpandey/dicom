@@ -1,0 +1,159 @@
+/*
+#######################################
+#********LAYOUT GRID STYLESHEET*******#
+#********MEDIFY HEALTH PROJECT********#
+#********THEME VERSION v1.0***********#
+#######################################
+*/
+body, div,section, p, h1, h2, h3, h4, h5, h6, pre, header, footer, ul,input,textarea {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+ul{
+    padding-left: 15px;
+}
+li {
+    list-style-position: outside;
+    margin-left: 15px;
+}
+input[type='text'], textarea, input[type='email'], input[type='password'] {
+    padding: 10px;
+    width: 100%;
+    font: 13px SourceSansPro-Regular;
+}
+input[type='text'],input[type='password'],input[type="email"]{
+    height: 40px;
+}
+textarea {
+    resize: none;
+    height: 120px;
+}
+
+button {
+    border: none;
+    background: #f2f2f2;
+    color: #3a3a3a;
+    font: 20px/40px SourceSansPro-Regular;
+    height: 40px;
+    padding: 0 20px;
+    cursor: pointer;
+}
+button:active {
+    box-shadow: 0 12px 21px rgba(0, 0, 0, 0.3) inset;
+}
+.info {
+    background: #3fa5cc none repeat scroll 0 0;
+    color: #fff;
+}
+header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 10px 50px;
+    height: 70px;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.2);
+}
+.container{
+    min-width: 1024px;
+    margin: 0 auto;
+    max-width: 1124px;
+    text-align: justify;
+}
+.row {
+    clear: both;
+    float: left;
+    width: 100%;
+    position: relative;
+}
+
+.column {
+    float: left;
+    display: block;
+    position: relative;
+    padding: 10px;
+}
+.one {
+    width: 8.333%;
+}
+
+.two {
+    width: 16.666%
+}
+
+.three {
+    width: 24.999%;
+}
+
+.four {
+    width: 33.332%;
+}
+
+.five {
+    width: 41.665%;
+}
+
+.six {
+    width: 49.998%;
+}
+
+.seven {
+    width: 58.331%;
+}
+
+.eight {
+    width: 66.664%;
+}
+
+.nine {
+    width: 74.997%;
+}
+
+.ten {
+    width: 83.330%;
+}
+
+.eleven {
+    width: 91.6636%;
+}
+
+.twelve {
+    width: 100%;
+}
+
+.responsive {
+    width: 100%;
+    float: left;
+}
+.f-left{
+    float: left;
+}
+.f-right{
+    float: right;
+}
+.a-left{
+    text-align: left;
+}
+.a-center{
+    text-align: center;
+}
+.a-right{
+    text-align: right;
+}
+.popup {
+    background: rgba(0, 0, 0, 0.8) none repeat scroll 0 0;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    display: none;
+    z-index: 5;
+}
+.f-left{
+    float: left;
+}
+.f-right{
+    float: right;
+}

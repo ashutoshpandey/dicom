@@ -1,0 +1,125 @@
+
+.wrapper {
+    width: 100%;
+
+}
+
+.container {
+    padding: 0 !important;
+}
+
+.top-menu ul li img {
+    width: 100%;
+    height: auto;
+}
+
+.top-menu ul {
+    float: right;
+    margin: 19px;
+}
+
+.top-menu ul li {
+    border: medium none;
+    display: inline-block;
+    height: 27px;
+    margin: 0;
+    padding: 0;
+    width: 24px;
+}
+
+.grid-info li {
+
+    clear: both;
+    margin: 10px 0;
+    display: block;
+    list-style: outside none none;
+    overflow: hidden;
+    padding: 10px;
+
+    width: 100%;
+}
+
+.info {
+    float: left;
+}
+
+.date-map {
+    float: right;
+    text-align: center;
+}
+
+.map {
+    display: inline-block;
+    padding: 0;
+    width: 46px;
+}
+
+.map img {
+    width: 100%;
+    height: auto;
+}
+
+.left {
+    float: left;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+.show1 {
+    clear: none !important;
+    float: left;
+    margin: 8px 6px !important;
+    width: 23% !important;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+}
+
+.show1 .map, .show1 .date {
+    display: none;
+}
+
+.right {
+    float: right;
+}
+
+.add-map .add {
+    float: left;
+}
+
+.name-date {
+    border-bottom: 1px solid #ccc;
+    padding: 5px 0;
+    margin-bottom: 10px;
+}
+
+.name-date .date {
+    float: right;
+}
+
+.add-map .map {
+    float: right
+}
+
+#page_navigation {
+    padding: 14px 47px;
+    clear: both;
+    text-align: center;
+}
+
+#page_navigation a {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+@media only screen and (max-width: 768px) {
+    .data.show1 {
+        float: none !important;
+        width: 100% !important;
+        clear: both;
+        background: none;
+        border: none;
+    }
+}

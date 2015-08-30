@@ -1,0 +1,63 @@
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+	font-family: Flaticon;
+        /*font-size: 20px;*/
+font-style: normal;
+margin-left: 0px;
+}
+.flaticon-onlinechat:before {
+	content: "\e000";
+}
+.flaticon-notes:before {
+	content: "\e001";
+}
+.flaticon-homevisit:before {
+	content: "\e002";
+}
+.flaticon-fracturedpatient:before {
+	content: "\e003";
+}
+.flaticon-telephone:before {
+	content: "\e004";
+}
+.flaticon-ringingtelephone:before {
+	content: "\e005";
+	margin-left: 5px;
+}
+.flaticon-writenotes:before {
+	content: "\e006";
+}
+.flaticon-homevisit:before {
+	content: "\e002";
+}
+.flaticon-graphic29:before {
+	content: "\e004";
+}
+.flaticon-history6:before {
+	content: "\e005";
+}
+.flaticon-house248:before {
+	content: "\e006";
+}
+.flaticon-iphone26:before {
+	content: "\e007";
+}
+.flaticon-money413:before {
+	content: "\e008";
+}
+.flaticon-placeholder8:before {
+	content: "\e009";
+}
+.flaticon-playbutton18:before {
+	content: "\e00a";
+}
+.flaticon-sign20:before {
+	content: "\e00b";
+}
+.flaticon-stats73:before {
+	content: "\e00c";
+}
+.flaticon-user3:before {
+	content: "\e00d";
+}

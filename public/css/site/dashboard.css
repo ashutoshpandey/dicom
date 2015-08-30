@@ -1,0 +1,366 @@
+header{
+    background: #292929;
+    padding: 12px;
+}
+.nav_menu{
+    margin: 0;
+}
+.top_nav.row  a{
+    padding: 12px;
+    display: inline-block;
+    color: #41A8CE;
+    text-decoration: none;
+    font:15px/25px SourceSansPro-Regular;
+}
+.top_nav a img {
+    border: medium none;
+    border-radius: 50%;
+    height: 30px;
+    margin-right: 10px;
+    vertical-align: middle;
+    width: 30px;
+}
+/* ******************DASHBOARD******************** */
+
+.side_nav{
+    padding: 30px 0;
+        background: #292929;
+    width:250px;
+    position: fixed;
+    top: 70px;
+    bottom:0px;
+    z-index: 10;
+    left:0;
+}
+.main_content{
+    padding-left: 250px;
+}
+.side_nav ul, .side_nav ul li {
+    margin: 0;
+    padding: 0;
+}
+.side_nav ul li{
+    list-style: none;
+    position: relative;
+}
+.side_nav ul li a{
+    height:44px;
+    line-height: 44px;
+    text-decoration: none;
+    padding: 0 12px;
+    color: #3a3a3a;
+    font: 15px/44px SourceSansPro-Regular;
+    display: block;
+    color: #fff;
+    border-bottom: 1px solid #3a3a3a;
+}
+.side_nav ul li span{
+    display: inline-block;
+    height:44px;
+    vertical-align: middle;
+    padding-top: 5px;
+    box-sizing: border-box;
+    margin-right: 5px;
+}
+.side_nav ul li ul{
+    display: none;
+    transition-duration: 200ms;
+    position: absolute;
+    left:100%;
+    background: #292929;
+    width:200px;
+    top: 0;
+}
+.side_nav ul li ul a{
+    border-bottom: 1px solid #3a3a3a;
+}
+.side_nav ul li:hover ul{
+    display: block;
+    transition-duration: 200ms;
+}
+.side_nav ul li a:hover{
+    background: #f7ba02;
+    color:#3a3a3a;
+}
+.side_nav svg path{
+    stroke: #fff;
+    fill: #fff;
+}
+.side_nav ul li a:hover svg path{
+    fill: #222;
+    stroke: #222;
+}
+
+
+/* *****DASHBORAD********* */
+
+.column.date {
+    font: 20px/25px SourceSansPro-Regular;
+    padding: 10px 0;
+}
+.digital_clock {
+    float: right;
+    font-size: 35px;
+    height: 70px;
+    line-height: 70px;
+    margin-right: 25px;
+}
+.row.today_work > p {
+    background: #45aacf none repeat scroll 0 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font: 15px/38px SourceSansPro-Regular;
+    letter-spacing: 1px;
+    margin: 0 0 23px;
+    padding: 0 15px;
+}
+.dashboard_block {
+    background: #f2f2f2 none repeat scroll 0 0;
+    height: 100px;
+    width: 220px;
+    padding: 12px 12px 12px 90px;
+    position: relative;
+    font: 18px/19px SourceSansPro-Regular;
+}
+.dashboard_block span{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: block;
+    width: 80px;
+    bottom: 0px;
+    background: #45AACF;
+    padding: 22px 12px;
+    box-sizing: border-box;
+    text-align: center;
+}
+.dashboard_block span svg path{
+    fill: #fff;
+    stroke: #fff;
+}
+.dashboard_block p {
+    border: 1px solid #555;
+    border-radius: 50%;
+    display: block;
+    font: 20px/40px SourceSansPro-Regular;
+    height: 40px;
+    margin-top: 5px;
+    text-align: center;
+    width: 40px;
+}
+
+.appointment_list table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+.appointment_list table tr{
+    font:15px/30px SourceSansPro-Regular;
+    border-bottom: 1px solid #f2f2f2;
+}
+.appointment_list table tr td,.appointment_list table tr th{
+    padding: 0 10px;
+}
+th.header {
+    background-image: url(../images/bg.gif);
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+th.headerSortDown {
+    background-image: url(../images/desc.gif);
+}
+th.headerSortUp {
+    background-image: url(../images/asc.gif);
+}
+.row.next_appointment {
+    background: #45aacf none repeat scroll 0 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font: 15px/40px SourceSansPro-Regular;
+    letter-spacing: 1px;
+    margin: 30px 0 0px;
+    padding: 0 15px;
+    z-index: 1;
+}
+caption {
+    background: #3a3a3a none repeat scroll 0 0;
+    color: #fff;
+    font: bold 15px/40px SourceSansPro-Regular;
+    padding: 0 10px;
+    text-align: left;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+caption .appointment_modes {
+    float: right;
+    font: 300 15px/30px SourceSansPro-Regular;
+    margin-right: -5px;
+    margin-top: 5px;
+    position: relative;
+    width: 250px;
+    cursor: pointer;
+}
+caption .appointment_modes .selected_mode p{
+    color: #fff;
+    border: 1px solid #555;
+    padding: 0 12px;
+}
+caption .appointment_modes p{
+    color: #3a3a3a;
+}
+caption .appointment_modes .selected_mode > span {
+    border: 7px solid transparent;
+    position: absolute;
+    right: 10px;
+    top: 14px;
+    border-top: 7px solid #555;
+    transition-duration: 200ms;
+}
+caption .appointment_modes .selected_mode:hover > span {
+    border-top: 7px solid #fff;
+    transition-duration: 200ms;
+}
+.calendar_container {
+    background: #fff none repeat scroll 0 0;
+    bottom: 15px;
+    box-shadow: 0 0 13px rgba(0, 0, 0, 0.5);
+    max-width: 1024px;
+    overflow: auto;
+    padding: 25px;
+    position: fixed;
+    right: -100%;
+    top: 85px;
+    width: 100%;
+    z-index: 15;
+    transition-duration: 500ms;
+}
+.calendar_container.active{
+    right: 0;
+    transition-duration: 500ms;
+}
+.toggle_calendar {
+    border-radius: 20px 0;
+    cursor: pointer;
+    position: fixed;
+    right: -50px;
+    top: 50%;
+    transform: rotate(-90deg);
+    width: 140px;
+    z-index: 15;
+    transition-duration: 500ms;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+.close_calendar {
+    background: #fff none repeat scroll 0 0;
+    border-radius: 50%;
+    float: right;
+    margin-right: -19px;
+    margin-top: -16px;
+    cursor: pointer;
+}
+.close_calendar svg circle{
+    stroke: none;
+}
+.fc-state-default.fc-corner-left,.fc-state-default.fc-corner-right{
+    border-radius: 0;
+    background: #fff;
+    height:30px;
+    font: 15px/30px SourceSansPro-Regular;
+    margin: 0 !important;
+    text-transform: capitalize;
+}
+.fc button .fc-icon{
+    top: -3px;
+}
+.row.column.next_patient_detail {
+    background: #d3ecf1 none repeat scroll 0 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    font: 15px/25px SourceSansPro-Regular;
+    margin-bottom: 30px;
+}
+.row.column.next_patient_detail a {
+    color: lightslategrey;
+}
+
+/* ***** Profile Page ******* */
+
+.image_uploader {
+    background: rgba(0, 0, 0, 0.2) none repeat scroll 0 0;
+    border-radius: 5px;
+    height: 70px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 70px;
+    text-align: center;
+    padding: 10px 0;
+}
+.image_uploader svg polygon{
+    fill: #fff;
+    stroke: #fff;
+}
+.image_uploader input{
+    opacity: 0;
+    border-radius: 5px;
+    height: 44px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    width: 44px;
+}
+.edit_profile_pic.row {
+    border-radius: 50%;
+    height: 130px;
+    margin: -140px 0 0 50px;
+    overflow: hidden;
+    width: 130px;
+}
+.edit_profile_pic .image_uploader{
+    width: 100%;
+    height: 100%;
+    padding-top: 40px;
+}
+.edit_expert_detail section {
+    float: left;
+    width: 50%;
+}
+.edit_expert_detail section:nth-child(odd) {
+    padding: 10px 10px 10px 0;
+    clear: left;
+}
+.edit_expert_detail section:nth-child(even) {
+    padding: 10px 0 10px 10px;
+}
+.edit_detail .section_head{
+    margin:10px 0 5px;
+    font: 17px/25px SourceSansPro-Regular;
+    color: #656565;
+}
+.edit_detail .added_points {
+    background: #eeeeee none repeat scroll 0 0;
+    border: 1px solid #bfbfbf;
+    height: auto;
+    margin: 10px 0 0;
+    height: 120px;
+    overflow: auto;
+}
+.edit_detail .added_points.qualifications {
+    height: 200px;
+}
+.edit_detail .added_points.services{
+    height: 250px;
+}
+.edit_detail .added_points > span {
+    background: #41A7CD none repeat scroll 0 0;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    margin: 5px;
+    letter-spacing: 1px;
+    font:13px/15px SourceSansPro-Regular;
+    padding: 3px 10px;
+}

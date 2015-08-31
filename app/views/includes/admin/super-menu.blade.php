@@ -14,6 +14,12 @@
                     <span>Institutes</span>
                 </a>
             </li>
+            <li class="categories">
+                <a href="{{$root}}/admin-categories">
+                    <i class="fa fa-laptop"></i>
+                    <span>Categories</span>
+                </a>
+            </li>
             <li class="users">
                 <a href="{{$root}}/admin-users">
                     <i class="fa fa-laptop"></i>

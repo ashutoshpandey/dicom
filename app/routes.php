@@ -142,3 +142,13 @@ Route::get('/remove-institute-expert/{id}', 'InstituteController@removeExpert');
 Route::get('/logout', 'AuthenticationController@logout');
 
 Route::get('/admin-get-cities/{state}', 'AdminController@getCities');
+
+Route::get('/admin-categories', 'AdminController@manageCategories');
+Route::get('/admin-list-categories/{status}', 'AdminController@listCategories');
+Route::get('/admin-list-subcategories/{id}/{status}', 'AdminController@listSubcategories');
+Route::post('/save-category', 'AdminController@saveCategory');
+Route::post('/update-category', 'AdminController@updateCategory');
+Route::post('/save-subcategory', 'AdminController@saveSubCategory');
+Route::post('/update-subcategory', 'AdminController@updateSubCategory');
+Route::get('/remove-category/{id}', 'AdminController@removeCategory');
+Route::get('/remove-subcategory/{id}', 'AdminController@removeSubCategory');

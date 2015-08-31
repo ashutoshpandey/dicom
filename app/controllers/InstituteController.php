@@ -78,11 +78,18 @@ class InstituteController extends BaseController {
 
             $institute = Institute::find($id);
 
+            $categories = Category::where('status', 'active')->get();
+
             if(isset($institute)){
 
-                Session::put('current_institute', $id);
+                if($categories && count($categories)>0) {
 
-                return View::make('admin.institute-experts')->with('institute', $institute);
+                    Session::put('current_institute', $id);
+
+                    return View::make('admin.institute-experts')->with('found', true)->with('institute', $institute)->with('categories', $categories);
+                }
+                else
+                    return View::make('admin.institute-experts')->with('found', false)->with('institute', $institute);
             }
             else
                 return Redirect::to('/');

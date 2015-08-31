@@ -36,6 +36,8 @@
         <!-- Main content -->
         <section class="content">
 
+            @if($found)
+
             <div class='tab-container'>
                 <ul class='tabs'>
                     <li><a href='#tab-list'>List</a></li>
@@ -80,6 +82,12 @@
                     </div>
                 </div>
             </div>
+
+            @else
+
+                You have not added any categories
+
+            @endif
 
         </section>
         <!-- /.content -->

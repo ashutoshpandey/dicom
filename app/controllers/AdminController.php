@@ -207,7 +207,7 @@ class AdminController extends BaseController {
 
         $name = Input::get('name');
 
-        $tempCategory = Category::where('name','=',$name)->get();
+        $tempCategory = Category::where('name', $name)->where('status', 'active')->get();
 
         if(is_null($tempCategory) || $tempCategory->isEmpty()){
 
@@ -233,7 +233,7 @@ class AdminController extends BaseController {
 
         $name = Input::get('name');
 
-        $tempSubCategory = SubCategory::where('name','=',$name)->get();
+        $tempSubCategory = SubCategory::where('name','=',$name)->where('status', 'active')->get();
 
         if(is_null($tempSubCategory) || $tempSubCategory->isEmpty()){
 

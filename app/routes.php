@@ -91,7 +91,7 @@ Route::get('/resolve-complaint/{id}', 'ComplaintController@resolve');
 /********************** admin urls ************************/
 Route::get('/admin-section', 'AdminController@adminSection');
 Route::get('/admin-institutes', 'AdminController@institutes');
-Route::get('/admin-courses/{id}', 'AdminController@courses');
+Route::get('/admin-institute-experts/{id}', 'InstituteController@instituteExperts');
 Route::get('/admin-products/{id}', 'AdminController@products');
 Route::get('/admin-orders', 'AdminController@orders');
 Route::get('/admin-couriers', 'AdminController@couriers');
@@ -109,13 +109,8 @@ Route::get('/admin-list-users/{status}/{page}', 'AdminController@listUsers');
 Route::get('/admin-list-locations/{status}/{page}', 'AdminController@listLocations');
 
 Route::get('/admin-view-institute/{id}', 'AdminController@viewInstitute');
-Route::get('/admin-view-course/{id}', 'AdminController@viewCourse');
-Route::get('/admin-view-product/{id}', 'AdminController@viewProduct');
-Route::get('/admin-view-courier/{id}', 'AdminController@viewCourier');
 Route::get('/admin-view-software-user/{id}', 'AdminController@viewSoftwareUser');
 Route::get('/admin-view-user/{id}', 'AdminController@viewUser');
-Route::get('/admin-view-location/{id}', 'AdminController@viewLocation');
-Route::get('/admin-view-order/{id}', 'AdminController@viewOrder');
 Route::post('/update-order-courier', 'AdminController@updateCourier');
 
 Route::get('/remove-courier/{id}', 'CourierController@remove');
@@ -134,11 +129,15 @@ Route::post('/update-location', 'LocationController@update');
 Route::post('/save-location', 'LocationController@save');
 
 Route::post('/save-institute', 'InstituteController@save');
+Route::post('/save-institute-expert', 'InstituteController@saveExpert');
 Route::get('/edit-institute', 'InstituteController@edit');
 Route::post('/update-institute', 'InstituteController@update');
 Route::get('/get-institute/{id}', 'InstituteController@getInstitute');
 Route::get('/list-institutes/{page?}/{city?}/{country?}', 'InstituteController@listInstitutes');
+Route::get('/admin-list-institute-experts/{page?}/{status?}', 'InstituteController@listExperts');
+Route::get('/admin-view-institute-expert/{id}', 'InstituteController@viewExpert');
 Route::get('/remove-institute/{id}', 'InstituteController@remove');
+Route::get('/remove-institute-expert/{id}', 'InstituteController@removeExpert');
 
 Route::get('/logout', 'AuthenticationController@logout');
 

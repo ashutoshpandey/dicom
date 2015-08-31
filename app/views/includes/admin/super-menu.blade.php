@@ -8,11 +8,6 @@
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
-            <li class="orders">
-                <a href="{{$root}}/admin-orders">
-                    <i class="fa fa-th"></i> <span>Orders</span>
-                </a>
-            </li>
             <li class="institutes">
                 <a href="{{$root}}/admin-institutes">
                     <i class="fa fa-files-o"></i>

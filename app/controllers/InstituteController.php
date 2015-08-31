@@ -5,7 +5,7 @@ class InstituteController extends BaseController {
     public function __construct(){
 
         $this->beforeFilter(function(){
-
+            View::share('name', Session::get('name'));
             View::share('root', URL::to('/'));
         });
     }
@@ -21,7 +21,9 @@ class InstituteController extends BaseController {
         $institute->name = Input::get('name');
         $institute->establish_date = date('Y-m-d h:i:s', strtotime(Input::get('establish_date')));
         $institute->address = Input::get('address');
-        $institute->location_id = Input::get('city');
+        $institute->city = Input::get('city');
+        $institute->state = Input::get('state');
+        $institute->country = Input::get('country');
         $institute->land_mark = Input::get('land_mark');
         $institute->contact_number_1 = Input::get('contact_number_1');
         $institute->contact_number_2 = Input::get('contact_number_2');
@@ -61,6 +63,90 @@ class InstituteController extends BaseController {
             $institute->longitude = Input::get('longitude');
 
             $institute->save();
+
+            return json_encode(array('message'=>'done'));
+        }
+    }
+
+    public function instituteExperts($id){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return Redirect::to('/');
+
+        if(isset($id)){
+
+            $institute = Institute::find($id);
+
+            if(isset($institute)){
+
+                Session::put('current_institute', $id);
+
+                return View::make('admin.institute-experts')->with('institute', $institute);
+            }
+            else
+                return Redirect::to('/');
+        }
+        else
+            return Redirect::to('/');
+    }
+
+    public function saveExpert(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $instituteId = Session::get('current_institute');
+        if(!isset($instituteId))
+            return Redirect::to('/');
+
+        $expert = new Expert();
+
+        $expert->institute_id = $instituteId;
+        $expert->name = Input::get('name');
+        $expert->contact_number = Input::get('contact_number');
+        $expert->email = Input::get('email');
+        $expert->status = 'active';
+
+        $expert->save();
+
+        return json_encode(array('message'=>'done'));
+    }
+
+    public function listExperts($status, $page){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $instituteId = Session::get('current_institute');
+        if(!isset($instituteId))
+            return json_encode(array('message'=>'invalid'));
+
+        $experts = Expert::where('status','=',$status)->where('institute_id', $instituteId)->get();
+
+        if(isset($experts) && count($experts)>0){
+
+            return json_encode(array('message'=>'found', 'experts' => $experts->toArray()));
+        }
+        else
+            return json_encode(array('message'=>'empty'));
+    }
+
+    public function removeExpert($id){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $expert = Expert::find($id);
+
+        if(is_null($expert))
+            return json_encode(array('message'=>'invalid'));
+        else{
+            $expert->status = 'removed';
+            $expert->save();
 
             return json_encode(array('message'=>'done'));
         }
@@ -150,39 +236,7 @@ class InstituteController extends BaseController {
         return View::make('institute.create-expert');
     }
 
-    public function saveExpert(){
-
-        $institute_id = Session::get('institute_id');
-
-        if(!isset($institute_id))
-            return 'not logged';
-
-        $email = Input::get('email');
-
-        if($this->isDuplicateExpert($email)==="no"){
-
-            $expert = new Expert;
-
-            $expert->institute_id = Session::get('institute_id');
-            $expert->email = $email;
-            $expert->password = Input::get('password');
-            $expert->first_name = Input::get('first_name');
-            $expert->last_name = Input::get('last_name');
-            $expert->city = Input::get('city');
-            $expert->about = "";
-            $expert->status = "pending";
-            $expert->created_at = date("Y-m-d h:i:s");
-            $expert->updated_at = date("Y-m-d h:i:s");
-
-            $expert->save();
-
-            return 'done';
-        }
-        else
-            return 'duplicate';
-    }
-
-    public function editExpert($id){
+    public function viewExpert($id){
 
         $institute_id = Session::get('institute_id');
 
@@ -193,7 +247,7 @@ class InstituteController extends BaseController {
             $expert = Expert::find($id);
 
             if(isset($expert))
-                return View::make('institute.edit-expert')->with("expert", $expert);
+                return View::make('admin.view-expert')->with("expert", $expert);
             else
                 return Redirect::to('/');
         }

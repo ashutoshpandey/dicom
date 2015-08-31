@@ -1,17 +1,17 @@
 $(function(){
-    $("input[name='btn-create']").click(createInstitute);
+    $("input[name='btn-create']").click(createInstituteExpert);
 
-    listInstitutes(1);
+    listExperts(1);
 });
 
-function createInstitute(){
+function createInstituteExpert(){
 
-    if(isInstituteFormValid()){
+    if(isInstituteExpertFormValid()){
 
-        var data = $("#form-create-institute").serialize();
+        var data = $("#form-create-institute-expert").serialize();
 
         $.ajax({
-            url: root + '/save-institute',
+            url: root + '/save-institute-expert',
             type: 'post',
             data: data,
             dataType: 'json',
@@ -23,26 +23,26 @@ function createInstitute(){
                     $('.message').html('Duplicate name for institute');
                 }
                 else if(result.message.indexOf('done')>-1){
-                    $('.message').html('Institute created successfully');
+                    $('.message').html('Expert created successfully');
 
                     $('#form-container').find('input[type="text"],input[type="password"],input[type="email"], textarea').val('');
 
-                    listInstitutes(1);
+                    listExperts(1);
                 }
             }
         });
     }
 }
-function isInstituteFormValid(){
+function isInstituteExpertFormValid(){
     return true;
 }
 
-function listInstitutes(page){
+function listExperts(page){
 
     var status = 'active';
 
     $.getJSON(
-        root + '/admin-list-institutes/' + status + '/' + page,
+        root + '/admin-list-institute-experts/' + status + '/' + page,
         function(result){
 
             if(result.message.indexOf('not logged')>-1)
@@ -55,7 +55,7 @@ function listInstitutes(page){
 }
 function showGrid(data){
 
-    if(data!=undefined && data.institutes!=undefined && data.institutes.length>0){
+    if(data!=undefined && data.experts!=undefined && data.experts.length>0){
 
         var str = '';
 
@@ -64,20 +64,22 @@ function showGrid(data){
                 <tr> \
                     <th data-column-id="id" data-type="numeric">ID</th> \
                     <th data-column-id="name">Name</th> \
-                    <th data-column-id="city">Location</th> \
+                    <th data-column-id="email">Email</th> \
+                    <th data-column-id="contact">Contact</th> \
                     <th data-formatter="link">Action</th> \
                 </tr> \
             </thead> \
             <tbody>';
 
-            for(var i =0;i<data.institutes.length;i++){
+            for(var i =0;i<data.experts.length;i++){
 
-                var institute = data.institutes[i];
+                var expert = data.experts[i];
 
                 str = str + '<tr> \
-                    <td>' + institute.id + '</td> \
-                    <td>' + institute.name + '</td> \
-                    <td>' + institute.city + ' / ' + institute.state + '</td> \
+                    <td>' + expert.id + '</td> \
+                    <td>' + expert.name + '</td> \
+                    <td>' + expert.email + '</td> \
+                    <td>' + expert.contact_number + '</td> \
                     <td></td> \
                 </tr>';
             }
@@ -85,15 +87,14 @@ function showGrid(data){
             str = str + '</tbody> \
         </table>';
 
-    $('#institute-list').html(str);
+    $('#expert-list').html(str);
 
     $("#grid-basic").bootgrid({
         formatters: {
             'link': function(column, row)
             {
-                var str = '<a target="_blank" href="' + root + '/admin-view-institute/' + row.id + '">View</a>&nbsp;&nbsp; ';
-                str += '<a target="_blank" href="' + root + '/admin-institute-experts/' + row.id + '">Experts</a>&nbsp;&nbsp; ';
-                str += '<a class="remove" href="#" rel="' + row.id + '">Remove</a>';
+                var str = '<a target="_blank" href="' + root + '/admin-view-institute-expert/' + row.id + '">View</a>&nbsp;&nbsp;';
+                str += '&nbsp;&nbsp; <a class="remove" href="#" rel="' + row.id + '">Remove</a>';
 
                 return str;
             }
@@ -106,10 +107,10 @@ function showGrid(data){
                 if(!confirm("Are you sure to remove this institute?"))
                     return;
 
-                $.getJSON(root + '/remove-institute/' + id,
+                $.getJSON(root + '/remove-institute-expert/' + id,
                     function(result){
                         if(result.message.indexOf('done')>-1)
-                            listInstitutes(1);
+                            listExperts(1);
                         else if(result.message.indexOf('not logged')>-1)
                             window.location.replace(root);
                         else
@@ -120,5 +121,5 @@ function showGrid(data){
         });
     }
     else
-        $('#institute-list').html('No institutes found');
+        $('#expert-list').html('No experts found');
 }

@@ -19,83 +19,25 @@ Route::get('/privacy-policy', 'StaticController@privacyPolicy');
 
 Route::get('/institutes', 'SearchController@institutes');
 Route::get('/institute/{id}', 'SearchController@home');
-Route::get('/courses/{institute_id}', 'CourseController@courses');
-Route::get('/course/{id}', 'CourseController@course');
-Route::get('/products/{course_id}', 'ProductController@products');
-Route::post('/get-course-products/{subjects?}', 'ProductController@getProducts');
-Route::get('/product/{id}', 'ProductController@product');
-
-Route::get('/add-to-bag/{id}/{quantity}', 'CartController@addToBag');
-Route::get('/get-bag', 'CartController@getBag');
-Route::get('/bag', 'CartController@bag');
-Route::get('/remove-from-bag/{id}', 'CartController@removeFromBag');
-Route::get('/save-order', 'CartController@saveOrder');
-
-Route::get('/checkout-login', 'CheckoutController@login');
-Route::get('/checkout-guest', 'CheckoutController@guest');
-Route::get('/checkout-address', 'CheckoutController@address');
-Route::post('/checkout-update-address', 'CheckoutController@updateAddress');
-Route::get('/checkout-payment', 'CheckoutController@payment');
-Route::any('/transaction-success', 'CheckoutController@transactionSuccess');
-Route::any('/transaction-failure', 'CheckoutController@transactionFailure');
 
 Route::post('/is-valid-user', 'AuthenticationController@isValidUser');
-Route::post('/is-valid-checkout-user', 'CheckoutController@isValidUser');
-
-Route::get('/admin-login', 'AuthenticationController@adminLogin');
 Route::post('/is-valid-admin', 'AuthenticationController@isValidAdmin');
 
-Route::get('/get-courses/{id}', 'InstituteController@getCourses');
-Route::get('/get-course-products/{id}', 'CourseController@getCourseProducts');
-Route::get('/remove-course/{id}', 'CourseController@remove');
-Route::get('/edit-course', 'CourseController@edit');
-Route::post('/update-course', 'CourseController@update');
-Route::post('/save-course', 'CourseController@save');
-
-Route::get('/remove-product/{id}', 'ProductController@remove');
-Route::get('/edit-product', 'ProductController@edit');
-Route::post('/update-product', 'ProductController@update');
-Route::post('/save-product', 'ProductController@save');
-
-Route::get('/remove-user/{id}', 'UserController@remove');
-
-Route::get('/search-cities/{key}', 'SearchController@searchCities');
-Route::get('/search-keyword/{key}/{city_id?}', 'SearchController@searchByKeyword');
+Route::get('/remove-user/{id}', 'PatientController@remove');
 
 /********************** user urls ************************/
 
-Route::get('/user-section', 'UserController@userSection');
-Route::get('/user-orders', 'UserController@orders');
-Route::get('/get-user-orders/{status?}/{page?}/{startDate?}/{endDate?}', 'UserController@getUserOrders');
-Route::get('/user-order/{id}', 'UserController@order');
-Route::get('/user-profile', 'UserController@profile');
-Route::post('/update-user-profile', 'UserController@updateProfile');
-Route::post('/update-user-password', 'UserController@updatePassword');
-Route::get('/complaint', 'UserController@complaint');
-Route::post('/submit-complaint', 'UserController@submitComplaint');
-Route::post('/complaint-status', 'UserController@complaintStatus');
-
-/********************** complaint urls ************************/
-
-Route::get('/manage-complaints', 'ComplaintController@manage');
-Route::get('/get-complaint/{id}', 'ComplaintController@getComplaint');
-Route::get('/get-complaint-updates', 'ComplaintController@complaintUpdates');
-Route::post('/save-complaint', 'ComplaintController@save');
-Route::post('/update-complaint-personal', 'ComplaintController@updatePersonal');
-Route::post('/add-complaint-update', 'ComplaintController@addComplaintUpdate');
-Route::get('/pending-complaints/{page?}', 'ComplaintController@pendingComplaints');
-Route::get('/software-user-complaints/{id}', 'ComplaintController@softwareUserComplaints');
-Route::get('/admin-view-complaint/{id}', 'ComplaintController@view');
-Route::get('/resolve-complaint/{id}', 'ComplaintController@resolve');
+/********************** user urls ************************/
+Route::get('/admin-patients', 'AdminController@patients');
+Route::post('/save-patient', 'PatientController@savePatient');
+Route::post('/admin-get-patients/{page?}/{status?}', 'PatientController@getPatients');
 
 /********************** admin urls ************************/
+Route::get('/admin-login', 'AuthenticationController@adminLogin');
 Route::get('/admin-section', 'AdminController@adminSection');
 Route::get('/admin-institutes', 'AdminController@institutes');
 Route::get('/admin-institute-experts/{id}', 'InstituteController@instituteExperts');
-Route::get('/admin-products/{id}', 'AdminController@products');
-Route::get('/admin-orders', 'AdminController@orders');
-Route::get('/admin-couriers', 'AdminController@couriers');
-Route::get('/admin-users', 'AdminController@users');
+Route::get('/admin-patients', 'AdminController@patients');
 Route::get('/admin-software-users', 'AdminController@softwareUsers');
 Route::get('/admin-locations', 'LocationController@locations');
 

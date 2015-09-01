@@ -64,11 +64,11 @@ class AdminController extends BaseController {
             return Redirect::to('/');
 
         $expertCount = Expert::where('status','=','active')->count();
-        $userCount = User::where('status','=','active')->count();
+        $patientCount = Patient::where('status','=','active')->count();
 
         return View::make('admin.admin-section')
             ->with('expertCount', $expertCount)
-            ->with('userCount', $userCount);
+            ->with('patientCount', $patientCount);
     }
 
 /********************** categories ***********************/
@@ -630,7 +630,7 @@ class AdminController extends BaseController {
 
             if(isset($softwareUser)){
 
-                Session::put('software_user_id', $id);
+                Session::put('software_patient_id', $id);
 
                 if($softwareUser->gender=='male'){
                     $male_checked = 'checked="checked"';
@@ -642,7 +642,7 @@ class AdminController extends BaseController {
                 }
 
                 return View::make('admin.view-software-user')
-                    ->with('softwareUser', $softwareUser)
+                    ->with('softwarePatient', $softwareUser)
                     ->with('male_checked', $male_checked)
                     ->with('female_checked', $female_checked);
             }
@@ -669,30 +669,121 @@ class AdminController extends BaseController {
             return json_encode(array('message'=>'empty'));
     }
 
-/************************** users *************************/
-    public function users(){
+/************************** patients *************************/
+    public function patients(){
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))
             return Redirect::to('/');
 
-        return View::make('admin.users');
+        return View::make('admin.patients');
     }
 
-    public function viewUser($id){
+    public function savePatient(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $email = Input::get('email');
+
+        if($this->isDuplicatePatient($email)==="no"){
+
+            $patient = new Patient;
+
+            $patient->password = Input::get('password');
+            $patient->first_name = Input::get('first_name');
+            $patient->last_name = Input::get('last_name');
+            $patient->gender = Input::get('gender');
+            $patient->country = Input::get('country');
+            $patient->email = $email;
+            $patient->contact_number = Input::get('contact_number');
+
+            $patient->status = "active";
+            $patient->created_at = date("Y-m-d h:i:s");
+            $patient->updated_at = date("Y-m-d h:i:s");
+
+            $patient->save();
+
+            return json_encode(array('message'=>'done'));
+        }
+        else
+            return json_encode(array('message'=>'duplicate'));
+    }
+
+    public function updatePatient(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $patientId = Session::get('patient_id');
+
+        if(isset($patientId)){
+
+            $patient = Patient::find($patientId);
+
+            if(isset($patient)) {
+                $patient->password = Input::get('password');
+                $patient->first_name = Input::get('first_name');
+                $patient->last_name = Input::get('last_name');
+                $patient->gender = Input::get('gender');
+                $patient->country = Input::get('country');
+                $patient->email = Input::get('email');
+                $patient->contact_number = Input::get('contact_number');
+
+                $patient->updated_at = date("Y-m-d h:i:s");
+
+                $patient->save();
+
+                return json_encode(array('message' => 'done'));
+            }
+            else
+                return json_encode(array('message' => 'invalid'));
+        }
+        else
+            return json_encode(array('message'=>'invalid'));
+    }
+
+    public function isDuplicatePatient($email)
+    {
+        $patient = Patient::where('email', '=', $email)->first();
+
+        return is_null($patient) ? "no" : "yes";
+    }
+
+    public function findPatient($id){
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))
             return Redirect::to('/');
 
         if(isset($id)){
-            $user = User::find($id);
+            $patient = Patient::find($id);
 
-            if(isset($user)){
+            if(isset($patient))
+                return json_encode(array('message' => 'found', patient => $patient));
+            else
+                return json_encode(array('message' => 'empty'));
+        }
+        else
+            return json_encode(array('message' => 'invalid'));
+    }
 
-                Session::put('user_id', $id);
+    public function viewPatient($id){
 
-                if($user->gender=='male'){
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return Redirect::to('/');
+
+        if(isset($id)){
+            $patient = Patient::find($id);
+
+            if(isset($patient)){
+
+                Session::put('patient_id', $id);
+
+                if($patient->gender=='male'){
                     $male_checked = 'checked="checked"';
                     $female_checked = '';
                 }
@@ -701,8 +792,8 @@ class AdminController extends BaseController {
                     $male_checked = '';
                 }
 
-                return View::make('admin.view-user')
-                    ->with('user', $user)
+                return View::make('admin.view-patient')
+                    ->with('patient', $patient)
                     ->with('male_checked', $male_checked)
                     ->with('female_checked', $female_checked);
             }
@@ -713,67 +804,41 @@ class AdminController extends BaseController {
             return Redirect::to('/');
     }
 
-    public function listUsers($status, $page){
+    public function listPatients($status, $page){
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))
             return json_encode(array('message'=>'not logged'));
 
-        $users = User::where('status','=',$status)->get();
+        $patients = Patient::where('status','=',$status)->get();
 
-        if(isset($users) && count($users)>0){
+        if(isset($patients) && count($patients)>0){
 
-            return json_encode(array('message'=>'found', 'users' => $users->toArray()));
+            return json_encode(array('message'=>'found', 'patients' => $patients->toArray()));
         }
         else
             return json_encode(array('message'=>'empty'));
     }
 
-
-    public function removeUser($id){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $user = User::find($id);
-
-        if(is_null($user))
-            return json_encode(array('message'=>'invalid'));
-        else{
-            $user->status = 'removed';
-            $user->save();
-
-            return json_encode(array('message'=>'done'));
-        }
-    }
-
-    public function updateUser(){
+    public function removePatient($id){
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))
             return json_encode(array('message'=>'not logged'));
 
-        $id = Input::get('id');
+        $patient = Patient::find($id);
 
-        $user = User::find($id);
-
-        if(is_null($user))
+        if(is_null($patient))
             return json_encode(array('message'=>'invalid'));
         else{
-            $user->first_name = Input::get('first_name');
-            $user->last_name = Input::get('last_name');
-            $user->email = Input::get('email');
-            $user->phone = Input::get('phone');
-            $user->password = Input::get('password');
-            $user->country = Input::get('country');
-            $user->timezone = Input::get('timezone');
-            $user->save();
+            $patient->status = 'removed';
+            $patient->save();
 
             return json_encode(array('message'=>'done'));
         }
     }
-    /************************** users *************************/
+
+    /************************** locations *************************/
 
     public function locations(){
 

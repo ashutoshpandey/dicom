@@ -86,29 +86,33 @@ function listCategories(page){
         }
     );
 }
-function showCategories(data){
+function showCategories(result){
 
-    if(data!=undefined && data.categories!=undefined && data.categories.length>0){
+    if(result!=undefined && result.categories!=undefined && result.categories.length>0){
 
         var str = '';
 
         str = str + '<table id="grid-category" class="table table-condensed table-hover table-striped"> \
             <thead> \
                 <tr> \
-                    <th data-column-id="id" data-type="numeric">ID</th> \
-                    <th data-column-id="name">Name</th> \
+                    <th data-column-id="id" data-type="numeric">Category Id</th> \
+                    <th data-column-id="name">Category Name</th> \
+                    <th data-column-id="subid">SubCategory Id</th> \
+                    <th data-column-id="subname">SubCategory Name</th> \
                     <th data-formatter="link">Action</th> \
                 </tr> \
             </thead> \
             <tbody>';
 
-        for(var i =0;i<data.categories.length;i++){
+        for(var i =0;i<result.categories.length;i++){
 
-            var category = data.categories[i];
+            var data = result.categories[i];
 
             str = str + '<tr> \
-                    <td>' + category.id + '</td> \
-                    <td>' + category.name + '</td> \
+                    <td>' + data.category.id + '</td> \
+                    <td>' + data.category.name + '</td> \
+                    <td>' + data.subcategory.id + '</td> \
+                    <td>' + data.subcategory.name + '</td> \
                     <td></td> \
                 </tr>';
         }

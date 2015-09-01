@@ -138,9 +138,9 @@ Route::get('/admin-get-cities/{state}', 'AdminController@getCities');
 
 Route::post('/assign-expert-category', 'AdminController@assignExpertCategory');
 Route::get('/remove-expert-category/{id}', 'AdminController@removeExpertCategory');
+Route::get('/admin-data-expert-categories/{id}/{status}', 'CategoryController@dataExpertCategories');
 
 Route::get('/admin-categories', 'AdminController@manageCategories');
-Route::get('/admin-data-expert-categories/{id}/{status}', 'ExpertController@dataExpertCategories');
 Route::get('/admin-list-categories/{status}', 'AdminController@listCategories');
 Route::get('/admin-list-subcategories/{id}/{status}', 'AdminController@listSubcategories');
 Route::post('/save-category', 'AdminController@saveCategory');
@@ -149,3 +149,6 @@ Route::post('/save-subcategory', 'AdminController@saveSubCategory');
 Route::post('/update-subcategory', 'AdminController@updateSubCategory');
 Route::get('/remove-category/{id}', 'AdminController@removeCategory');
 Route::get('/remove-subcategory/{id}', 'AdminController@removeSubCategory');
+
+Route::get('/data-expert-list-services/{id}/{page?}', 'ExpertController@dataListServices');
+Route::get('/data-expert-list-qualification/{id}/{page?}', 'ExpertController@dataListQualification');

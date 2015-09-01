@@ -1,6 +1,6 @@
 <?php
 
-class ExpertSpecialty extends Eloquent{
+class ExpertService extends Eloquent{
 
 	protected $table = 'expert_specialties';
 

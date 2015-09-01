@@ -33,4 +33,20 @@ class CategoryController extends BaseController {
         else
             return json_encode(array('message' => 'invalid'));
     }
+
+    function dataExpertCategories($id, $status='active'){
+
+        if(isset($id)){
+
+            $categories = ExpertCategory::where('expert_id', $id)
+                ->where('status', '=', 'active')->with('category')->with('subcategory')->where('status', 'active')->get();
+
+            if(isset($categories))
+                return json_encode(array('message'=>'found', 'categories' => $categories->toArray()));
+            else
+                return json_encode(array('message'=>'empty'));
+        }
+        else
+            return json_encode(array('message'=>'invalid'));
+    }
 }

@@ -570,39 +570,7 @@ class ExpertController extends BaseController {
         return $expert;
     }
 
-    function dataExpertCategories($id, $status='active'){
-
-        if(isset($id)){
-
-            $categories = ExpertCategory::where('expert_id', $id)
-                ->where('status', '=', 'active')->with('category')->with('subcategory')->get();
-
-            if(isset($categories))
-                return json_encode(array('message'=>'found', 'categories' => $categories->toArray()));
-            else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
-    }
-
-    public function dataListAchievements($expertId, $page=null){
-
-        if(isset($expertId)){
-
-            $achievements = ExpertAchievement::where('expert_id','=',$expertId)->
-                where('status','=','active')->get();
-
-            if(isset($achievements) && count($achievements)>0)
-                return json_encode(array('message'=>'found', 'achievements' =>$achievements->toArray()));
-            else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
-    }
-
-    public function dataListServices($expertId, $page=null){
+    public function dataListServices($expertId, $page=1){
 
         if(isset($expertId)){
 
@@ -618,7 +586,7 @@ class ExpertController extends BaseController {
             return json_encode(array('message'=>'invalid'));
     }
 
-    public function dataListQualification($expertId, $page=null){
+    public function dataListQualification($expertId, $page=1){
 
         if(isset($expertId)){
 

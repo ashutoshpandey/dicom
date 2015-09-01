@@ -71,6 +71,23 @@
                                 <div class='clear'></div>
                             </div>
                             <div class='form-row'>
+                                <div class='form-label'>Gender</div>
+                                <div class='form-data'>
+                                    <select name='gender'>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                    </select>
+                                </div>
+                                <div class='clear'></div>
+                            </div>
+                            <div class='form-row'>
+                                <div class='form-label'>Highest Qualification</div>
+                                <div class='form-data'>
+                                    <input type='text' name='highest_qualification'/>
+                                </div>
+                                <div class='clear'></div>
+                            </div>
+                            <div class='form-row'>
                                 <div class='form-label'>&nbsp;</div>
                                 <div class='form-data-full'>
                                     <input type='button' name='btn-create' value="Create Expert" class='half'/> <span

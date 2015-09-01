@@ -114,11 +114,47 @@ class InstituteController extends BaseController {
         $expert->name = Input::get('name');
         $expert->contact_number = Input::get('contact_number');
         $expert->email = Input::get('email');
+        $expert->gender = Input::get('gender');
+        $expert->highest_qualification = Input::get('highest_qualification');
         $expert->status = 'active';
 
         $expert->save();
 
         return json_encode(array('message'=>'done'));
+    }
+
+    public function viewExpert($id){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return Redirect::to('/');
+
+        if(isset($id)){
+            $expert = Expert::find($id);
+
+            if(isset($expert)){
+
+                Session::put('expert_id', $id);
+
+                if($expert->gender=='male'){
+                    $male_checked = 'checked="checked"';
+                    $female_checked = '';
+                }
+                else{
+                    $female_checked = 'checked="checked"';
+                    $male_checked = '';
+                }
+
+                return View::make('institute.view-expert')
+                    ->with('expert', $expert)
+                    ->with('male_checked', $male_checked)
+                    ->with('female_checked', $female_checked);
+            }
+            else
+                return Redirect::to('/');
+        }
+        else
+            return Redirect::to('/');
     }
 
     public function listExperts($status, $page){
@@ -241,25 +277,6 @@ class InstituteController extends BaseController {
             return Redirect::to('/');
 
         return View::make('institute.create-expert');
-    }
-
-    public function viewExpert($id){
-
-        $institute_id = Session::get('institute_id');
-
-        if(!isset($institute_id))
-            return Redirect::to('/');
-
-        if(isset($id)){
-            $expert = Expert::find($id);
-
-            if(isset($expert))
-                return View::make('admin.view-expert')->with("expert", $expert);
-            else
-                return Redirect::to('/');
-        }
-        else
-            return Redirect::to('/');
     }
 
     public function updateExpert(){

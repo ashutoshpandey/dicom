@@ -71,110 +71,6 @@ class AdminController extends BaseController {
             ->with('userCount', $userCount);
     }
 
-/********************** appointments ***********************/
-    public function appointments(){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return Redirect::to('/');
-
-        return View::make('admin.appointments');
-    }
-
-    public function listAppointments($status, $page){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $appointments = null;
-
-        $filter = Input::get('filter');
-
-        if($filter=="expert"){
-
-            $expert_id = Input::get('expert_id');
-
-            $appointments = Appointment::where('status','=','booked')->where('Appointment.expert_id','=',$expert_id)->with('user')->with('expert')->get();
-
-        }
-        else if($filter=="date"){
-
-            $startDate = Input::get('startDate');
-            $endDate = Input::get('endDate');
-
-            $appointments = Appointment::where('Appointment.appointment_date','>=',$startDate)->
-										 where('Appointment.appointment_date','<=',$endDate)->
-										 where('status','=','booked')->with('user')->with('expert')->get();
-
-        }
-        else if($filter=="expertdate"){
-
-            $expert_id = Input::get('expert_id');
-
-            $startDate = Input::get('startDate');
-            $endDate = Input::get('endDate');
-
-            $appointments = Appointment::where('Appointment.appointment_date','>=',$startDate)->
-                                         where('Appointment.appointment_date','<=',$endDate)->
-										 where('status','=','booked')->
-                                         where('Appointment.expert_id','=',$expert_id)->with('user')->with('expert')->get();
-
-        }
-        else{
-            $appointments = Appointment::where('status','=','booked')->where('appointment_date','>=',date("Y-m-d H:i:s"))->with('user')->with('expert')->get();
-        }
-
-		if(isset($appointments) && count($appointments)>0)
-			return json_encode(array('message' => 'found', 'appointments' => $appointments->toArray()));
-		else
-            return json_encode(array('message' => 'empty'));
-    }
-
-    public function viewAppointment($id){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return Redirect::to('/');
-
-        if(isset($id)){
-            $appointment = Appointment::find($id);
-
-            if(isset($appointment)){
-
-                Session::put('appointment_id', $id);
-
-                return View::make('admin.view-appointment')
-                            ->with('appointment', $appointment);
-            }
-            else
-                return Redirect::to('/');
-        }
-        else
-            return Redirect::to('/');
-    }
-
-    public function cancelAppointment($id){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $appointment = Appointment::find($id);
-
-        if(is_null($appointment))
-            return json_encode(array('message'=>'invalid'));
-        else{
-            $appointment->status = "admin-cancelled";
-            $appointment->cancel_id = $adminId;
-            $appointment->updated_at = date('Y-m-d h:i:s');
-
-            $appointment->save();
-
-            return json_encode(array('message'=>'done'));
-        }
-    }
-
 /********************** categories ***********************/
     public function manageCategories(){
 
@@ -379,6 +275,63 @@ class AdminController extends BaseController {
         }
     }
 
+    public function assignExpertCategory(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $categoryId = Input::get('category');
+        $subcategoryId = Input::get('subcategory');
+
+        $category = Category::find($categoryId);
+        $subcategory = SubCategory::find($subcategoryId);
+
+        if(isset($category) && isset($subcategory)){
+
+            $expertId = Session::get('expert_id');
+
+            $tempExpertCategory = ExpertCategory::where('category_id', $categoryId)->where('subcategory_id', $subcategoryId)->where('expert_id', $expertId)->get();
+
+            if(isset($tempExpertCategory) && count($tempExpertCategory)>0){
+                return json_encode(array('message' => 'duplicate'));
+            }
+            else {
+                $expertCategory = new ExpertCategory();
+
+                $expertCategory->category_id = $categoryId;
+                $expertCategory->subcategory_id = $subcategoryId;
+                $expertCategory->expert_id = Session::get('expert_id');
+                $expertCategory->status = "active";
+
+                $expertCategory->save();
+
+                return json_encode(array('message' => 'done'));
+            }
+        }
+        else
+            return json_encode(array('message'=>'invalid'));
+    }
+
+    public function removeExpertCategory($id){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $expertCategory = ExpertCategory::find($id);
+
+        if(isset($expertCategory)){
+
+            $expertCategory->status = 'removed';
+            $expertCategory->save();
+
+            return json_encode(array('message' => 'done'));
+        }
+        else
+            return json_encode(array('message'=>'invalid'));
+    }
+
     public function adminLogout(){
 
         Session::flush();
@@ -396,40 +349,6 @@ class AdminController extends BaseController {
             return Redirect::to('/');
 
         return View::make('admin.experts');
-    }
-
-    public function viewExpert($id){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return Redirect::to('/');
-
-        if(isset($id)){
-            $expert = Expert::find($id);
-
-            if(isset($expert)){
-
-                Session::put('expert_id', $id);
-
-                if($expert->gender=='male'){
-                    $male_checked = 'checked="checked"';
-                    $female_checked = '';
-                }
-                else{
-                    $female_checked = 'checked="checked"';
-                    $male_checked = '';
-                }
-
-                return View::make('admin.view-expert')
-                    ->with('expert', $expert)
-                    ->with('male_checked', $male_checked)
-                    ->with('female_checked', $female_checked);
-            }
-            else
-                return Redirect::to('/');
-        }
-        else
-            return Redirect::to('/');
     }
 
     public function listExperts($status, $page){

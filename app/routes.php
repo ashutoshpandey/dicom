@@ -113,15 +113,8 @@ Route::get('/admin-view-software-user/{id}', 'AdminController@viewSoftwareUser')
 Route::get('/admin-view-user/{id}', 'AdminController@viewUser');
 Route::post('/update-order-courier', 'AdminController@updateCourier');
 
-Route::get('/remove-courier/{id}', 'CourierController@remove');
-Route::get('/edit-courier', 'CourierController@edit');
-Route::post('/update-courier', 'CourierController@update');
-Route::post('/save-courier', 'CourierController@save');
-
-Route::get('/remove-software-user/{id}', 'SoftwareUserController@remove');
-Route::get('/edit-software-user', 'SoftwareUserController@edit');
-Route::post('/update-software-user', 'SoftwareUserController@update');
-Route::post('/save-software-user', 'SoftwareUserController@save');
+Route::get('/categories', 'CategoryController@categories');
+Route::get('/subcategories/{id}', 'CategoryController@subcategories');
 
 Route::get('/remove-location/{id}', 'LocationController@remove');
 Route::get('/edit-location', 'LocationController@edit');
@@ -143,7 +136,11 @@ Route::get('/logout', 'AuthenticationController@logout');
 
 Route::get('/admin-get-cities/{state}', 'AdminController@getCities');
 
+Route::post('/assign-expert-category', 'AdminController@assignExpertCategory');
+Route::get('/remove-expert-category/{id}', 'AdminController@removeExpertCategory');
+
 Route::get('/admin-categories', 'AdminController@manageCategories');
+Route::get('/admin-data-expert-categories/{id}/{status}', 'ExpertController@dataExpertCategories');
 Route::get('/admin-list-categories/{status}', 'AdminController@listCategories');
 Route::get('/admin-list-subcategories/{id}/{status}', 'AdminController@listSubcategories');
 Route::post('/save-category', 'AdminController@saveCategory');

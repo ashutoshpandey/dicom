@@ -570,98 +570,15 @@ class ExpertController extends BaseController {
         return $expert;
     }
 
-    function dataExpertAppointments($id, $status='active', $startDate=null, $endDate=null){
+    function dataExpertCategories($id, $status='active'){
 
         if(isset($id)){
 
-            if(isset($startDate) && isset($endDate)){
+            $categories = ExpertCategory::where('expert_id', $id)
+                ->where('status', '=', 'active')->with('category')->with('subcategory')->get();
 
-                $startDate = date('Y-m-d', strtotime($startDate));
-                $endDate = date('Y-m-d', strtotime($endDate));
-
-                $appointments = Appointment::where('expert_id', '=', $id)
-                    ->where('status', '=', 'active')
-                    ->where('start_date', '>=', $startDate)
-                    ->where('end_date', '<=', $endDate)->get();
-            }
-            else if(isset($startDate)){
-
-                $startDate = date('Y-m-d', strtotime($startDate));
-
-                $appointments = Appointment::where('expert_id', '=', $id)
-                    ->where('start_date', '>=', $startDate)->get();
-            }
-            else
-                $appointments = Appointment::where('expert_id', '=', $id)->get();
-
-            if(isset($appointments))
-                return json_encode(array('message'=>'found', 'appointments' => $appointments->toArray()));
-            else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
-    }
-
-    function dataExpertAppointmentsByType($id, $appointmentType, $startDate=null, $endDate=null){
-
-        if(isset($id) && isset($appointmentType)){
-
-            if(isset($startDate) && isset($endDate)){
-
-                $startDate = date('Y-m-d', strtotime($startDate));
-                $endDate = date('Y-m-d', strtotime($endDate));
-
-                $appointments = Appointment::where('expert_id', '=', $id)
-                    ->where('appointment_type', '>=', $appointmentType)
-                    ->where('start_date', '>=', $startDate)
-                    ->where('end_date', '<=', $endDate)->get();
-            }
-            else if(isset($startDate)){
-
-                $startDate = date('Y-m-d', strtotime($startDate));
-
-                $appointments = Appointment::where('expert_id', '=', $id)
-                    ->where('appointment_type', '>=', $appointmentType)
-                    ->where('start_date', '>=', $startDate)->get();
-            }
-            else
-                $appointments = Appointment::where('expert_id', '=', $id)
-                    ->where('appointment_type', '>=', $appointmentType);
-
-            if(isset($appointments))
-                return json_encode(array('message'=>'found', 'appointments' => $appointments->toArray()));
-            else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
-    }
-
-    public function dataCancelledAppointments(){
-
-        $id = Session::get('expert_id');
-
-        if(isset($id)){
-
-            $appointments = Appointment::where('expert_id','=',$id)->
-                where('status','=','cancelled')->get();
-
-            return json_encode(array('message'=>'found', 'appointments' => $appointments->toArray()));
-        }
-        else
-            return json_encode(array('message'=>'empty'));
-    }
-
-    public function dataListMemberships($expertId, $page=null){
-
-        if(isset($expertId)){
-
-            $memberships = ExpertMembership::where('expert_id','=',$expertId)->
-                where('status','=','active')->get();
-
-            if(isset($memberships) && count($memberships)>0)
-                return json_encode(array('message'=>'found', 'memberships' =>$memberships->toArray()));
+            if(isset($categories))
+                return json_encode(array('message'=>'found', 'categories' => $categories->toArray()));
             else
                 return json_encode(array('message'=>'empty'));
         }
@@ -701,38 +618,6 @@ class ExpertController extends BaseController {
             return json_encode(array('message'=>'invalid'));
     }
 
-    public function dataListSpecialties($expertId, $page=null){
-
-        if(isset($expertId)){
-
-            $specialties = ExpertSpecialty::where('expert_id','=',$expertId)->
-                where('status','=','active')->get();
-
-            if(isset($specialties) && count($specialties)>0)
-                return json_encode(array('message'=>'found', 'specialties' =>$specialties->toArray()));
-            else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
-    }
-
-    public function dataListSocial($expertId, $page=null){
-
-        if(isset($expertId)){
-
-            $expertSocials = ExpertSocial::where('expert_id','=',$expertId)->
-                                           where('status','=','active')->get();
-
-            if(isset($expertSocials) && count($expertSocials)>0)
-                return json_encode(array('message'=>'found', 'socials' =>$expertSocials->toArray()));
-            else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
-    }
-
     public function dataListQualification($expertId, $page=null){
 
         if(isset($expertId)){
@@ -747,30 +632,5 @@ class ExpertController extends BaseController {
         }
         else
             return json_encode(array('message'=>'invalid'));
-    }
-
-    public function dataListLocation($expertId, $page=null){
-
-        if(isset($expertId)){
-
-            $expertLocations = ExpertLocation::where('expert_id','=',$expertId)->with('location')->where('status','=','active')->get();
-
-            if(isset($expertLocations) && count($expertLocations)>0)
-                return json_encode(array('message'=>'found', 'locations' =>$expertLocations->toArray()));
-            else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
-    }
-
-    public function manageAppointments(){
-
-        $expertId = Session::get('expert_id');
-
-        if(!isset($expertId))
-            return Redirect::to('/');
-
-        return View::make('expert.manage-appointments');
     }
 }

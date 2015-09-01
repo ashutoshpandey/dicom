@@ -4,250 +4,111 @@ $(function(){
 
     expertId = $('#expert_id').attr('rel');
 
-    $("input[name='btn-create-membership']").click(createMembership);
     $("input[name='btn-create-service']").click(createService);
-    $("input[name='btn-create-achievement']").click(createAchievement);
-    $("input[name='btn-create-social']").click(createSocial);
-    $("input[name='btn-create-specialty']").click(createSpecialty);
+    $("input[name='btn-create-category']").click(createCategory);
     $("input[name='btn-create-qualification']").click(createQualification);
-    $("input[name='btn-create-location']").click(createLocation);
 
-    listMemberships(1);
+    getCategories();
 
     listServices(1);
 
-    listAchievements(1);
-
-    listSpecialties(1);
-
-    listSocialProfiles(1);
+    listCategories(1);
 
     listQualifications(1);
-
-    listLocations(1);
-
-    $("#form-create-location").find("select[name='state']").change(function(){
-        var value = $(this).val();
-
-        var cityObject = $("#form-create-location").find("select[name='city']");
-
-        loadCities(value, cityObject);
-    });
 });
 
-function listMemberships(page){
 
-    $("#form-create-membership").find('.message').html('');
+function getCategories(){
 
     $.getJSON(
-        root + '/data-expert-list-memberships/' + expertId + '/' + page,
+        root + '/categories',
         function(result){
 
             if(result.message.indexOf('not logged')>-1)
                 window.location.replace(root);
             else{
-                showMemberships(result);
-            }
-        }
-    );
-}
-function showMemberships(data){
+                if(result.categories!=undefined && result.categories.length>0){
 
-    if(data!=undefined && data.memberships!=undefined && data.memberships.length>0){
+                    for(var i=0;i<result.categories.length;i++){
 
-        var str = '';
+                        var category = result.categories[i];
 
-        str = str + '<table id="grid-memberships" class="table table-condensed table-hover table-striped"> \
-            <thead> \
-                <tr> \
-                    <th data-column-id="id" data-type="numeric">ID</th> \
-                    <th data-column-id="name">Name</th> \
-                    <th data-column-id="details">Details</th> \
-                    <th data-formatter="link">Action</th> \
-                </tr> \
-            </thead> \
-            <tbody>';
-
-        for(var i =0;i<data.memberships.length;i++){
-
-            var membership = data.memberships[i];
-
-            str = str + '<tr> \
-                    <td>' + membership.id + '</td> \
-                    <td>' + membership.name + '</td> \
-                    <td>' + membership.details + '</td> \
-                    <td></td> \
-                </tr>';
-        }
-
-        str = str + '</tbody> \
-        </table>';
-
-        $('#membership-list').html(str);
-
-        $("#grid-memberships").bootgrid({
-            formatters: {
-                'link': function(column, row)
-                {
-                    var str = "&nbsp;&nbsp; <a class='remove' href='#' rel='" + row.id + "'>Remove</a>";
-
-                    return str;
-                }
-            }
-        }).on("loaded.rs.jquery.bootgrid", function()
-            {
-                $('#membership-list').find(".remove").click(function(){
-                    var id = $(this).attr("rel");
-
-                    if(!confirm("Are you sure to remove this membership?"))
-                        return;
-
-                    $.getJSON(root + '/remove-expert-membership-admin/' + id,
-                        function(result){
-                            if(result.message.indexOf('done')>-1)
-                                listMemberships(1);
-                            else if(result.message.indexOf('not logged')>-1)
-                                window.location.replace(root);
-                            else
-                                alert("Server returned error : " + result);
-                        }
-                    );
-                });
-            });
-    }
-    else
-        $('#membership-list').html('No memberships found');
-
-}
-
-
-function listLocations(page){
-
-    $("#form-create-location").find('.message').html('');
-
-    $.getJSON(
-        root + '/data-expert-list-location/' + expertId + '/' + page,
-        function(result){
-
-            if(result.message.indexOf('not logged')>-1)
-                window.location.replace(root);
-            else{
-                showLocations(result);
-            }
-        }
-    );
-}
-function showLocations(data){
-
-    if(data!=undefined && data.locations!=undefined && data.locations.length>0){
-
-        var str = '';
-
-        str = str + '<table id="grid-locations" class="table table-condensed table-hover table-striped"> \
-            <thead> \
-                <tr> \
-                    <th data-column-id="id" data-type="numeric">ID</th> \
-                    <th data-column-id="name">Location</th> \
-                    <th data-column-id="location">Address</th> \
-                    <th data-formatter="link">Action</th> \
-                </tr> \
-            </thead> \
-            <tbody>';
-
-        for(var i =0;i<data.locations.length;i++){
-
-            var locationObj = data.locations[i];
-
-            str = str + '<tr> \
-                    <td>' + locationObj.id + '</td> \
-                    <td>' + locationObj.location.city + ' - ' + locationObj.location.state + '</td> \
-                    <td>' + locationObj.address + '</td> \
-                    <td></td> \
-                </tr>';
-        }
-
-        str = str + '</tbody> \
-        </table>';
-
-        $('#location-list').html(str);
-
-        $("#grid-locations").bootgrid({
-            formatters: {
-                'link': function(column, row)
-                {
-                    var str = "&nbsp;&nbsp; <a class='remove' href='#' rel='" + row.id + "'>Remove</a>";
-
-                    return str;
-                }
-            }
-        }).on("loaded.rs.jquery.bootgrid", function()
-        {
-            $('#location-list').find(".remove").click(function(){
-                var id = $(this).attr("rel");
-
-                if(!confirm("Are you sure to remove this location?"))
-                    return;
-
-                $.getJSON(root + '/remove-expert-location-admin/' + id,
-                    function(result){
-                        if(result.message.indexOf('done')>-1)
-                            listLocations(1);
-                        else if(result.message.indexOf('not logged')>-1)
-                            window.location.replace(root);
-                        else
-                            alert("Server returned error : " + result);
+                        $("select[name='category']").append("<option value='" + category.id + "'>" + category.name + "</option>");
                     }
-                );
-            });
-        });
-    }
-    else
-        $('#location-list').html('No locations found');
 
+                    getSubcategories();
+
+                    $("select[name='category']").change(getSubcategories);
+                }
+            }
+        }
+    );
 }
 
+function getSubcategories(){
 
-function listSpecialties(page){
-
-    $("#form-create-specialty").find('.message').html('');
+    var categoryId = $("select[name='category']").val();
 
     $.getJSON(
-        root + '/data-expert-list-specialties/' + expertId + '/' + page,
+        root + '/subcategories/' + categoryId,
         function(result){
 
             if(result.message.indexOf('not logged')>-1)
                 window.location.replace(root);
             else{
-                showSpecialties(result);
+                if(result.subcategories!=undefined && result.subcategories.length>0){
+
+                    for(var i=0;i<result.subcategories.length;i++){
+
+                        var subcategory = result.subcategories[i];
+
+                        $("select[name='subcategory']").append("<option value='" + subcategory.id + "'>" + subcategory.name + "</option>");
+                    }
+                }
             }
         }
     );
 }
-function showSpecialties(data){
 
-    if(data!=undefined && data.specialties!=undefined && data.specialties.length>0){
+function listCategories(page){
+
+    $("#form-create-category").find('.message').html('');
+
+    $.getJSON(
+        root + '/admin-data-expert-categories/' + expertId + '/' + page,
+        function(result){
+
+            if(result.message.indexOf('not logged')>-1)
+                window.location.replace(root);
+            else{
+                showCategories(result);
+            }
+        }
+    );
+}
+function showCategories(data){
+
+    if(data!=undefined && data.categories!=undefined && data.categories.length>0){
 
         var str = '';
 
-        str = str + '<table id="grid-specialties" class="table table-condensed table-hover table-striped"> \
+        str = str + '<table id="grid-category" class="table table-condensed table-hover table-striped"> \
             <thead> \
                 <tr> \
                     <th data-column-id="id" data-type="numeric">ID</th> \
                     <th data-column-id="name">Name</th> \
-                    <th data-column-id="details">Detail</th> \
                     <th data-formatter="link">Action</th> \
                 </tr> \
             </thead> \
             <tbody>';
 
-        for(var i =0;i<data.specialties.length;i++){
+        for(var i =0;i<data.categories.length;i++){
 
-            var specialty = data.specialties[i];
+            var category = data.categories[i];
 
             str = str + '<tr> \
-                    <td>' + specialty.id + '</td> \
-                    <td>' + specialty.name + '</td> \
-                    <td>' + specialty.details + '</td> \
+                    <td>' + category.id + '</td> \
+                    <td>' + category.name + '</td> \
                     <td></td> \
                 </tr>';
         }
@@ -255,29 +116,29 @@ function showSpecialties(data){
         str = str + '</tbody> \
         </table>';
 
-        $('#specialty-list').html(str);
+        $('#category-list').html(str);
 
-        $("#grid-specialties").bootgrid({
+        $("#grid-category").bootgrid({
             formatters: {
                 'link': function(column, row)
                 {
-                    var str = "&nbsp;&nbsp; <a class='remove' href='#' rel='" + row.id + "'>Remove</a>";
+                    var str = "&nbsp;&nbsp; <span style='cursor:pointer;color:blue' class='remove' rel='" + row.id + "'>Remove</a>";
 
                     return str;
                 }
             }
         }).on("loaded.rs.jquery.bootgrid", function()
             {
-                $('#specialty-list').find(".remove").click(function(){
+                $('#category-list').find(".remove").click(function(){
                     var id = $(this).attr("rel");
 
-                    if(!confirm("Are you sure to remove this specialty?"))
+                    if(!confirm("Are you sure to remove expert from this category?"))
                         return;
 
-                    $.getJSON(root + '/remove-expert-specialty-admin/' + id,
+                    $.getJSON(root + '/remove-expert-category/' + id,
                         function(result){
                             if(result.message.indexOf('done')>-1)
-                                listSpecialties(1);
+                                listCategories(1);
                             else if(result.message.indexOf('not logged')>-1)
                                 window.location.replace(root);
                             else
@@ -288,7 +149,7 @@ function showSpecialties(data){
             });
     }
     else
-        $('#specialty-list').html('No specialties found');
+        $('#category-list').html('No categories assigned');
 
 }
 
@@ -377,202 +238,18 @@ function showServices(data){
 
 }
 
-function listAchievements(page){
-
-    $("#form-create-achievement").find('.message').html('');
-
-    $.getJSON(
-        root + '/data-expert-list-achievements/' + expertId + '/' + page,
-        function(result){
-
-            if(result.message.indexOf('not logged')>-1)
-                window.location.replace(root);
-            else{
-                showAchievements(result);
-            }
-        }
-    );
-}
-function showAchievements(data){
-
-    if(data!=undefined && data.achievements!=undefined && data.achievements.length>0){
-
-        var str = '';
-
-        str = str + '<table id="grid-achievements" class="table table-condensed table-hover table-striped"> \
-            <thead> \
-                <tr> \
-                    <th data-column-id="id" data-type="numeric">ID</th> \
-                    <th data-column-id="name">Name</th> \
-                    <th data-column-id="details">Details</th> \
-                    <th data-formatter="link">Action</th> \
-                </tr> \
-            </thead> \
-            <tbody>';
-
-        for(var i =0;i<data.achievements.length;i++){
-
-            var achievement = data.achievements[i];
-
-            str = str + '<tr> \
-                    <td>' + achievement.id + '</td> \
-                    <td>' + achievement.name + '</td> \
-                    <td>' + achievement.details + '</td> \
-                    <td></td> \
-                </tr>';
-        }
-
-        str = str + '</tbody> \
-        </table>';
-
-        $('#achievement-list').html(str);
-
-        $("#grid-achievements").bootgrid({
-            formatters: {
-                'link': function(column, row)
-                {
-                    var str ='&nbsp;&nbsp; <a class="remove" href="#" rel="' + row.id + '">Remove</a>';
-
-                    return str;
-                }
-            }
-        }).on("loaded.rs.jquery.bootgrid", function()
-            {
-                $('#achievement-list').find(".remove").click(function(){
-                    var id = $(this).attr("rel");
-
-                    if(!confirm("Are you sure to remove this achievement?"))
-                        return;
-
-                    $.getJSON(root + '/remove-expert-achievement-admin/' + id,
-                        function(result){
-                            if(result.message.indexOf('done')>-1)
-                                listAchievements(1);
-                            else if(result.message.indexOf('not logged')>-1)
-                                window.location.replace(root);
-                            else
-                                alert("Server returned error : " + result);
-                        }
-                    );
-                });
-            });
-    }
-    else
-        $('#achievement-list').html('No achievements found');
-
-}
-
-function listSocialProfiles(page){
-
-    $("#form-create-social").find('.message').html('');
-
-    $.getJSON(
-        root + '/data-expert-list-social/' + expertId + '/' + page,
-        function(result){
-
-            if(result.message.indexOf('not logged')>-1)
-                window.location.replace(root);
-            else{
-                showSocials(result);
-            }
-        }
-    );
-}
-function showSocials(data){
-
-    if(data!=undefined && data.socials!=undefined && data.socials.length>0){
-
-        var str = '';
-
-        str = str + '<table id="grid-socials" class="table table-condensed table-hover table-striped"> \
-            <thead> \
-                <tr> \
-                    <th data-column-id="id" data-type="numeric">ID</th> \
-                    <th data-column-id="name">Name</th> \
-                    <th data-column-id="url">URL</th> \
-                    <th data-formatter="link">Action</th> \
-                </tr> \
-            </thead> \
-            <tbody>';
-
-        for(var i =0;i<data.socials.length;i++){
-
-            var social = data.socials[i];
-
-            str = str + '<tr> \
-                    <td>' + social.id + '</td> \
-                    <td>' + social.name + '</td> \
-                    <td>' + social.url + '</td> \
-                    <td></td> \
-                </tr>';
-        }
-
-        str = str + '</tbody> \
-        </table>';
-
-        $('#social-list').html(str);
-
-        $("#grid-socials").bootgrid({
-            formatters: {
-                'link': function(column, row)
-                {
-                    var str = '&nbsp;&nbsp; <a class="remove" href="#" rel="' + row.id + '">Remove</a>';
-
-                    return str;
-                }
-            }
-        }).on("loaded.rs.jquery.bootgrid", function()
-            {
-                $('#social-list').find(".remove").click(function(){
-                    var id = $(this).attr("rel");
-
-                    if(!confirm("Are you sure to remove this social record?"))
-                        return;
-
-                    $.getJSON(root + '/remove-expert-social-admin/' + id,
-                        function(result){
-                            if(result.message.indexOf('done')>-1)
-                                listSocials(1);
-                            else if(result.message.indexOf('not logged')>-1)
-                                window.location.replace(root);
-                            else
-                                alert("Server returned error : " + result);
-                        }
-                    );
-                });
-            });
-    }
-    else
-        $('#social-list').html('No social records found');
-
-}
-
-function startUpdatingExpert(){
-
-    $("#ifr").load(function(){
-        expertUpdated();
-    });
-
-    return true;
-}
-
-function expertUpdated(){
-
-    $(".message").html("Expert updated successfully");
-}
-
 function isExpertFormValid(){
     return true;
 }
 
-function createMembership(){
+function createCategory(){
 
-    if(isMembershipFormValid()){
+    if(isCategoryFormValid()){
 
-        var data = $("#form-create-membership").serialize();
+        var data = $("#form-create-category").serialize();
 
         $.ajax({
-            url: root + '/create-expert-membership-admin',
+            url: root + '/assign-expert-category',
             type: 'post',
             data: data,
             dataType: 'json',
@@ -581,128 +258,23 @@ function createMembership(){
                 if(result.message.indexOf('not logged')>-1)
                     window.location.replace(root);
                 else if(result.message.indexOf('duplicate')>-1){
-                    $("#form-create-membership").find('.message').html('Duplicate membership');
+                    $("#form-create-membership").find('.message').html('Duplicate category');
                 }
                 else if(result.message.indexOf('done')>-1){
-                    $('.message').html('Membership added successfully');
+                    $('.message').html('Category added successfully');
 
-                    $("#form-create-membership").find("input[type='text']").val('');
-                    $("#form-create-membership").find("textarea").val('');
+                    $("#form-create-category").find("input[type='text']").val('');
+                    $("#form-create-category").find("textarea").val('');
 
-                    listMemberships(1);
+                    listCategories(1);
                 }
             }
         });
     }
 }
-function isMembershipFormValid(){
+function isCategoryFormValid(){
     return true;
 }
-
-
-function createLocation(){
-
-    if(isLocationFormValid()){
-
-        var data = $("#form-create-location").serialize();
-
-        $.ajax({
-            url: root + '/create-expert-location-admin',
-            type: 'post',
-            data: data,
-            dataType: 'json',
-            success: function(result){
-
-                if(result.message.indexOf('not logged')>-1)
-                    window.location.replace(root);
-                else if(result.message.indexOf('duplicate')>-1){
-                    $('.message').html('Duplicate location');
-                }
-                else if(result.message.indexOf('done')>-1){
-                    $("#form-create-location").find('.message').html('Location added successfully');
-
-                    $("#form-create-location").find("input[type='text']").val('');
-                    $("#form-create-location").find("textarea").val('');
-
-                    listLocations(1);
-                }
-            }
-        });
-    }
-}
-function isLocationFormValid(){
-    return true;
-}
-
-function createAchievement(){
-
-    if(isAchievementFormValid()){
-
-        var data = $("#form-create-achievement").serialize();
-
-        $.ajax({
-            url: root + '/create-expert-achievement-admin',
-            type: 'post',
-            data: data,
-            dataType: 'json',
-            success: function(result){
-
-                if(result.message.indexOf('not logged')>-1)
-                    window.location.replace(root);
-                else if(result.message.indexOf('duplicate')>-1){
-                    $("#form-create-achievement").find('.message').html('Duplicate achievement');
-                }
-                else if(result.message.indexOf('done')>-1){
-                    $('.message').html('Achievement added successfully');
-
-                    $("#form-create-achievement").find("input[type='text']").val('');
-                    $("#form-create-achievement").find("textarea").val('');
-
-                    listAchievements(1);
-                }
-            }
-        });
-    }
-}
-function isAchievementFormValid(){
-    return true;
-}
-
-
-function createSpecialty(){
-
-    if(isSpecialtyFormValid()){
-
-        var data = $("#form-create-specialty").serialize();
-
-        $.ajax({
-            url: root + '/create-expert-specialty-admin',
-            type: 'post',
-            data: data,
-            dataType: 'json',
-            success: function(result){
-
-                if(result.message.indexOf('not logged')>-1)
-                    window.location.replace(root);
-                else if(result.message.indexOf('duplicate')>-1){
-                    $("#form-create-speciality").find('.message').html('Duplicate specialty');
-                }
-                else if(result.message.indexOf('done')>-1){
-                    $('.message').html('Specialty added successfully');
-
-                    $("#form-create-specialty").find("input[type='text']").val('');
-                    $("#form-create-specialty").find("textarea").val('');
-
-                    listSpecialties(1);
-                }
-            }
-        });
-    }
-}
-function isSpecialtyFormValid(){
-    return true;
-}
-
 
 function createService(){
 
@@ -738,41 +310,9 @@ function isServiceFormValid(){
     return true;
 }
 
-
-function createSocial(){
-
-    if(isSocialFormValid()){
-
-        var data = $("#form-create-social").serialize();
-
-        $.ajax({
-            url: root + '/create-expert-social-admin',
-            type: 'post',
-            data: data,
-            dataType: 'json',
-            success: function(result){
-
-                if(result.message.indexOf('not logged')>-1)
-                    window.location.replace(root);
-                else if(result.message.indexOf('duplicate')>-1){
-                    $("#form-create-achievement").find('.message').html('Duplicate social entry');
-                }
-                else if(result.message.indexOf('done')>-1){
-                    $('.message').html('Social information added successfully');
-
-                    $("#form-create-social").find("input[type='text']").val('');
-                    $("#form-create-social").find("textarea").val('');
-
-                    listSocialProfiles(1);
-                }
-            }
-        });
-    }
-}
 function isQualificationFormValid(){
     return true;
 }
-
 
 function createQualification(){
 
@@ -891,27 +431,4 @@ function showQualifications(data){
     else
         $('#qualification-list').html('No qualification found');
 
-}
-
-function loadCities(state,destination){
-
-    $.ajax({
-        url: root + '/admin-get-cities/' + state,
-        type: 'get',
-        dataType: 'json',
-        success: function(result){
-
-            $("select[name='city']").find('option').remove();
-
-            if(result.message=="found"){
-
-                for(var i=0; i<result.locations.length; i++){
-
-                    var location = result.locations[i];
-
-                    destination.append('<option value="' + location.id + '">' + location.city + '</option>');
-                }
-            }
-        }
-    });
 }

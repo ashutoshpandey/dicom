@@ -69,7 +69,7 @@
                 <div class="inner">
                     <h3>0</h3>
 
-                    <p>Pending Orders</p>
+                    <p>Reports</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-bag"></i>
@@ -79,11 +79,25 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                    <h3>0</h3>
+
+                    <p>Replies</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-person-add"></i>
+                </div>
+            </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
             <div class="small-box bg-green">
                 <div class="inner">
-                    <h3>{{$userCount}}</h3>
+                    <h3>{{$patientCount}}</h3>
 
-                    <p>Active customers</p>
+                    <p>Patients</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-stats-bars"></i>
@@ -98,20 +112,6 @@
                     <h3>0</h3>
 
                     <p>Software Users</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-person-add"></i>
-                </div>
-            </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-yellow">
-                <div class="inner">
-                    <h3>0</h3>
-
-                    <p>Unresolved complaints</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-person-add"></i>

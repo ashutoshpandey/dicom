@@ -38,7 +38,7 @@ function listUsers(page){
     var status = 'active';
 
     $.getJSON(
-        root + '/admin-list-users/' + status + '/' + page,
+        root + '/list-users/' + status + '/' + page,
         function(result){
 
             if(result.message.indexOf('not logged')>-1)

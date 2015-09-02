@@ -42,7 +42,7 @@ function listPatients(page){
     var status = 'active';
 
     $.getJSON(
-        root + '/admin-list-institute-experts/' + status + '/' + page,
+        root + '/admin-get-patients/' + page + '/' + status,
         function(result){
 
             if(result.message.indexOf('not logged')>-1)
@@ -55,7 +55,7 @@ function listPatients(page){
 }
 function showGrid(data){
 
-    if(data!=undefined && data.experts!=undefined && data.experts.length>0){
+    if(data!=undefined && data.patients!=undefined && data.patients.length>0){
 
         var str = '';
 
@@ -71,15 +71,15 @@ function showGrid(data){
             </thead> \
             <tbody>';
 
-            for(var i =0;i<data.experts.length;i++){
+            for(var i =0;i<data.patients.length;i++){
 
-                var expert = data.experts[i];
+                var patient = data.patients[i];
 
                 str = str + '<tr> \
-                    <td>' + expert.id + '</td> \
-                    <td>' + expert.name + '</td> \
-                    <td>' + expert.email + '</td> \
-                    <td>' + expert.contact_number + '</td> \
+                    <td>' + patient.id + '</td> \
+                    <td>' + patient.name + '</td> \
+                    <td>' + patient.email + '</td> \
+                    <td>' + patient.contact_number + '</td> \
                     <td></td> \
                 </tr>';
             }
@@ -87,13 +87,13 @@ function showGrid(data){
             str = str + '</tbody> \
         </table>';
 
-    $('#expert-list').html(str);
+    $('#patient-list').html(str);
 
     $("#grid-basic").bootgrid({
         formatters: {
             'link': function(column, row)
             {
-                var str = '<a target="_blank" href="' + root + '/admin-view-institute-expert/' + row.id + '">View</a>&nbsp;&nbsp;';
+                var str = '<a target="_blank" href="' + root + '/admin-view-institute-patient/' + row.id + '">View</a>&nbsp;&nbsp;';
                 str += '&nbsp;&nbsp; <a class="remove" href="#" rel="' + row.id + '">Remove</a>';
 
                 return str;
@@ -104,10 +104,10 @@ function showGrid(data){
             $(".remove").click(function(){
                 var id = $(this).attr("rel");
 
-                if(!confirm("Are you sure to remove this institute?"))
+                if(!confirm("Are you sure to remove this patient?"))
                     return;
 
-                $.getJSON(root + '/remove-institute-expert/' + id,
+                $.getJSON(root + '/remove-patient/' + id,
                     function(result){
                         if(result.message.indexOf('done')>-1)
                             listPatients(1);
@@ -121,5 +121,5 @@ function showGrid(data){
         });
     }
     else
-        $('#expert-list').html('No experts found');
+        $('#patient-list').html('No patients found');
 }

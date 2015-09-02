@@ -27,33 +27,25 @@ Route::get('/remove-user/{id}', 'PatientController@remove');
 
 /********************** user urls ************************/
 
-/********************** user urls ************************/
-Route::get('/admin-patients', 'AdminController@patients');
+/********************** patient urls ************************/
 Route::post('/save-patient', 'PatientController@savePatient');
-Route::post('/admin-get-patients/{page?}/{status?}', 'PatientController@getPatients');
+Route::get('/remove-patient/{id}', 'PatientController@removePatient');
+Route::get('/admin-get-patients/{page?}/{status?}', 'PatientController@getPatients');
 
 /********************** admin urls ************************/
 Route::get('/admin-login', 'AuthenticationController@adminLogin');
 Route::get('/admin-section', 'AdminController@adminSection');
 Route::get('/admin-institutes', 'AdminController@institutes');
 Route::get('/admin-institute-experts/{id}', 'InstituteController@instituteExperts');
-Route::get('/admin-patients', 'AdminController@patients');
-Route::get('/admin-software-users', 'AdminController@softwareUsers');
+Route::get('/admin-patients', 'PatientController@patients');
 Route::get('/admin-locations', 'LocationController@locations');
 
 Route::get('/admin-list-institutes/{status}/{page}', 'InstituteController@adminListInstitutes');
-Route::get('/admin-list-orders/{status}/{page}', 'AdminController@listOrders');
-Route::get('/admin-list-courses/{status}/{page}', 'AdminController@listCourses');
-Route::get('/admin-list-products/{status}/{page}', 'AdminController@listProducts');
-Route::get('/admin-list-couriers/{status}/{page}', 'AdminController@listCouriers');
-Route::get('/admin-list-software-users/{status}/{page}', 'AdminController@listSoftwareUsers');
-Route::get('/admin-list-users/{status}/{page}', 'AdminController@listUsers');
 Route::get('/admin-list-locations/{status}/{page}', 'AdminController@listLocations');
 
 Route::get('/admin-view-institute/{id}', 'AdminController@viewInstitute');
 Route::get('/admin-view-software-user/{id}', 'AdminController@viewSoftwareUser');
 Route::get('/admin-view-user/{id}', 'AdminController@viewUser');
-Route::post('/update-order-courier', 'AdminController@updateCourier');
 
 Route::get('/categories', 'CategoryController@categories');
 Route::get('/subcategories/{id}', 'CategoryController@subcategories');
@@ -62,6 +54,14 @@ Route::get('/remove-location/{id}', 'LocationController@remove');
 Route::get('/edit-location', 'LocationController@edit');
 Route::post('/update-location', 'LocationController@update');
 Route::post('/save-location', 'LocationController@save');
+
+Route::get('/admin-users', 'UserController@manageUsers');
+Route::post('/save-user', 'UserController@save');
+Route::get('/edit-user', 'UserController@edit');
+Route::post('/update-user', 'UserController@update');
+Route::get('/get-user/{id}', 'UserController@getUser');
+Route::get('/list-users/{status?}/{page?}', 'UserController@listUsers');
+Route::get('/remove-user/{id}', 'UserController@remove');
 
 Route::post('/save-institute', 'InstituteController@save');
 Route::post('/save-institute-expert', 'InstituteController@saveExpert');

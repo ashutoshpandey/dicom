@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAdminsTable extends Migration {
+class CreatePatientRequestForwardRepliesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,14 @@ class CreateAdminsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('admins', function(Blueprint $table)
+		Schema::create('patient_request_forward_replies', function(Blueprint $table)
 		{
             $table->increments('id');
 
-            $table->string('username', 255);
-            $table->string('password', 255);
-			$table->integer('institute_id')->unsigned();
+            $table->integer('request_id')->unsigned();
+			$table->integer('request_forward_id')->unsigned();
+			$table->integer('expert_id')->unsigned();
+			$table->string('comment', 255);
             $table->string('status', 50);
 
             $table->timestamps();
@@ -32,7 +33,7 @@ class CreateAdminsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('admins', function(Blueprint $table)
+		Schema::table('patient_request_forward_replies', function(Blueprint $table)
 		{
 			//
 		});

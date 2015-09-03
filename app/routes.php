@@ -39,6 +39,11 @@ Route::get('/admin-institutes', 'AdminController@institutes');
 Route::get('/admin-institute-experts/{id}', 'InstituteController@instituteExperts');
 Route::get('/admin-patients', 'PatientController@patients');
 Route::get('/admin-locations', 'LocationController@locations');
+Route::get('/admin-connections', 'ConnectionController@manageConnections');
+
+Route::get('/admin-get-connections/{status?}/{page?}', 'ConnectionController@getConnections');
+Route::post('/save-connection', 'ConnectionController@save');
+Route::get('/remove-connection/{id}', 'ConnectionController@remove');
 
 Route::get('/admin-list-institutes/{status}/{page}', 'InstituteController@adminListInstitutes');
 Route::get('/admin-list-locations/{status}/{page}', 'AdminController@listLocations');

@@ -10,7 +10,14 @@
             </li>
             <li class="patients">
                 <a href="{{$root}}/admin-patients">
-                    <i class="fa fa-th"></i> <span>Patients</span>
+                    <i class="fa fa-files-o"></i>
+                    <span>Patients</span>
+                </a>
+            </li>
+            <li class="categories">
+                <a href="{{$root}}/admin-categories">
+                    <i class="fa fa-laptop"></i>
+                    <span>Categories</span>
                 </a>
             </li>
             <li class="logout">

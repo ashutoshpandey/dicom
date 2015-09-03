@@ -20,16 +20,17 @@ class CreateInstitutesTable extends Migration {
             $table->dateTime('establish_date');
             $table->string('address', 1000);
 			$table->string('land_mark', 255);
-			$table->integer('location_id')->unsigned();
 			$table->string('contact_number_1', 20);
 			$table->string('contact_number_2', 20);
+			$table->string('city', 255);
+			$table->string('state', 255);
+			$table->string('zip', 20);
+			$table->string('country', 255);
 
             $table->float('latitude');
             $table->float('longitude');
 
             $table->string('status', 50);
-
-			$table->foreign('location_id')->references('id')->on('locations');
 
             $table->timestamps();
 		});

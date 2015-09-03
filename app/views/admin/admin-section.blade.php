@@ -46,7 +46,7 @@
 <!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
-    @include('includes.admin.super-menu')
+    @include('includes.admin.menu')
     <!-- /.sidebar -->
 </aside>
 

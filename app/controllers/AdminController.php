@@ -12,6 +12,7 @@ class AdminController extends BaseController {
 
                 View::share('root', URL::to('/'));
                 View::share('name', $admin->name);
+                View::share('adminType', Session::get('admin_type'));
             }
         });
     }

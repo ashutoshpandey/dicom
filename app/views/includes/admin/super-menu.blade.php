@@ -20,6 +20,12 @@
                     <span>Institutes</span>
                 </a>
             </li>
+            <li class="connections">
+                <a href="{{$root}}/admin-connections">
+                    <i class="fa fa-files-o"></i>
+                    <span>Connections</span>
+                </a>
+            </li>
             <li class="categories">
                 <a href="{{$root}}/admin-categories">
                     <i class="fa fa-laptop"></i>

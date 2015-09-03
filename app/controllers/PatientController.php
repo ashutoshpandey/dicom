@@ -456,4 +456,8 @@ class PatientController extends BaseController {
         else
             return json_encode(array('message'=>'invalid'));
     }
+
+    public function patientRequests(){
+
+    }
 }

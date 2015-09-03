@@ -18,10 +18,13 @@ class CreateExpertCategoriesTable extends Migration {
 
             $table->integer('category_id')->unsigned();
 			$table->integer('subcategory_id')->unsigned();
+			$table->integer('expert_id')->unsigned();
+
             $table->string('status', 50);
 
             $table->foreign('category_id')->references('id')->on('categories');
 			$table->foreign('subcategory_id')->references('id')->on('sub_categories');
+			$table->foreign('expert_id')->references('id')->on('experts');
 
             $table->timestamps();
 		});

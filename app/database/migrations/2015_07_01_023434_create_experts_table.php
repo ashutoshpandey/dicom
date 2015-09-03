@@ -16,20 +16,19 @@ class CreateExpertsTable extends Migration {
 		{
             $table->increments('id');
 
-            $table->string('first_name', 255);
-            $table->string('last_name', 255);
-            $table->string('gender', 255);
-            $table->string('title', 255);
+            $table->string('name', 255);
             $table->string('email', 255);
-            $table->string('password', 255);
             $table->string('contact_number', 50);
-            $table->string('extension_number', 50);
-            $table->string('country', 255);
-            $table->string('image_name', 255);
-            $table->string('banner_image_name', 255);
             $table->string('highest_qualification', 255);
-            $table->text('about');
-            $table->string('experience');
+            $table->string('gender', 255);
+            $table->integer('institute_id')->unsigned();
+            $table->string('address', 1000);
+            $table->string('city', 255);
+            $table->string('state', 255);
+            $table->string('country', 255);
+            $table->string('password', 255);
+            $table->string('image_name', 255);
+            $table->string('saved_image_name', 255);
             $table->string('status', 50);
 
             $table->timestamps();

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserDocumentsTable extends Migration {
+class CreatePatientDocumentsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,18 +12,18 @@ class CreateUserDocumentsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('user_documents', function(Blueprint $table)
+		Schema::create('patient_documents', function(Blueprint $table)
 		{
             $table->increments('id');
 
-            $table->integer('user_id')->unsigned();
+            $table->integer('patient_id')->unsigned();
 
             $table->string('title', 255);
             $table->string('document_name', 255);
             $table->string('document_saved_name', 255);
             $table->string('status', 50);
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('patient_id')->references('id')->on('patients');
 
             $table->timestamps();
 		});
@@ -36,7 +36,7 @@ class CreateUserDocumentsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('user_documents', function(Blueprint $table)
+		Schema::table('patient_documents', function(Blueprint $table)
 		{
 			//
 		});

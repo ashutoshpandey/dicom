@@ -460,4 +460,32 @@ class PatientController extends BaseController {
     public function patientRequests(){
 
     }
+
+    public function addPatientRequest(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $email = Input::get('email');
+
+        $patientRequest = new PatientRequest();
+
+        $patientRequest->password = Input::get('password');
+        $patientRequest->name = Input::get('name');
+        $patientRequest->gender = Input::get('gender');
+        $patientRequest->country = Input::get('country');
+        $patientRequest->email = $email;
+        $patientRequest->password = hash('sha256', uniqid());
+        $patientRequest->contact_number = Input::get('contact_number');
+
+        $patientRequest->status = "active";
+        $patientRequest->created_at = date("Y-m-d h:i:s");
+        $patientRequest->updated_at = date("Y-m-d h:i:s");
+
+        $patientRequest->save();
+
+        return json_encode(array('message'=>'duplicate'));
+    }
+
 }

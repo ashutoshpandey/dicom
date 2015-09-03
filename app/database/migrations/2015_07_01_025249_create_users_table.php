@@ -20,7 +20,7 @@ class CreateSoftwareUsersTable extends Migration {
             $table->string('password', 255);
             $table->string('user_type', 50);
 			$table->integer('institute_id')->unsigned();
-			
+
             $table->string('status', 50);
 
             $table->timestamps();

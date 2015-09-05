@@ -532,10 +532,10 @@ class PatientController extends BaseController {
 
         $patientRequestForward->patient_id = Input::get('patient_id');
         $patientRequestForward->connection_id = Input::get('connection_id');
+        $patientRequestForward->consultation_expert_id = Input::get('consultation_expert_id');
         $patientRequestForward->expert_id = Input::get('expert_id');
-        $patientRequestForward->institute_id = Input::get('institute_id');
 
-        $patientRequestForward->status = 'active';
+        $patientRequestForward->status = 'consultation';
 
         $patientRequestForward->created_at = date("Y-m-d h:i:s");
         $patientRequestForward->updated_at = date("Y-m-d h:i:s");
@@ -554,9 +554,9 @@ class PatientController extends BaseController {
         $institute_id = Session::get('institute_id');
 
         if(isset($institute_id))
-            $patientRequestForwards = PatientRequestForward::where('institute_id', $institute_id)->where('status', 'active')->get();
+            $patientRequestForwards = PatientRequestForward::where('institute_id', $institute_id)->whereIn('status', array('consultation','expert'))->get();
         else
-            $patientRequestForwards = PatientRequestForward::where('status', 'active')->get();
+            $patientRequestForwards = PatientRequestForward::whereIn('status', array('consultation','expert'))->get();
 
         if(isset($patientRequestForwards) && count($patientRequestForwards)>0){
             return json_encode(array('message'=>'found', 'patientRequests' => $patientRequestForwards->toArray()));

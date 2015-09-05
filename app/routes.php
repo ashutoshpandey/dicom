@@ -49,6 +49,7 @@ Route::get('/admin-list-institutes/{status}/{page}', 'InstituteController@adminL
 Route::get('/admin-list-locations/{status}/{page}', 'AdminController@listLocations');
 
 Route::get('/admin-view-institute/{id}', 'AdminController@viewInstitute');
+Route::get('/admin-view-institute-patient/{id}', 'PatientController@viewInstitutePatient');
 Route::get('/admin-view-software-user/{id}', 'AdminController@viewSoftwareUser');
 Route::get('/admin-view-user/{id}', 'AdminController@viewUser');
 
@@ -99,3 +100,19 @@ Route::get('/remove-subcategory/{id}', 'AdminController@removeSubCategory');
 
 Route::get('/data-expert-list-services/{id}/{page?}', 'ExpertController@dataListServices');
 Route::get('/data-expert-list-qualification/{id}/{page?}', 'ExpertController@dataListQualification');
+Route::get('/data-get-patient/{id}', 'PatientController@dataGetPatient');
+Route::get('/data-patient-documents/{id}', 'PatientController@dataPatientDocuments');
+
+Route::get('/patient-requests', 'PatientController@patientRequests');
+
+Route::get('/add-patient-request', 'PatientController@addPatientRequest');
+
+Route::get('/forward-patient-request', 'PatientController@forwardPatientRequest');
+
+Route::get('/patient-requests', 'PatientController@patientRequests');
+
+Route::get('/patient-request-forwards', 'PatientController@patientRequestForwards');
+
+Route::get('/add-forward-patient-request-reply', 'PatientController@addForwardPatientRequestReply');
+
+Route::get('/patient-request-forward-replies', 'PatientController@patientRequestForwardReplies');

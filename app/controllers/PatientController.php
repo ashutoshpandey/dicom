@@ -17,7 +17,25 @@ class PatientController extends BaseController {
         return View::make('patients.patient-section');
     }
 
+    function viewInstitutePatient($id){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $patient = Patient::find($id);
+
+        if(isset($patient))
+            return View::make('patient.institute-patient')->with('found', true)->with('patient', $patient);
+        else
+            return View::make('patient.institute-patient')->with('found', false);
+    }
+
     function editPatient(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
 
         $patientId = Session::get('patient_id');
 
@@ -459,6 +477,22 @@ class PatientController extends BaseController {
 
     public function patientRequests(){
 
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $institute_id = Session::get('institute_id');
+
+        if(isset($institute_id))
+            $patientRequests = PatientRequest::where('connection_id', $institute_id)->where('status', 'active')->get();
+        else
+            $patientRequests = PatientRequest::where('status', 'active')->get();
+
+        if(isset($patientRequests) && count($patientRequests)>0){
+            return json_encode(array('message'=>'found', 'patientRequests' => $patientRequests->toArray()));
+        }
+        else
+            return json_encode(array('message'=>'empty'));
     }
 
     public function addPatientRequest(){
@@ -485,7 +519,89 @@ class PatientController extends BaseController {
 
         $patientRequest->save();
 
-        return json_encode(array('message'=>'duplicate'));
+        return json_encode(array('message'=>'done'));
     }
 
+    public function forwardPatientRequest(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $patientRequestForward = new PatientRequestForward();
+
+        $patientRequestForward->patient_id = Input::get('patient_id');
+        $patientRequestForward->connection_id = Input::get('connection_id');
+        $patientRequestForward->expert_id = Input::get('expert_id');
+        $patientRequestForward->institute_id = Input::get('institute_id');
+
+        $patientRequestForward->status = 'active';
+
+        $patientRequestForward->created_at = date("Y-m-d h:i:s");
+        $patientRequestForward->updated_at = date("Y-m-d h:i:s");
+
+        $patientRequestForward->save();
+
+        return json_encode(array('message'=>'done'));
+    }
+
+    public function patientRequestForwards(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $institute_id = Session::get('institute_id');
+
+        if(isset($institute_id))
+            $patientRequestForwards = PatientRequestForward::where('institute_id', $institute_id)->where('status', 'active')->get();
+        else
+            $patientRequestForwards = PatientRequestForward::where('status', 'active')->get();
+
+        if(isset($patientRequestForwards) && count($patientRequestForwards)>0){
+            return json_encode(array('message'=>'found', 'patientRequests' => $patientRequestForwards->toArray()));
+        }
+        else
+            return json_encode(array('message'=>'empty'));
+    }
+
+    public function addForwardPatientRequestReply(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $patientRequestForwardReply = new PatientRequestForwardReply();
+
+        $patientRequestForwardReply->request_forward_id = Input::get('request_forward_id');
+        $patientRequestForwardReply->forward_id = Input::get('forward_id');
+        $patientRequestForwardReply->expert_id = Input::get('expert_id');
+        $patientRequestForwardReply->comment = Input::get('comment');
+
+        $patientRequestForwardReply->status = 'active';
+
+        $patientRequestForwardReply->created_at = date("Y-m-d h:i:s");
+        $patientRequestForwardReply->updated_at = date("Y-m-d h:i:s");
+
+        $patientRequestForwardReply->save();
+
+        return json_encode(array('message'=>'done'));
+    }
+
+    public function patientRequestForwardReplies(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $request_forward_id = Input::get('request_forward_id');
+
+        $patientRequestForwardReplies = PatientRequestForwardReply::where('request_forward_id', $request_forward_id)->where('status', 'active')->get();
+
+        if(isset($patientRequestForwardReplies) && count($patientRequestForwardReplies)>0){
+            return json_encode(array('message'=>'found', 'patientRequestForwardReplies' => $patientRequestForwardReplies->toArray()));
+        }
+        else
+            return json_encode(array('message'=>'empty'));
+    }
 }

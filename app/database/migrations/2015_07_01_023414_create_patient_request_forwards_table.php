@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatientRequestsTable extends Migration {
+class CreatePatientRequestForwardsTable extends Migration {
 
 	/**
 	 * Run the migrations.

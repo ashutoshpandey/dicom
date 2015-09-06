@@ -1,6 +1,8 @@
 $(function(){
 
     listUsers(1);
+
+    $("input[name='btn-create']").click(createUser);
 });
 
 function createUser(){

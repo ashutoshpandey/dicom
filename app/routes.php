@@ -108,9 +108,9 @@ Route::get('/patient-requests', 'PatientController@patientRequests');
 
 Route::get('/add-patient-request', 'PatientController@addPatientRequest');
 
-Route::get('/forward-patient-request', 'PatientController@forwardPatientRequest');
+Route::post('/forward-patient-request', 'PatientController@forwardPatientRequest');
 
-Route::get('/patient-requests', 'PatientController@patientRequests');
+Route::get('/patient-requests/{status?}', 'PatientController@patientRequests');
 
 Route::get('/patient-request-forwards', 'PatientController@patientRequestForwards');
 

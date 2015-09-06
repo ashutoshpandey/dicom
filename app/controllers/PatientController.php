@@ -25,8 +25,14 @@ class PatientController extends BaseController {
 
         $patient = Patient::find($id);
 
+        $institute_id = Session::get('institute_id');
+
+        $parents = InstituteConnection::where('connection_id', $institute_id)->where('status', 'active')->get();
+
+        $hasParents = isset($parents) && count($parents)>0;
+
         if(isset($patient))
-            return View::make('patient.institute-patient')->with('found', true)->with('patient', $patient);
+            return View::make('patient.institute-patient')->with('found', true)->with('patient', $patient)->with('hasParents', $hasParents)->with('parents', $parents);
         else
             return View::make('patient.institute-patient')->with('found', false);
     }
@@ -475,7 +481,7 @@ class PatientController extends BaseController {
             return json_encode(array('message'=>'invalid'));
     }
 
-    public function patientRequests(){
+    public function patientRequests($status = 'active'){
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))
@@ -484,9 +490,9 @@ class PatientController extends BaseController {
         $institute_id = Session::get('institute_id');
 
         if(isset($institute_id))
-            $patientRequests = PatientRequest::where('connection_id', $institute_id)->where('status', 'active')->get();
+            $patientRequests = PatientRequest::where('connection_id', $institute_id)->where('status', $status)->with('Patient')->with('Institute')->get();
         else
-            $patientRequests = PatientRequest::where('status', 'active')->get();
+            $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('Institute')->get();
 
         if(isset($patientRequests) && count($patientRequests)>0){
             return json_encode(array('message'=>'found', 'patientRequests' => $patientRequests->toArray()));
@@ -494,7 +500,7 @@ class PatientController extends BaseController {
         else
             return json_encode(array('message'=>'empty'));
     }
-
+/*
     public function addPatientRequest(){
 
         $adminId = Session::get('admin_id');
@@ -521,7 +527,7 @@ class PatientController extends BaseController {
 
         return json_encode(array('message'=>'done'));
     }
-
+*/
     public function forwardPatientRequest(){
 
         $adminId = Session::get('admin_id');
@@ -530,8 +536,8 @@ class PatientController extends BaseController {
 
         $patientRequestForward = new PatientRequestForward();
 
-        $patientRequestForward->patient_id = Input::get('patient_id');
-        $patientRequestForward->connection_id = Input::get('connection_id');
+        $patientRequestForward->patient_id = Session::get('patient_id');
+        $patientRequestForward->connection_id = Session::get('institute_id');
         $patientRequestForward->consultation_expert_id = Input::get('consultation_expert_id');
         $patientRequestForward->expert_id = Input::get('expert_id');
 

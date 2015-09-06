@@ -43,7 +43,7 @@
                             <div class='form-row'>
                                 <div class='form-label'>Name</div>
                                 <div class='form-data'>
-                                    <input type='text' name='first_name' value="{{$patient->name}}"/>
+                                    <input type='text' name='name' value="{{$patient->name}}"/>
                                 </div>
                                 <div class='clear'></div>
                             </div>
@@ -89,26 +89,30 @@
 
                 <div id='tab-form'>
 
-                    <form id='form-create-category'>
+                    <form id='form-forward-request'>
                         <div class='form-row'>
-                            <div class='form-label'>Category</div>
+                            <div class='form-label'>Data</div>
                             <div class='form-data'>
-                                <select name="category"></select>
+                                <input type="text" name="data"/>
                             </div>
                             <div class='clear'></div>
                         </div>
                         <div class='form-row'>
-                            <div class='form-label'>Sub Category</div>
+                            <div class='form-label'>To</div>
                             <div class='form-data'>
-                                <select name="subcategory"></select>
-                            </div>
-                            <div class='clear'></div>
-                        </div>
-                        <div class='form-row'>
-                            <div class='form-label'>&nbsp;</div>
-                            <div class='form-data'>
-                                <input type='button' name='btn-create-category' value="Add To Category" class="half"/><span
-                                        class='message'></span>
+                                @if($hasParents)
+                                <select name="institute_id">
+                                    @foreach($parents as $parent)
+                                        <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                    @endforeach
+                                </select>
+                                @else
+                                    @if($patient->institute_id==0)
+                                        This patient is not associated to any institute
+                                    @else
+                                        Please check connection
+                                    @endif
+                                @endif
                             </div>
                             <div class='clear'></div>
                         </div>

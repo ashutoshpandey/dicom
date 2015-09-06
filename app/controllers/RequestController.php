@@ -8,10 +8,12 @@ class RequestController extends BaseController {
             $id = Session::get('admin_id');
 
             if(isset($id)){
-                $admin = Admin::find($id);
+                $user = User::find($id);
 
-                View::share('root', URL::to('/'));
-                View::share('name', $admin->name);
+                if(isset($user)) {
+                    View::share('root', URL::to('/'));
+                    View::share('name', $user->name);
+                }
             }
         });
     }

@@ -65,7 +65,7 @@ function showGrid(data){
 
                 str = str + '<tr> \
                     <td>' + request.id + '</td> \
-                    <td>' + request.institute.name + '</td> \
+                    <td>' + request.sender_institute.name + '</td> \
                     <td>' + request.patient.name + '</td> \
                     <td>' + request.created_at + '</td> \
                     <td></td> \
@@ -81,9 +81,9 @@ function showGrid(data){
         formatters: {
             'link': function(column, row)
             {
-                var str = '<a target="_blank" href="' + root + '/admin-view-institute-patient/' + row.patient.id + '">Patient</a>&nbsp;&nbsp;';
-                str += '<a target="_blank" href="' + root + '/admin-view-institute/' + row.institute.id + '">Institute</a>&nbsp;&nbsp;';
-                str += '&nbsp;&nbsp; <a class="forward" href="#" rel="' + row.id + '">Forward</a>';
+                var str = '<a target="_blank" href="' + root + '/admin-view-institute-patient/' + row.patient_id + '">Patient</a>&nbsp;&nbsp; ';
+                str += '<a target="_blank" href="' + root + '/admin-view-institute/' + row.institute_id + '">Institute</a>&nbsp;&nbsp; ';
+                str += '<a class="forward" href="#" rel="' + row.id + '">Forward</a>';
 
                 return str;
             }

@@ -6,7 +6,11 @@ class PatientController extends BaseController
     function __construct()
     {
         View::share('root', URL::to('/'));
-        View::share('name', Session::get('name'));
+
+        $name = Session::get('name');
+
+        if(isset($name))
+            View::share('name', $name);
     }
 
     function dashboard()
@@ -532,7 +536,7 @@ class PatientController extends BaseController
             return json_encode(array('message' => 'invalid'));
     }
 
-    public function patientRequests($status = 'active')
+    public function patientRequests($type = 'incoming')
     {
 
         $adminId = Session::get('admin_id');
@@ -541,10 +545,18 @@ class PatientController extends BaseController
 
         $institute_id = Session::get('institute_id');
 
-        if (isset($institute_id))
-            $patientRequests = PatientRequest::where('connection_id', $institute_id)->where('status', $status)->with('Patient')->with('Institute')->get();
-        else
-            $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('Institute')->get();
+        if($type=='incoming') {
+            if (isset($institute_id))
+                $patientRequests = PatientRequest::where('institute_id', $institute_id)->with('Patient')->with('senderInstitute')->get();
+            else
+                $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('Institute')->get();
+        }
+        else if($type=='outgoing'){
+            if (isset($institute_id))
+                $patientRequests = PatientRequest::where('connection_id', $institute_id)->with('Patient')->with('senderInstitute')->get();
+            else
+                $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('Institute')->get();
+        }
 
         if (isset($patientRequests) && count($patientRequests) > 0) {
             return json_encode(array('message' => 'found', 'patientRequests' => $patientRequests->toArray()));

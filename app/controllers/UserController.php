@@ -35,8 +35,16 @@ class UserController extends BaseController {
 
 				Session::put('user_id', $id);
 
+				$male_checked = '';
+				$female_checked = '';
+
+				if(strtolower($user->gender) == 'male')
+					$male_checked = "checked='checked'";
+				else
+					$female_checked = "checked='checked'";
+
 				return View::make('admin.view-user')
-					->with('user', $user);
+					->with('user', $user)->with('male_checked', $male_checked)->with('female_checked', $female_checked);
 			}
 			else
 				return Redirect::to('/');
@@ -113,7 +121,7 @@ class UserController extends BaseController {
 			return json_encode(array('message'=>'invalid'));
 	}
 
-	public function saveUser(){
+	public function save(){
 
 		$adminId = Session::get('admin_id');
 		if(!isset($adminId))
@@ -123,15 +131,19 @@ class UserController extends BaseController {
 
 		if($this->isDuplicateUser($email)==="no"){
 
+			$password = Input::get('password');
+
 			$user = new User;
 
+			$user->username = Input::get('username');
+			$user->user_type = Input::get('user_type');
 			$user->password = Input::get('password');
 			$user->name = Input::get('name');
 			$user->gender = Input::get('gender');
-			$user->country = Input::get('country');
 			$user->email = $email;
-			$user->password = hash('sha256', uniqid());
+			$user->password = hash('sha256', $password);
 			$user->contact_number = Input::get('contact_number');
+			$user->institute_id = Session::get('institute_id');
 
 			$user->status = "active";
 			$user->created_at = date("Y-m-d h:i:s");

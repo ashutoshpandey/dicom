@@ -1,27 +1,31 @@
 <?php
 
-class PatientController extends BaseController {
+class PatientController extends BaseController
+{
 
-    function __construct(){
+    function __construct()
+    {
         View::share('root', URL::to('/'));
         View::share('name', Session::get('name'));
     }
 
-    function dashboard(){
+    function dashboard()
+    {
 
         $patientId = Session::get('patient_id');
 
-        if(!isset($patientId))
+        if (!isset($patientId))
             return Redirect::to('/');
 
         return View::make('patients.patient-section');
     }
 
-    function viewInstitutePatient($id){
+    function viewInstitutePatient($id)
+    {
 
         $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
 
         $patient = Patient::find($id);
 
@@ -29,55 +33,61 @@ class PatientController extends BaseController {
 
         $parents = InstituteConnection::where('connection_id', $institute_id)->where('status', 'active')->get();
 
-        $hasParents = isset($parents) && count($parents)>0;
+        $hasParents = isset($parents) && count($parents) > 0;
 
-        if(isset($patient))
+        if (isset($patient)) {
+
+            Session::set('current_patient_id', $patient->id);
+
             return View::make('patient.institute-patient')->with('found', true)->with('patient', $patient)->with('hasParents', $hasParents)->with('parents', $parents);
+        }
         else
             return View::make('patient.institute-patient')->with('found', false);
     }
 
-    function editPatient(){
+    function editPatient()
+    {
 
         $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
 
         $patientId = Session::get('patient_id');
 
-        if(!isset($patientId))
+        if (!isset($patientId))
             return Redirect::to('/');
 
         $patient = Patient::find($patientId);
 
-        if(isset($patient))
+        if (isset($patient))
             return View::make('patients.edit')->with('patient', $patient);
         else
             return Redirect::to('/');
     }
 
-    function updatePatient(){
+    function updatePatient()
+    {
 
         $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
 
         $patientId = Session::get('patient_id');
 
-        if(!isset($patientId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($patientId))
+            return json_encode(array('message' => 'not logged'));
 
         $patient = patient::find($patientId);
 
-        if(isset($patient)){
+        if (isset($patient)) {
 
             $email = Input::get('email');
 
             $patientByEmail = patient::where('email', '=', $email)->first();
 
-            if(isset($patientByEmail) && $patientByEmail->id != $patient->id)
+            if (isset($patientByEmail) && $patientByEmail->id != $patient->id)
                 echo 'duplicate';
-            else{
+            else {
                 $patient->id = $patientId;
                 $patient->email = $email;
                 $patient->name = Input::get('name');
@@ -86,46 +96,46 @@ class PatientController extends BaseController {
 
                 $patient->save();
 
-                return json_encode(array('message'=>'done'));
+                return json_encode(array('message' => 'done'));
             }
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
+        } else
+            return json_encode(array('message' => 'invalid'));
     }
 
-    function updatePassword(){
+    function updatePassword()
+    {
 
         $patientId = Session::get('patient_id');
 
-        if(!isset($patientId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($patientId))
+            return json_encode(array('message' => 'not logged'));
 
         $patient = patient::find($patientId);
 
-        if(isset($patient)){
+        if (isset($patient)) {
 
             $patient->password = Input::get('password');
 
             $patient->save();
 
-            return json_encode(array('message'=>'done'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
+            return json_encode(array('message' => 'done'));
+        } else
+            return json_encode(array('message' => 'invalid'));
     }
 
-    function updatePicture(){
+    function updatePicture()
+    {
 
         $patientId = Session::get('patient_id');
 
-        if(!isset($patientId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($patientId))
+            return json_encode(array('message' => 'not logged'));
 
         $patient = patient::find($patientId);
 
-        if(isset($patient)){
+        if (isset($patient)) {
 
-            if (Input::hasFile('image')){
+            if (Input::hasFile('image')) {
 
                 $file = array('image' => Input::file('image'));
 
@@ -133,8 +143,7 @@ class PatientController extends BaseController {
                 $validator = Validator::make($file, $rules);
                 if ($validator->fails()) {
                     echo 'wrong';
-                }
-                else {
+                } else {
                     $imageNameSaved = date('Ymdhis');
 
                     $imageName = Input::file('image')->getClientOriginalName();
@@ -145,7 +154,7 @@ class PatientController extends BaseController {
 
                     $directoryPath = base_path() . '/' . $destinationPath;
 
-                    if(!file_exists($directoryPath))
+                    if (!file_exists($directoryPath))
                         mkdir($directoryPath);
 
                     Input::file('image')->move($destinationPath, $fileName);
@@ -155,40 +164,38 @@ class PatientController extends BaseController {
 
                     $patient->save();
 
-                    return json_encode(array('message'=>'done'));
+                    return json_encode(array('message' => 'done'));
                 }
-            }
-            else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
+            } else
+                return json_encode(array('message' => 'empty'));
+        } else
+            return json_encode(array('message' => 'invalid'));
     }
 
-    function uploadDocument(){
+    function uploadDocument()
+    {
 
         $patientId = Session::get('patient_id');
 
-        if(!isset($patientId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($patientId))
+            return json_encode(array('message' => 'not logged'));
 
         $patient = patient::find($patientId);
 
-        if(isset($patient)){
+        if (isset($patient)) {
 
-            if (Input::hasFile('documents')){
+            if (Input::hasFile('documents')) {
 
                 $files = Input::file('documents');
 
                 $rules = array('image' => 'required|max:10000|mimes:png,jpg,jpeg,bmp,gif,pdf,doc,docx,xls,csv');
 
-                foreach($files as $file) {
+                foreach ($files as $file) {
 
                     $validator = Validator::make($file, $rules);
                     if ($validator->fails()) {
                         ;
-                    }
-                    else {
+                    } else {
                         $documentNameSaved = date('Ymdhis');
 
                         $documentName = $file->getClientOriginalName();
@@ -199,7 +206,7 @@ class PatientController extends BaseController {
 
                         $directoryPath = base_path() . '/' . $destinationPath;
 
-                        if(!file_exists($directoryPath))
+                        if (!file_exists($directoryPath))
                             mkdir($directoryPath);
 
                         $file->move($destinationPath, $fileName);
@@ -215,64 +222,63 @@ class PatientController extends BaseController {
                     }
                 }
 
-                return json_encode(array('message'=>'done'));
-            }
-            else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
+                return json_encode(array('message' => 'done'));
+            } else
+                return json_encode(array('message' => 'empty'));
+        } else
+            return json_encode(array('message' => 'invalid'));
     }
 
-    function removeDocument($id){
+    function removeDocument($id)
+    {
 
         $patientId = Session::get('patient_id');
 
-        if(!isset($patientId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($patientId))
+            return json_encode(array('message' => 'not logged'));
 
-        if(isset($id)) {
+        if (isset($id)) {
             $patientDocument = PatientDocument::find($id);
 
-            if(isset($patientDocument)){
+            if (isset($patientDocument)) {
                 $patientDocument->status = 'removed';
                 $patientDocument->save();
             }
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
+        } else
+            return json_encode(array('message' => 'invalid'));
     }
 
-/********************************** admin methods **********************************/
+    /********************************** admin methods **********************************/
 
-    public function patients(){
+    public function patients()
+    {
 
         $adminId = Session::get('admin_id');
-        if(!isset($adminId))
+        if (!isset($adminId))
             return Redirect::to('/');
 
         return View::make('admin.patients');
     }
 
-    public function savePatient(){
+    public function savePatient()
+    {
 
         $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
 
         $email = Input::get('email');
 
-        if($this->isDuplicatePatient($email)==="no"){
+        if ($this->isDuplicatePatient($email) === "no") {
 
             $patient = new Patient;
 
-            $patient->password = Input::get('password');
             $patient->name = Input::get('name');
             $patient->gender = Input::get('gender');
-            $patient->country = Input::get('country');
             $patient->email = $email;
-            $patient->password = hash('sha256', uniqid());
             $patient->contact_number = Input::get('contact_number');
+            $patient->country = Input::get('country');
+            $patient->institute_id = Session::get('institute_id');
 
             $patient->status = "active";
             $patient->created_at = date("Y-m-d h:i:s");
@@ -280,25 +286,65 @@ class PatientController extends BaseController {
 
             $patient->save();
 
-            return json_encode(array('message'=>'done'));
-        }
-        else
-            return json_encode(array('message'=>'duplicate'));
+            return json_encode(array('message' => 'done'));
+        } else
+            return json_encode(array('message' => 'duplicate'));
     }
 
-    public function updateAdminPatient(){
+    public function updateInstitutePatient()
+    {
 
         $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
+
+        $email = Input::get('email');
+
+        $id = Session::get('current_patient_id');
+
+        if(isset($id)) {
+            $patient = Patient::find($id);
+
+            if(isset($patient)) {
+
+                if ($this->isDuplicatePatient($email, $patient->id) === "no") {
+
+                    $patient->name = Input::get('name');
+                    $patient->gender = Input::get('gender');
+                    $patient->email = $email;
+                    $patient->contact_number = Input::get('contact_number');
+
+                    $patient->status = "active";
+                    $patient->created_at = date("Y-m-d h:i:s");
+                    $patient->updated_at = date("Y-m-d h:i:s");
+
+                    $patient->save();
+
+                    return json_encode(array('message' => 'done'));
+                }
+                else
+                    return json_encode(array('message' => 'invalid'));
+            } else
+                return json_encode(array('message' => 'duplicate'));
+        }
+        else
+            return json_encode(array('message' => 'invalid'));
+    }
+
+    public function updateAdminPatient()
+    {
+
+        $adminId = Session::get('admin_id');
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
 
         $patientId = Session::get('patient_id');
 
-        if(isset($patientId)){
+        if (isset($patientId)) {
 
             $patient = Patient::find($patientId);
 
-            if(isset($patient)) {
+            if (isset($patient)) {
                 $patient->password = Input::get('password');
                 $patient->first_name = Input::get('first_name');
                 $patient->last_name = Input::get('last_name');
@@ -312,57 +358,63 @@ class PatientController extends BaseController {
                 $patient->save();
 
                 return json_encode(array('message' => 'done'));
-            }
-            else
+            } else
                 return json_encode(array('message' => 'invalid'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
-    }
-
-    public function isDuplicatePatient($email)
-    {
-        $patient = Patient::where('email', '=', $email)->first();
-
-        return is_null($patient) ? "no" : "yes";
-    }
-
-    public function findPatient($id){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return Redirect::to('/');
-
-        if(isset($id)){
-            $patient = Patient::find($id);
-
-            if(isset($patient))
-                return json_encode(array('message' => 'found', patient => $patient));
-            else
-                return json_encode(array('message' => 'empty'));
-        }
-        else
+        } else
             return json_encode(array('message' => 'invalid'));
     }
 
-    public function viewPatient($id){
+    public function isDuplicatePatient($email, $id = 0)
+    {
+        $patient = Patient::where('email', '=', $email)->first();
+
+        if($id==0){
+            return is_null($patient) ? "no" : "yes";
+        }
+        else {
+            if (is_null($patient))
+                return 'no';
+            else
+                return $patient->id == $id ? "no" : "yes";
+        }
+    }
+
+    public function findPatient($id)
+    {
 
         $adminId = Session::get('admin_id');
-        if(!isset($adminId))
+        if (!isset($adminId))
             return Redirect::to('/');
 
-        if(isset($id)){
+        if (isset($id)) {
             $patient = Patient::find($id);
 
-            if(isset($patient)){
+            if (isset($patient))
+                return json_encode(array('message' => 'found', patient => $patient));
+            else
+                return json_encode(array('message' => 'empty'));
+        } else
+            return json_encode(array('message' => 'invalid'));
+    }
+
+    public function viewPatient($id)
+    {
+
+        $adminId = Session::get('admin_id');
+        if (!isset($adminId))
+            return Redirect::to('/');
+
+        if (isset($id)) {
+            $patient = Patient::find($id);
+
+            if (isset($patient)) {
 
                 Session::put('patient_id', $id);
 
-                if($patient->gender=='male'){
+                if ($patient->gender == 'male') {
                     $male_checked = 'checked="checked"';
                     $female_checked = '';
-                }
-                else{
+                } else {
                     $female_checked = 'checked="checked"';
                     $male_checked = '';
                 }
@@ -371,117 +423,136 @@ class PatientController extends BaseController {
                     ->with('patient', $patient)
                     ->with('male_checked', $male_checked)
                     ->with('female_checked', $female_checked);
-            }
-            else
+            } else
                 return Redirect::to('/');
-        }
-        else
+        } else
             return Redirect::to('/');
     }
 
-    public function getPatients($page = 1, $status = 'active'){
+    public function getPatients($page = 1, $status = 'active')
+    {
 
         $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
 
-        $patients = Patient::where('status', $status)->get();
+        $instituteId = Session::get('institute_id');
 
-        if(isset($patients) && count($patients)>0){
+        $patients = Patient::where('status', $status)->where('institute_id', $instituteId)->get();
 
-            return json_encode(array('message'=>'found', 'patients' => $patients->toArray()));
-        }
-        else
-            return json_encode(array('message'=>'empty'));
+        if (isset($patients) && count($patients) > 0) {
+
+            return json_encode(array('message' => 'found', 'patients' => $patients->toArray()));
+        } else
+            return json_encode(array('message' => 'empty'));
     }
 
-    function removePatient($id){
+    function removePatient($id)
+    {
 
         $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
 
-        if(isset($id)) {
+        if (isset($id)) {
             $patient = Patient::find($id);
 
-            if(isset($patient)){
+            if (isset($patient)) {
                 $patient->status = 'removed';
                 $patient->save();
 
-                return json_encode(array('message'=>'done'));
-            }
-            else
-                return json_encode(array('message'=>'invalid'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
+                return json_encode(array('message' => 'done'));
+            } else
+                return json_encode(array('message' => 'invalid'));
+        } else
+            return json_encode(array('message' => 'invalid'));
     }
 
-/********************************** admin methods **********************************/
+    /********************************** admin methods **********************************/
 
-    function removeAccount(){
+    function removeAccount()
+    {
 
         $patientId = Session::get('patient_id');
 
-        if(!isset($patientId))
-            return json_encode(array('message'=>'not logged'));
+        if (!isset($patientId))
+            return json_encode(array('message' => 'not logged'));
 
-        if(isset($patientId)) {
+        if (isset($patientId)) {
 
             $patient = patient::find($patientId);
 
-            if(isset($patient)){
+            if (isset($patient)) {
                 $patient->status = 'removed';
 
                 $patient->save();
 
-                return json_encode(array('message'=>'done'));
-            }
-            else
-                return json_encode(array('message'=>'invalid'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
+                return json_encode(array('message' => 'done'));
+            } else
+                return json_encode(array('message' => 'invalid'));
+        } else
+            return json_encode(array('message' => 'invalid'));
     }
 
     /************** json methods ***************/
-    function dataGetPatient($id){
+    function dataGetPatient($id)
+    {
 
         $patient = Patient::find($id);
 
-        if(isset($patient))
-            return json_encode(array('message'=>'found', 'patient' => $patient));
+        if (isset($patient))
+            return json_encode(array('message' => 'found', 'patient' => $patient));
         else
-            return json_encode(array('message'=>'empty'));
+            return json_encode(array('message' => 'empty'));
     }
 
-    function dataGetPatients($page=1, $status='active'){
+    function dataGetPatients($page = 1, $status = 'active')
+    {
 
         $patients = Patient::where('status', $status)->get();
 
-        if(isset($patients) && count($patients)>0){
-            return json_encode(array('message'=>'found', 'patients' => $patients));
-        }
-        else
-            return json_encode(array('message'=>'empty'));
+        if (isset($patients) && count($patients) > 0) {
+            return json_encode(array('message' => 'found', 'patients' => $patients));
+        } else
+            return json_encode(array('message' => 'empty'));
     }
 
-    public function dataPatientDocuments($patientId){
+    public function dataPatientDocuments($patientId)
+    {
 
-        if(isset($patientId)){
-            $documents = PatientDocument::where('patient_id','=',$patientId)->
-                where('status','=','active')->get();
+        if (isset($patientId)) {
+            $documents = PatientDocument::where('patient_id', '=', $patientId)->
+            where('status', '=', 'active')->get();
 
-            if(isset($documents) && count($documents)>0)
-                return json_encode(array('message'=>'found', 'documents' => $documents->toArray()));
+            if (isset($documents) && count($documents) > 0)
+                return json_encode(array('message' => 'found', 'documents' => $documents->toArray()));
             else
-                return json_encode(array('message'=>'empty'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
+                return json_encode(array('message' => 'empty'));
+        } else
+            return json_encode(array('message' => 'invalid'));
     }
 
-    public function patientRequests($status = 'active'){
+    public function patientRequests($status = 'active')
+    {
+
+        $adminId = Session::get('admin_id');
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
+
+        $institute_id = Session::get('institute_id');
+
+        if (isset($institute_id))
+            $patientRequests = PatientRequest::where('connection_id', $institute_id)->where('status', $status)->with('Patient')->with('Institute')->get();
+        else
+            $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('Institute')->get();
+
+        if (isset($patientRequests) && count($patientRequests) > 0) {
+            return json_encode(array('message' => 'found', 'patientRequests' => $patientRequests->toArray()));
+        } else
+            return json_encode(array('message' => 'empty'));
+    }
+
+    public function patientRequestHistory($patientId, $page = 1, $status = 'active'){
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))
@@ -490,9 +561,9 @@ class PatientController extends BaseController {
         $institute_id = Session::get('institute_id');
 
         if(isset($institute_id))
-            $patientRequests = PatientRequest::where('connection_id', $institute_id)->where('status', $status)->with('Patient')->with('Institute')->get();
+            $patientRequests = PatientRequest::where('connection_id', $institute_id)->where('patient_id', $patientId)->where('status', $status)->with('Institute')->get();
         else
-            $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('Institute')->get();
+            $patientRequests = PatientRequest::where('status', 'active')->where('patient_id', $patientId)->with('Institute')->get();
 
         if(isset($patientRequests) && count($patientRequests)>0){
             return json_encode(array('message'=>'found', 'patientRequests' => $patientRequests->toArray()));
@@ -527,7 +598,7 @@ class PatientController extends BaseController {
 
         return json_encode(array('message'=>'done'));
     }
-*/
+
     public function forwardPatientRequest(){
 
         $adminId = Session::get('admin_id');
@@ -570,31 +641,54 @@ class PatientController extends BaseController {
         else
             return json_encode(array('message'=>'empty'));
     }
+*/
 
-    public function addForwardPatientRequestReply(){
+    public function forwardPatientRequest(){
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))
             return json_encode(array('message'=>'not logged'));
 
-        $patientRequestForwardReply = new PatientRequestForwardReply();
+        $patientRequest = new PatientRequest();
 
-        $patientRequestForwardReply->request_forward_id = Input::get('request_forward_id');
-        $patientRequestForwardReply->forward_id = Input::get('forward_id');
-        $patientRequestForwardReply->expert_id = Input::get('expert_id');
-        $patientRequestForwardReply->comment = Input::get('comment');
+        $patientRequest->patient_id = Session::get('current_patient_id');
+        $patientRequest->connection_id = Session::get('institute_id');
+        $patientRequest->institute_id = Input::get('institute_id');
 
-        $patientRequestForwardReply->status = 'active';
+        $patientRequest->status = 'consultation';
 
-        $patientRequestForwardReply->created_at = date("Y-m-d h:i:s");
-        $patientRequestForwardReply->updated_at = date("Y-m-d h:i:s");
+        $patientRequest->created_at = date("Y-m-d h:i:s");
+        $patientRequest->updated_at = date("Y-m-d h:i:s");
 
-        $patientRequestForwardReply->save();
+        $patientRequest->save();
 
         return json_encode(array('message'=>'done'));
     }
 
-    public function patientRequestForwardReplies(){
+    public function addPatientRequestReply(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $patientRequestReply = new PatientRequestReply();
+
+        $patientRequestReply->request_id = Input::get('request_forward_id');
+        $patientRequestReply->forward_id = Input::get('forward_id');
+        $patientRequestReply->expert_id = Input::get('expert_id');
+        $patientRequestReply->comment = Input::get('comment');
+
+        $patientRequestReply->status = 'active';
+
+        $patientRequestReply->created_at = date("Y-m-d h:i:s");
+        $patientRequestReply->updated_at = date("Y-m-d h:i:s");
+
+        $patientRequestReply->save();
+
+        return json_encode(array('message'=>'done'));
+    }
+
+    public function patientRequestReplies(){
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))

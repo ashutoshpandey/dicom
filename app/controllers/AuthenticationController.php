@@ -13,6 +13,10 @@ class AuthenticationController extends BaseController {
 		return View::make('admin.login');
 	}
 
+    public function login(){
+        return View::make('user.login');
+    }
+
     public function registerExpert(){
         return View::make('authentication.register-expert');
     }
@@ -47,25 +51,22 @@ class AuthenticationController extends BaseController {
 
 	public function isValidUser()
 	{
-        $email = Input::get('email');
+        $username = Input::get('username');
         $password = Input::get('password');
 
-        $user = User::where('email', '=', $email)
+        $user = User::where('username', $username)
                     ->where('password','=',$password)->first();
 
         if(is_null($user)){
             return json_encode(array("message"=>"invalid"));
         }
         else{
-            Session::put('user_id', $user->id);
+            Session::put('admin_type', 'institute');
+            Session::put('admin_id', $user->id);
+            Session::put('institute_id', $user->institute_id);
             Session::put('login_type', 'user');
 
-            $ar = array(
-                "message"       =>  "correct",
-                "name"    =>  $user->name
-            );
-
-            return json_encode($ar);
+            return json_encode(array("message"=>"correct"));
         }
 	}
 

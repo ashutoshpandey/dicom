@@ -79,13 +79,6 @@
                                 <div class='clear'></div>
                             </div>
                             <div class='form-row'>
-                                <div class='form-label'>Highest Qualification</div>
-                                <div class='form-data'>
-                                    <input type='text' name='highest_qualification'/>
-                                </div>
-                                <div class='clear'></div>
-                            </div>
-                            <div class='form-row'>
                                 <div class='form-label'>Country</div>
                                 <div class='form-data'>
                                     <select name="country">

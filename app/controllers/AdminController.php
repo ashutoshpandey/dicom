@@ -8,7 +8,7 @@ class AdminController extends BaseController {
             $id = Session::get('admin_id');
 
             if(isset($id)){
-                $admin = Admin::find($id);
+                $admin = User::find($id);
 
                 View::share('root', URL::to('/'));
                 View::share('name', $admin->name);

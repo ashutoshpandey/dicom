@@ -46,7 +46,7 @@
                 </div>
                 <div id='tab-create'>
                     <div id='form-container'>
-                        <form id='form-create-software-user'>
+                        <form id='form-create-user'>
 
                             <div class='form-row'>
                                 <div class='form-label'>Institute</div>

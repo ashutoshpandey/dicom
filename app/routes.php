@@ -20,8 +20,8 @@ Route::get('/privacy-policy', 'StaticController@privacyPolicy');
 Route::get('/institutes', 'SearchController@institutes');
 Route::get('/institute/{id}', 'SearchController@home');
 
+Route::get('/login', 'AuthenticationController@login');
 Route::post('/is-valid-user', 'AuthenticationController@isValidUser');
-Route::post('/is-valid-admin', 'AuthenticationController@isValidAdmin');
 
 Route::get('/remove-user/{id}', 'PatientController@remove');
 
@@ -29,11 +29,14 @@ Route::get('/remove-user/{id}', 'PatientController@remove');
 
 /********************** patient urls ************************/
 Route::post('/save-patient', 'PatientController@savePatient');
+Route::post('/update-institute-patient', 'PatientController@updateInstitutePatient');
 Route::get('/remove-patient/{id}', 'PatientController@removePatient');
 Route::get('/admin-get-patients/{page?}/{status?}', 'PatientController@getPatients');
 
 /********************** admin urls ************************/
 Route::get('/admin-login', 'AuthenticationController@adminLogin');
+Route::post('/is-valid-admin', 'AuthenticationController@isValidAdmin');
+
 Route::get('/admin-section', 'AdminController@adminSection');
 Route::get('/admin-institutes', 'AdminController@institutes');
 Route::get('/admin-institute-experts/{id}', 'InstituteController@instituteExperts');
@@ -51,8 +54,6 @@ Route::get('/admin-list-locations/{status}/{page}', 'AdminController@listLocatio
 
 Route::get('/admin-view-institute/{id}', 'AdminController@viewInstitute');
 Route::get('/admin-view-institute-patient/{id}', 'PatientController@viewInstitutePatient');
-Route::get('/admin-view-software-user/{id}', 'AdminController@viewSoftwareUser');
-Route::get('/admin-view-user/{id}', 'AdminController@viewUser');
 
 Route::get('/categories', 'CategoryController@categories');
 Route::get('/subcategories/{id}', 'CategoryController@subcategories');
@@ -69,6 +70,7 @@ Route::post('/update-user', 'UserController@update');
 Route::get('/get-user/{id}', 'UserController@getUser');
 Route::get('/list-users/{status?}/{page?}', 'UserController@listUsers');
 Route::get('/remove-user/{id}', 'UserController@remove');
+Route::get('/admin-view-user/{id}', 'UserController@viewUser');
 
 Route::post('/save-institute', 'InstituteController@save');
 Route::post('/save-institute-expert', 'InstituteController@saveExpert');
@@ -105,6 +107,7 @@ Route::get('/data-get-patient/{id}', 'PatientController@dataGetPatient');
 Route::get('/data-patient-documents/{id}', 'PatientController@dataPatientDocuments');
 
 Route::get('/patient-requests', 'PatientController@patientRequests');
+Route::get('/patient-request-history/{id}/{page?}/{status?}', 'PatientController@patientRequestHistory');
 
 Route::get('/add-patient-request', 'PatientController@addPatientRequest');
 

@@ -39,11 +39,18 @@
 
                 <div id='tab-edit'>
                     <div id='form-container'>
-                        <form id='form-create-book'>
+                        <form id='form-update-patient'>
                             <div class='form-row'>
                                 <div class='form-label'>Name</div>
                                 <div class='form-data'>
                                     <input type='text' name='name' value="{{$patient->name}}"/>
+                                </div>
+                                <div class='form-label'>Gender</div>
+                                <div class='form-data'>
+                                    <select name='gender'>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                    </select>
                                 </div>
                                 <div class='clear'></div>
                             </div>
@@ -59,26 +66,9 @@
                                 <div class='clear'></div>
                             </div>
                             <div class='form-row'>
-                                <div class='form-label'>Gender</div>
-                                <div class='form-data'>
-                                    <select name='gender'>
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                    </select>
-                                </div>
-                                <div class='clear'></div>
-                            </div>
-                            <div class='form-row'>
-                                <div class='form-label'>Highest Qualification</div>
-                                <div class='form-data'>
-                                    <input type='text' name='highest_qualification' value="{{$patient->highest_qualification}}"/>
-                                </div>
-                                <div class='clear'></div>
-                            </div>
-                            <div class='form-row'>
                                 <div class='form-label'>&nbsp;</div>
                                 <div class='form-data-full'>
-                                    <input type='submit' value="Update Expert" class='half'/> <span
+                                    <input type='button' name="btn-update-patient" value="Update Patient"/> <span
                                             class='message'></span>
                                 </div>
                                 <div class='clear'></div>
@@ -103,7 +93,7 @@
                                 @if($hasParents)
                                 <select name="institute_id">
                                     @foreach($parents as $parent)
-                                        <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                        <option value="{{$parent->institute->id}}">{{$parent->institute->name}}</option>
                                     @endforeach
                                 </select>
                                 @else
@@ -119,7 +109,7 @@
                         <div class="form-row">
                             <div class='form-label'>&nbsp;</div>
                             <div class='form-data'>
-                                <input type='button' name='btn-forward' value="Forward to expert" class="half"/><span class='message forward-message'></span>
+                                <input type='button' name='btn-forward' value="Forward" class="half"/><span class='message forward-message'></span>
                             </div>
                             <div class='clear'></div>
                         </div>
@@ -149,7 +139,8 @@
 <!-- ./wrapper -->
 
 @include('includes/common_js_bottom')
-{{HTML::script(asset("/public/js/site/admin/view-institute-patient.js"))}}
+{{HTML::script(asset("/public/js/site/admin/institute-patient.js"))}}
+<span class="span-patient" rel="{{$patient->id}}"></span>
 <script>
     $("select[name='gender']").val("{{$patient->gender}}");
 </script>

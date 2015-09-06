@@ -9,7 +9,7 @@ function doLogin(){
         var data = $("#form-admin-login").serialize();
 
         $.ajax({
-            url: root + '/is-valid-admin',
+            url: root + '/is-valid-user',
             type: 'post',
             data: data,
             dataType: 'json',

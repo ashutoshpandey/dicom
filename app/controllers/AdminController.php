@@ -7,11 +7,12 @@ class AdminController extends BaseController {
         $this->beforeFilter(function(){
             $id = Session::get('admin_id');
 
-            if(isset($id)){
-                $admin = User::find($id);
+            View::share('root', URL::to('/'));
 
-                View::share('root', URL::to('/'));
-                View::share('name', $admin->name);
+            if(isset($id)){
+                $user = User::find($id);
+
+                View::share('name', $user->name);
                 View::share('adminType', Session::get('admin_type'));
             }
         });

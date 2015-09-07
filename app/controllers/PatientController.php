@@ -7,10 +7,14 @@ class PatientController extends BaseController
     {
         View::share('root', URL::to('/'));
 
-        $name = Session::get('name');
+        $id = Session::get('admin_id');
 
-        if(isset($name))
-            View::share('name', $name);
+        if(isset($id)){
+            $user = User::find($id);
+
+            View::share('name', $user->name);
+            View::share('adminType', Session::get('admin_type'));
+        }
     }
 
     function dashboard()

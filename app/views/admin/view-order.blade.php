@@ -163,7 +163,7 @@
 <!-- ./wrapper -->
 
 @include('includes/common_js_bottom')
-@include('includes/admin/order-popup')
+@include('includes.admin.assign-popup')
 {{HTML::script(asset("/public/js/site/admin/view-order.js"))}}
 </body>
 </html>

@@ -10,6 +10,7 @@
 
     {{HTML::style(asset("/public/css/AdminLTE.css"))}}
     {{HTML::style(asset("/public/css/admin-skins/_all-skins.min.css"))}}
+    {{HTML::style(asset("/public/css/p"))}}
 
     @include('includes.admin.common_js_top')
 </head>
@@ -49,7 +50,8 @@
 </div>
 <!-- ./wrapper -->
 
-@include('includes/common_js_bottom')
+@include('includes.admin.assign-popup')
+@include('includes.common_js_bottom')
 {{HTML::script(asset("/public/js/site/admin/patient-requests.js"))}}
 <script type="text/javascript">
     $(function () {

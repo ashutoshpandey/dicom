@@ -83,29 +83,42 @@ function showGrid(data){
             {
                 var str = '<a target="_blank" href="' + root + '/admin-view-institute-patient/' + row.patient_id + '">Patient</a>&nbsp;&nbsp; ';
                 str += '<a target="_blank" href="' + root + '/admin-view-institute/' + row.institute_id + '">Institute</a>&nbsp;&nbsp; ';
-                str += '<a class="forward" href="#" rel="' + row.id + '">Forward</a>';
+                str += '<a class="assign" href="#" rel="' + row.id + '">Assign</a>';
 
                 return str;
             }
         }
     }).on("loaded.rs.jquery.bootgrid", function()
         {
-            $(".remove").click(function(){
+            $(".assign").click(function(){
                 var id = $(this).attr("rel");
 
-                if(!confirm("Are you sure to remove this patient?"))
-                    return;
+                var data = $("#form-assign").serialize();
 
-                $.getJSON(root + '/forward-patient-request/' + id,
-                    function(result){
-                        if(result.message.indexOf('done')>-1)
-                            listPatients(1);
-                        else if(result.message.indexOf('not logged')>-1)
-                            window.location.replace(root);
-                        else
-                            alert("Server returned error : " + result);
+                data = data + '&id=' + id;
+
+                $.ajax({
+                    url: root + '/assign-request',
+                    type: 'post',
+                    data: data,
+                    success: function(result){
+
+                        if(result.message != undefined){
+
+                            if(result.indexOf("not logged")>-1) {
+                                alert("You are logged out");
+                                window.location.replace = root;
+                            }
+                            else if(result.indexOf("done")>-1) {
+                                $(".message-assign").html("Request assigned");
+                                listPatientRequests(1);
+                            }
+                        }
+                        else {
+                            alert("Invalid result returned by server");
+                        }
                     }
-                );
+                });
             });
         });
     }

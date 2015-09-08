@@ -1,99 +1,18 @@
-var assignId;
+var requestId;
 
 $(function(){
 
     listPatientRequests(1);
 
-    $("input[name='btn-forward']").click(forwardRequest);
-
-    $("input[name='btn-assign-request']").click(assignRequest);
-
-    $("select[name='category_consultant']").change(loadConsultants);
-    $("select[name='category_expert']").change(loadExperts);
-
-    loadConsultants();
-    loadExperts();
+    $("input[name='btn-reply-request']").click(replyRequest);
 });
-
-function loadConsultants(){
-
-    var category_id = $("select[name='category_consultant']").val();
-
-    $.ajax({
-        url: root + '/get-category-consultants/' + category_id,
-        type: 'get',
-        dataType: 'json',
-        success: function(result){
-
-            if (result.message.indexOf('not logged') > -1)
-                window.location.replace(root);
-            else {
-                if(result.message!=undefined && result.message=="found"){
-
-                    for(var i=0;i<result.experts.length;i++){
-
-                        var expert = result.experts[i];
-
-                        $("select[name='consultant_id']").append("<option value='" + expert.id + "'>" + expert.name + "</option>");
-                    }
-                }
-            }
-        }
-    });
-}
-function loadExperts(){
-
-    var category_id = $("select[name='category_expert']").val();
-
-    $.ajax({
-        url: root + '/get-category-experts/' + category_id,
-        type: 'get',
-        dataType: 'json',
-        success: function(result){
-
-            if (result.message.indexOf('not logged') > -1)
-                window.location.replace(root);
-            else {
-                if(result.message!=undefined && result.message=="found"){
-
-                    for(var i=0;i<result.experts.length;i++){
-
-                        var expert = result.experts[i];
-
-                        $("select[name='expert_id']").append("<option value='" + expert.id + "'>" + expert.name + "</option>");
-                    }
-                }
-            }
-        }
-    });
-}
-
-function forwardRequest(){
-
-    var frm = $("#form-forward-request").serialize();
-
-    $(".forward-message").html("");
-
-    $.ajax({
-        url: root + '/forward-patient-request',
-        type: 'post',
-        success: function(result){
-
-            if (result.message.indexOf('not logged') > -1)
-                window.location.replace(root);
-            else {
-                $(".forward-message").html("Request forwarded successfully");
-            }
-        }
-    });
-}
 
 function listPatientRequests(page){
 
     var status = 'active';
 
     $.getJSON(
-        root + '/patient-requests',
+        root + '/get-expert-requests',
         function(result){
 
             if(result.message.indexOf('not logged')>-1)
@@ -114,7 +33,7 @@ function showGrid(data){
             <thead> \
                 <tr> \
                     <th data-column-id="id" data-type="numeric">ID</th> \
-                    <th data-column-id="institute">Institute</th> \
+                    <th data-column-id="institute">Sender Institute</th> \
                     <th data-column-id="patient">Patient</th> \
                     <th data-column-id="date">Date</th> \
                     <th data-column-id="status">Status</th> \
@@ -132,9 +51,9 @@ function showGrid(data){
                 if(status=="consultation")
                     status = "Not assigned";
                 else if(status=="assigned")
-                    status = "Assigned";
+                    status = "Please reply";
                 else if(status=="consultant replied")
-                    status = "Pending from expert";
+                    status = "Replied";
                 else if(status=="expert reply")
                     status = "Complete";
 
@@ -160,19 +79,19 @@ function showGrid(data){
                 var str = '<a target="_blank" href="' + root + '/admin-view-institute-patient/' + row.patient_id + '">Patient</a>&nbsp;&nbsp; ';
                 str += '<a target="_blank" href="' + root + '/admin-view-institute/' + row.institute_id + '">Institute</a>&nbsp;&nbsp; ';
 
-                if(row.status=="Not assigned")
-                    str += '<a class="assign" href="#" rel="' + row.id + '">Assign</a>';
+                if(row.status=="Please reply")
+                    str += '<a class="reply" href="#" rel="' + row.id + '">Reply</a>';
 
                 return str;
             }
         }
     }).on("loaded.rs.jquery.bootgrid", function()
         {
-            $(".assign").click(function(){
+            $(".reply").click(function(){
 
-                assignId = $(this).attr('rel');
+                requestId = $(this).attr('rel');
 
-                $('#assign-popup').modal();
+                $('#reply-popup').modal();
 
             });
         });
@@ -181,14 +100,14 @@ function showGrid(data){
         $('#request-list').html('No requests found');
 }
 
-function assignRequest(){
+function replyRequest(){
 
-    var data = $("#form-assign-request").serialize();
+    var data = $("#form-reply-request").serialize();
 
-    data = data + '&id=' + assignId;
+    data = data + '&id=' + requestId;
 
     $.ajax({
-        url: root + '/assign-request',
+        url: root + '/reply-request',
         type: 'post',
         data: data,
         dataType: 'json',

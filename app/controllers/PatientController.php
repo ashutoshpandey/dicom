@@ -704,29 +704,6 @@ class PatientController extends BaseController
             return json_encode(array('message' => 'invalid'));
     }
 
-    public function addPatientRequestReply(){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $patientRequestReply = new PatientRequestReply();
-
-        $patientRequestReply->request_id = Input::get('request_forward_id');
-        $patientRequestReply->forward_id = Input::get('forward_id');
-        $patientRequestReply->expert_id = Input::get('expert_id');
-        $patientRequestReply->comment = Input::get('comment');
-
-        $patientRequestReply->status = 'active';
-
-        $patientRequestReply->created_at = date("Y-m-d h:i:s");
-        $patientRequestReply->updated_at = date("Y-m-d h:i:s");
-
-        $patientRequestReply->save();
-
-        return json_encode(array('message'=>'done'));
-    }
-
     public function patientRequestReplies(){
 
         $adminId = Session::get('admin_id');

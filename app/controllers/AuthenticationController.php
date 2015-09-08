@@ -13,8 +13,12 @@ class AuthenticationController extends BaseController {
 		return View::make('admin.login');
 	}
 
-    public function login(){
+    public function userLogin(){
         return View::make('user.login');
+    }
+
+    public function expertLogin(){
+        return View::make('expert.login');
     }
 
     public function registerExpert(){

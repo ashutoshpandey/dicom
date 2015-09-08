@@ -20,12 +20,18 @@ Route::get('/privacy-policy', 'StaticController@privacyPolicy');
 Route::get('/institutes', 'SearchController@institutes');
 Route::get('/institute/{id}', 'SearchController@home');
 
-Route::get('/login', 'AuthenticationController@login');
+/********************** user urls ************************/
+Route::get('/login', 'AuthenticationController@expertLogin');
 Route::post('/is-valid-user', 'AuthenticationController@isValidUser');
-
 Route::get('/remove-user/{id}', 'PatientController@remove');
 
-/********************** user urls ************************/
+/********************** expert urls ************************/
+Route::get('/expert-login', 'AuthenticationController@expertLogin');
+Route::post('/is-valid-expert', 'AuthenticationController@isValidExpert');
+
+Route::get('/expert-section', 'ExpertController@expertSection');
+Route::get('/expert-requests', 'ExpertController@requests');
+Route::get('/get-expert-requests', 'ExpertController@getExpertRequests');
 
 /********************** patient urls ************************/
 Route::post('/save-patient', 'PatientController@savePatient');
@@ -110,9 +116,8 @@ Route::get('/patient-requests', 'PatientController@patientRequests');
 Route::get('/patient-request-history/{id}/{page?}/{status?}', 'PatientController@patientRequestHistory');
 
 Route::get('/add-patient-request', 'PatientController@addPatientRequest');
-
-Route::post('/forward-patient-request', 'PatientController@forwardPatientRequest');
 Route::post('/assign-request', 'PatientController@assignPatientRequest');
+Route::post('/reply-request', 'ExpertController@addRequestReply');
 
 Route::get('/patient-requests/{status?}', 'PatientController@patientRequests');
 

@@ -2,29 +2,25 @@
 
 class ExpertController extends BaseController {
 
-    public function __construct(){
+    function __construct()
+    {
+        View::share('root', URL::to('/'));
 
-        $this->beforeFilter(function(){
-            $id = Session::get('expert_id');
+        $id = Session::get('admin_id');
 
-            if(isset($id)){
-                $expert = Expert::find($id);
+        if(isset($id)){
+            $expert = Expert::find($id);
 
-                if(isset($expert)) {
-                    if (isset($expert->image_name))
-                        $expertImage = 'uploads/experts/' . $expert->id . '/' . $expert->image_name;
-                    else
-                        $expertImage = 'images/expert.jpg';
+            View::share('name', $expert->name);
+        }
+    }
 
-                    View::share('expertImage', $expertImage);
-                    View::share('expert_name', $expert->first_name . " " . $expert->last_name);
-                }
-            }
+    public function expertSection(){
+        return View::make('expert.expert-section');
+    }
 
-            date_default_timezone_set("UTC");
-
-            View::share('root', URL::to('/'));
-        });
+    public function requests(){
+        return View::make('expert.requests');
     }
 
     public function manage(){
@@ -49,203 +45,69 @@ class ExpertController extends BaseController {
                     ->with('availability_count', $availability_count);
     }
 
-    public function achievements(){
+    public function getExpertRequests($type = 'incoming')
+    {
 
-        $expertId = Session::get('expert_id');
+        $adminId = Session::get('admin_id');
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
 
-        if(!isset($expertId))
-            return Redirect::to('/');
-
-        return View::make('expert.achievements');
-    }
-
-    public function addAchievement(){
-
-        $expertId = Session::get('expert_id');
-
-        if(!isset($expertId))
-            return json_encode(array('message'=>'not logged'));
-
-        $expertMembership = new ExpertMembership();
-
-        $expertMembership->created_at = date('Y-m-d h:i:s');
-        $expertMembership->title = Input::get('title');
-        $expertMembership->content = Input::get('content');
-
-        $expertMembership->save();
-
-        return json_encode(array('message'=>'done'));
-    }
-
-    public function getAchievements(){
-
-        $expertId = Session::get('expert_id');
-
-        if(!isset($expertId))
-            return json_encode(array('message'=>'not logged'));
-
-        if(isset($expertId)){
-
-            $memberships = ExpertMembership::where('expert_id','=',$expertId)->
-                where('status','=','active')->get();
-
-            return json_encode(array('message'=>'found', 'memberships' =>$memberships));
-        }
-        else
-            return json_encode(array('message'=>'empty'));
-    }
-
-    public function removeAchievement($id){
-
-        $expertId = Session::get('expert_id');
-
-        if(!isset($expertId))
-            return json_encode(array('message'=>'not logged'));
-
-        if(isset($id)){
-
-            $expertMembership = ExpertMembership::find($id);
-
-            if(isset($expertMembership)){
-
-                $expertMembership->status = 'removed';
-                $expertMembership->save();
-
-                return json_encode(array('message'=>'done'));
-            }
+        if($type=='incoming') {
+            if (isset($adminId))
+                $patientRequests = PatientRequest::where('consultant_id', $adminId)->with('Patient')->with('senderInstitute')->with('receiverInstitute')->get();
             else
-                return json_encode(array('message'=>'invalid'));
+                $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('receiverInstitute')->get();
+        }
+        else if($type=='outgoing'){
+            if (isset($institute_id))
+                $patientRequests = PatientRequest::where('connection_id', $institute_id)->with('Patient')->with('senderInstitute')->get();
+            else
+                $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('receiverInstitute')->get();
+        }
+
+        if (isset($patientRequests) && count($patientRequests) > 0) {
+            return json_encode(array('message' => 'found', 'patientRequests' => $patientRequests->toArray()));
+        } else
+            return json_encode(array('message' => 'empty'));
+    }
+
+    public function addRequestReply(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $requestId = Input::get('id');
+
+        if(isset($requestId)) {
+
+            $patientRequest = PatientRequest::find($requestId);
+
+            if (isset($patientRequest)) {
+
+                $patientRequestReply = new PatientRequestReply();
+
+                $patientRequestReply->request_id = $requestId;
+                $patientRequestReply->reply_from = 'consultant';
+                $patientRequestReply->expert_id = Session::get('expert_id');
+                $patientRequestReply->comment = Input::get('reply');
+
+                $patientRequestReply->status = 'active';
+
+                $patientRequestReply->created_at = date("Y-m-d h:i:s");
+                $patientRequestReply->updated_at = date("Y-m-d h:i:s");
+
+                $patientRequestReply->save();
+
+                $patientRequest->status = 'consultant replied';
+                $patientRequest->save();
+
+                return json_encode(array('message' => 'done'));
+            } else
+                return json_encode(array('message' => 'invalid'));
         }
         else
-            return json_encode(array('message'=>'invalid'));
-    }
-
-    public function getAvailabilities(){
-
-        $expertId = Session::get('expert_id');
-
-        if(!isset($expertId))
-            return json_encode(array('message'=>'not logged'));
-
-        $expert_id = Session::get('expert_id');
-
-        $start_date = Input::get('start_date');
-        $end_date = Input::get('end_date');
-
-        $start_date = date("Y-m-d", strtotime($start_date));
-        $end_date = date("Y-m-d", strtotime($end_date));
-
-        $startDate = $start_date . " 00:00:01";
-        $endDate = $end_date . " 23:59:59";
-
-        $appointments = Appointment::where('status','=','pending')
-                                   ->where('expert_id','=',$expert_id)
-                                   ->where('appointment_date','>',$startDate)
-                                   ->where('appointment_date','<',$endDate)->orderBy('appointment_date', 'ASC')->get();
-
-        if(isset($appointments))
-            return json_encode(array('message'=>'found', 'appointments' => $appointments));
-        else
-            return json_encode(array('message'=>'empty'));
-    }
-
-    public function edit(){
-
-        $expertId = Session::get('expert_id');
-
-        if(!isset($expertId))
-            return Redirect::to('/');
-
-        $status = Session::get('status');
-        $categories = Category::all();
-
-        $expert = Expert::find($expertId);
-
-        return View::make('expert.profile')->with("expert", $expert)->with('categories', $categories)->with('status',$status);
-    }
-
-    public function updateProfile(){
-
-        $expertId = Session::get('expert_id');
-
-        if(!isset($expertId))
-            return json_encode(array('message'=>'not logged'));
-
-        $expert = Expert::find($expertId);
-
-        if(is_null($expert))
-            return json_encode(array('message'=>'invalid'));
-        else{
-            $expert->email = Input::get('email');
-            $expert->password = Input::get('password');
-            $expert->first_name = Input::get('first_name');
-            $expert->last_name = Input::get('last_name');
-            $expert->about = Input::get('about');
-            $expert->updated_at = date("Y-m-d H:i:s");
-
-            $expert->save();
-
-            return json_encode(array('message'=>'done'));
-        }
-    }
-
-    public function updateAbout(){
-
-        $expertId = Session::get('expert_id');
-
-        if(!isset($expertId))
-            return json_encode(array('message'=>'not logged'));
-
-        $expert = Expert::find($expertId);
-
-        if(is_null($expert))
-            return json_encode(array('message'=>'invalid'));
-        else{
-            $expert->about = Input::get('about');
-            $expert->updated_at = date("Y-m-d H:i:s");
-
-            $expert->save();
-
-            return json_encode(array('message'=>'done'));
-        }
-    }
-
-    function updatePassword(){
-
-        $expertId = Session::get('expert_id');
-
-        if(!isset($expertId))
-            return json_encode(array('message'=>'not logged'));
-
-        $expert = Expert::find($expertId);
-
-        if(isset($expert)){
-
-            $expert->password = Input::get('password');
-
-            $expert->save();
-
-            return json_encode(array('message'=>'done'));
-        }
-        else
-            return json_encode(array('message'=>'invalid'));
-    }
-
-    /************** json methods ***************/
-    public function dataCancelAppointment($id){
-
-        $appointment = Appointment::find($id);
-
-        if(is_null($appointment))
-            return json_encode(array('message'=>'invalid'));
-        else{
-            $appointment->status = "expert-cancelled";
-            $appointment->updated_at = date('Y-m-d H:i:s');
-
-            $appointment->save();
-
-            return json_encode(array('message'=>'done'));
-        }
+            return json_encode(array('message' => 'invalid'));
     }
 
     function dataGetExpert($id){

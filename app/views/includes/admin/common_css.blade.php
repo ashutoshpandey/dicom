@@ -2,4 +2,5 @@
 {{HTML::style(asset("/public/css/jquery.bootgrid.css"))}}
 {{HTML::style(asset("/public/css/font-awesome/css/font-awesome.css"))}}
 {{HTML::style(asset("/public/css/site/common.css"))}}
+{{HTML::style(asset("/public/css/site/admin/common.css"))}}
 {{HTML::style(asset("/public/css/site/admin/admin.css"))}}

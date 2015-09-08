@@ -39,10 +39,50 @@ class CategoryController extends BaseController {
         if(isset($id)){
 
             $categories = ExpertCategory::where('expert_id', $id)
-                ->where('status', '=', 'active')->with('category')->with('subcategory')->where('status', 'active')->get();
+                                        ->with('category')->with('subcategory')->where('status', 'active')->get();
 
             if(isset($categories))
                 return json_encode(array('message'=>'found', 'categories' => $categories->toArray()));
+            else
+                return json_encode(array('message'=>'empty'));
+        }
+        else
+            return json_encode(array('message'=>'invalid'));
+    }
+
+    function getCategoryConsultants($id){
+
+        if(isset($id)){
+
+            $experts = Expert::whereIn('id', function($query) use ($id){
+                $query->select('expert_id')
+                    ->from('expert_categories')
+                    ->where('category_id', $id)
+                    ->where('status', 'active');
+            })->get();
+
+            if(isset($experts) && count($experts)>0)
+                return json_encode(array('message'=>'found', 'experts' => $experts->toArray()));
+            else
+                return json_encode(array('message'=>'empty'));
+        }
+        else
+            return json_encode(array('message'=>'invalid'));
+    }
+
+    function getCategoryExperts($id){
+
+        if(isset($id)){
+
+            $experts = Expert::whereIn('id', function($query) use ($id){
+                $query->select('expert_id')
+                    ->from('expert_categories')
+                    ->where('category_id', $id)
+                    ->where('status', 'active');
+            })->get();
+
+            if(isset($experts) && count($experts)>0)
+                return json_encode(array('message'=>'found', 'experts' => $experts->toArray()));
             else
                 return json_encode(array('message'=>'empty'));
         }

@@ -24,6 +24,10 @@ class RequestController extends BaseController {
         if(!isset($adminId))
             return Redirect::to('/');
 
-        return View::make('requests.manage');
+        $categories = Category::where('status', 'active')->get();
+
+        $found = isset($categories) && count($categories)>0;
+
+        return View::make('requests.manage')->with('found', $found)->with('categories', $categories);
     }
 }

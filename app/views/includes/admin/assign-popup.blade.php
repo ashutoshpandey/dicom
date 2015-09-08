@@ -1,25 +1,27 @@
-<div id="popup" class="modal-box">
-    <header>
-        <a href="#" class="js-modal-close close">x</a>
-        <h3>Update Order</h3>
-    </header>
-    <div class="modal-body">
-        <p>Enter docket number</p>
-        <input type="text" name="docket"/>
-
-        <p>Choose courier</p>
-        <select name="courier">
-            @if(isset($couriers))
-
-                @foreach($couriers as $courier)
-                    <option value="{{$courier->id}}">{{$courier->name}}</option>
-                @endforeach
-            @endif
+<div id="assign-popup">
+    <form id="form-assign-request">
+        <p style="padding-top: 10px;">Consultant</p>
+        <select name="category_consultant">
+            @foreach($categories as $category)
+                <option value="{{$category->id}}">{{$category->name}}</option>
+            @endforeach
         </select>
-        <br/><br/>
-        <input type="button" name="btn-set-courier" value=" Update "/> &nbsp; <span id="message-courier" class="message"></span>
-    </div>
-    <footer>
-        <a href="#" class="js-modal-close">Close</a>
-    </footer>
+
+        <select name="consultant_id">
+        </select>
+
+        <p style="padding-top: 20px;">Expert</p>
+        <select name="category_expert">
+            @foreach($categories as $category)
+                <option value="{{$category->id}}">{{$category->name}}</option>
+            @endforeach
+        </select>
+
+        <select name="expert_id">
+        </select>
+
+        <hr/>
+
+        <input type="button" name="btn-assign-request" value=" Assign "/> &nbsp; <span class="message message-assign"></span>
+    </form>
 </div>

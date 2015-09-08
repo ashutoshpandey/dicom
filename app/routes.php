@@ -112,6 +112,7 @@ Route::get('/patient-request-history/{id}/{page?}/{status?}', 'PatientController
 Route::get('/add-patient-request', 'PatientController@addPatientRequest');
 
 Route::post('/forward-patient-request', 'PatientController@forwardPatientRequest');
+Route::post('/assign-request', 'PatientController@assignPatientRequest');
 
 Route::get('/patient-requests/{status?}', 'PatientController@patientRequests');
 
@@ -120,3 +121,6 @@ Route::get('/patient-request-forwards', 'PatientController@patientRequestForward
 Route::get('/add-forward-patient-request-reply', 'PatientController@addForwardPatientRequestReply');
 
 Route::get('/patient-request-forward-replies', 'PatientController@patientRequestForwardReplies');
+
+Route::get('/get-category-consultants/{id}', 'CategoryController@getCategoryConsultants');
+Route::get('/get-category-experts/{id}', 'CategoryController@getCategoryExperts');

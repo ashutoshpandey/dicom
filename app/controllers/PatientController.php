@@ -681,6 +681,29 @@ class PatientController extends BaseController
         return json_encode(array('message'=>'done'));
     }
 
+    public function assignPatientRequest(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $id = Input::get('id');
+
+        if(isset($id)) {
+            $patientRequest = PatientRequest::find($id);
+
+            $patientRequest->consultant_id = Input::get('consultant_id');
+            $patientRequest->expert_id = Input::get('expert_id');
+            $patientRequest->status = "assigned";
+
+            $patientRequest->save();
+
+            return json_encode(array('message' => 'done'));
+        }
+        else
+            return json_encode(array('message' => 'invalid'));
+    }
+
     public function addPatientRequestReply(){
 
         $adminId = Session::get('admin_id');

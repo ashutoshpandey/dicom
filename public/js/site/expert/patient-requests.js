@@ -1,5 +1,6 @@
 var requestId;
 var currentExpertId;
+var patientData = Array();
 
 $(function(){
 
@@ -41,7 +42,6 @@ function showGrid(data){
                     <th data-column-id="date">Date</th> \
                     <th data-column-id="status">Status</th> \
                     <th data-formatter="link">Action</th> \
-                    <th data-formatter="extra"></th> \
                 </tr> \
             </thead> \
             <tbody>';

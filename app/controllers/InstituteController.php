@@ -168,6 +168,63 @@ class InstituteController extends BaseController {
             return Redirect::to('/');
     }
 
+    public function assignExpertCategory(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $categoryId = Input::get('category');
+        $subcategoryId = Input::get('subcategory');
+
+        $category = Category::find($categoryId);
+        $subcategory = SubCategory::find($subcategoryId);
+
+        if(isset($category) && isset($subcategory)){
+
+            $expertId = Session::get('current_expert_id');
+
+            $tempExpertCategory = ExpertCategory::where('category_id', $categoryId)->where('subcategory_id', $subcategoryId)->where('expert_id', $expertId)->get();
+
+            if(isset($tempExpertCategory) && count($tempExpertCategory)>0){
+                return json_encode(array('message' => 'duplicate'));
+            }
+            else {
+                $expertCategory = new ExpertCategory();
+
+                $expertCategory->category_id = $categoryId;
+                $expertCategory->subcategory_id = $subcategoryId;
+                $expertCategory->expert_id = Session::get('expert_id');
+                $expertCategory->status = "active";
+
+                $expertCategory->save();
+
+                return json_encode(array('message' => 'done'));
+            }
+        }
+        else
+            return json_encode(array('message'=>'invalid'));
+    }
+
+    public function removeExpertCategory($id){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $expertCategory = ExpertCategory::find($id);
+
+        if(isset($expertCategory)){
+
+            $expertCategory->status = 'removed';
+            $expertCategory->save();
+
+            return json_encode(array('message' => 'done'));
+        }
+        else
+            return json_encode(array('message'=>'invalid'));
+    }
+
     public function listExperts($status, $page){
 
         $adminId = Session::get('admin_id');

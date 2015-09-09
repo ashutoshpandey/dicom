@@ -294,9 +294,9 @@ class AdminController extends BaseController {
 
         if(isset($category) && isset($subcategory)){
 
-            $expertId = Session::get('expert_id');
+            $expertId = Session::get('current_expert_id');
 
-            $tempExpertCategory = ExpertCategory::where('category_id', $categoryId)->where('subcategory_id', $subcategoryId)->where('expert_id', $expertId)->get();
+            $tempExpertCategory = ExpertCategory::where('category_id', $categoryId)->where('subcategory_id', $subcategoryId)->where('expert_id', $expertId)->where('status', 'active')->get();
 
             if(isset($tempExpertCategory) && count($tempExpertCategory)>0){
                 return json_encode(array('message' => 'duplicate'));
@@ -306,7 +306,7 @@ class AdminController extends BaseController {
 
                 $expertCategory->category_id = $categoryId;
                 $expertCategory->subcategory_id = $subcategoryId;
-                $expertCategory->expert_id = Session::get('expert_id');
+                $expertCategory->expert_id = $expertId;
                 $expertCategory->status = "active";
 
                 $expertCategory->save();

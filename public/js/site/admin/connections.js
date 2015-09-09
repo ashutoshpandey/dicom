@@ -73,7 +73,7 @@ function showGrid(data){
                 <tr> \
                     <th data-column-id="id" data-type="numeric">ID</th> \
                     <th data-column-id="name">Institute</th> \
-                    <th data-column-id="email">Connected To</th> \
+                    <th data-column-id="email">Child <Institute></Institute></th> \
                     <th data-formatter="link">Action</th> \
                 </tr> \
             </thead> \

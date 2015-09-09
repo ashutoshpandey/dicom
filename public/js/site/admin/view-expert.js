@@ -96,10 +96,9 @@ function showCategories(result){
         str = str + '<table id="grid-category" class="table table-condensed table-hover table-striped"> \
             <thead> \
                 <tr> \
-                    <th data-column-id="id" data-type="numeric">Category Id</th> \
-                    <th data-column-id="name">Category Name</th> \
-                    <th data-column-id="subid">SubCategory Id</th> \
-                    <th data-column-id="subname">SubCategory Name</th> \
+                    <th data-column-id="id" data-type="numeric">Id</th> \
+                    <th data-column-id="category">Category</th> \
+                    <th data-column-id="subcategory">SubCategory</th> \
                     <th data-formatter="link">Action</th> \
                 </tr> \
             </thead> \
@@ -110,9 +109,8 @@ function showCategories(result){
             var data = result.categories[i];
 
             str = str + '<tr> \
-                    <td>' + data.category.id + '</td> \
+                    <td>' + data.id + '</td> \
                     <td>' + data.category.name + '</td> \
-                    <td>' + data.subcategory.id + '</td> \
                     <td>' + data.subcategory.name + '</td> \
                     <td></td> \
                 </tr>';

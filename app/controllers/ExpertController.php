@@ -13,8 +13,8 @@ class ExpertController extends BaseController {
             View::share('adminType', Session::get('admin_type'));
 
             $id = Session::get('expert_id');
-            $user = Expert::find($id);
-            View::share('name', $user->name);
+            $expert = Expert::find($id);
+            View::share('name', $expert->name);
         }
     }
 

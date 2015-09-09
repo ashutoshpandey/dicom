@@ -91,7 +91,7 @@ class ConnectionController extends BaseController
 		$connection_id = Input::get('connection_id');
 		$institute_id = Input::get('institute_id');
 
-		$instituteConnectionTemp = InstituteConnection::where('connection_id', $connection_id)->where('institute_id', $institute_id)->get();
+		$instituteConnectionTemp = InstituteConnection::where('connection_id', $connection_id)->where('institute_id', $institute_id)->where('status', 'active')->get();
 
 		if (isset($instituteConnectionTemp) && count($instituteConnectionTemp) > 0)
 			return json_encode(array('message' => 'duplicate'));

@@ -336,7 +336,7 @@
                             <div class='form-row'>
                                 <div class='form-label'>&nbsp;</div>
                                 <div class='form-data-full'>
-                                    <input type='button' name='btn-create' value="Create Expert" class='half'/> <span
+                                    <input type='button' name='btn-create' value="Create Patient" class='half'/> <span
                                             class='message'></span>
                                 </div>
                                 <div class='clear'></div>

@@ -135,8 +135,8 @@ function showGrid(data){
                     status = "Assigned";
                 else if(status=="consultant replied")
                     status = "Pending from expert";
-                else if(status=="expert reply")
-                    status = "Complete";
+                else if(status=="expert replied")
+                    status = "Expert Replied";
 
                 str = str + '<tr> \
                     <td>' + request.id + '</td> \
@@ -162,6 +162,9 @@ function showGrid(data){
 
                 if(row.status=="Not assigned")
                     str += '<a class="assign" href="#" rel="' + row.id + '">Assign</a>';
+
+                else if(row.status=="Expert Replied")
+                    str += '<a class="quotation" href="#" rel="' + row.id + '">Quotation</a>';
 
                 return str;
             }

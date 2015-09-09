@@ -21,7 +21,8 @@ Route::get('/institutes', 'SearchController@institutes');
 Route::get('/institute/{id}', 'SearchController@home');
 
 /********************** user urls ************************/
-Route::get('/login', 'AuthenticationController@expertLogin');
+Route::get('/login', 'AuthenticationController@userLogin');
+Route::get('/expert-login', 'AuthenticationController@expertLogin');
 Route::post('/is-valid-user', 'AuthenticationController@isValidUser');
 Route::get('/remove-user/{id}', 'PatientController@remove');
 
@@ -118,14 +119,19 @@ Route::get('/patient-request-history/{id}/{page?}/{status?}', 'PatientController
 Route::get('/add-patient-request', 'PatientController@addPatientRequest');
 Route::post('/assign-request', 'PatientController@assignPatientRequest');
 Route::post('/reply-request', 'ExpertController@addRequestReply');
+Route::get('/get-consultant-request-reply/{id}', 'ExpertController@getConsultantRequestReply');
 
 Route::get('/patient-requests/{status?}', 'PatientController@patientRequests');
 
 Route::get('/patient-request-forwards', 'PatientController@patientRequestForwards');
 
+Route::post('/forward-patient-request', 'PatientController@forwardPatientRequest');
 Route::get('/add-forward-patient-request-reply', 'PatientController@addForwardPatientRequestReply');
 
 Route::get('/patient-request-forward-replies', 'PatientController@patientRequestForwardReplies');
 
 Route::get('/get-category-consultants/{id}', 'CategoryController@getCategoryConsultants');
 Route::get('/get-category-experts/{id}', 'CategoryController@getCategoryExperts');
+
+Route::get('/expert-view-patient/{id}', 'ExpertController@viewPatient');
+Route::get('/expert-view-institute/{id}', 'ExpertController@viewInstitute');

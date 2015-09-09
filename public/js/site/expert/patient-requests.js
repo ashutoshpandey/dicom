@@ -1,10 +1,13 @@
 var requestId;
+var currentExpertId;
 
 $(function(){
 
     listPatientRequests(1);
 
     $("input[name='btn-reply-request']").click(replyRequest);
+
+    currentExpertId = $(".current_expert_id").attr('rel');
 });
 
 function listPatientRequests(page){
@@ -54,7 +57,7 @@ function showGrid(data){
                     status = "Please reply";
                 else if(status=="consultant replied")
                     status = "Replied";
-                else if(status=="expert reply")
+                else if(status=="expert replied")
                     status = "Complete";
 
                 str = str + '<tr> \
@@ -76,17 +79,39 @@ function showGrid(data){
         formatters: {
             'link': function(column, row)
             {
-                var str = '<a target="_blank" href="' + root + '/admin-view-institute-patient/' + row.patient_id + '">Patient</a>&nbsp;&nbsp; ';
-                str += '<a target="_blank" href="' + root + '/admin-view-institute/' + row.institute_id + '">Institute</a>&nbsp;&nbsp; ';
+                var str = '<a target="_blank" href="' + root + '/expert-view-patient/' + row.id + '">Patient</a>&nbsp;&nbsp; ';
+                str += '<a target="_blank" href="' + root + '/expert-view-institute/' + row.id + '">Institute</a>&nbsp;&nbsp; ';
 
                 if(row.status=="Please reply")
                     str += '<a class="reply" href="#" rel="' + row.id + '">Reply</a>';
+
+                else if(row.status=="Replied" && row.consultant_id != currentExpertId) {
+                    str += '<a class="view" href="#" rel="' + row.id + '">View</a>&nbsp;&nbsp; ';
+                    str += '<a class="reply" href="#" rel="' + row.id + '">Reply</a>';
+                }
 
                 return str;
             }
         }
     }).on("loaded.rs.jquery.bootgrid", function()
         {
+            $(".view").click(function(){
+
+                var id = $(this).attr('rel');
+
+                $.ajax({
+                    url: root + '/get-consultant-request-reply/' + id,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(result){
+                        $(".consultant-reply").html(result.requestReply.comment);
+                        $(".consultant-reply-date").html(result.requestReply.created_at);
+
+                        $("#consultant-reply-popup").modal();
+                    }
+                });
+            });
+
             $(".reply").click(function(){
 
                 requestId = $(this).attr('rel');
@@ -120,7 +145,7 @@ function replyRequest(){
                     window.location.replace = root;
                 }
                 else if(result.message.indexOf("done")>-1) {
-                    $(".message-assign").html("Request assigned");
+                    $(".message-assign").html("Reply added successfully");
                     listPatientRequests(1);
                 }
             }

@@ -50,7 +50,9 @@
 <!-- ./wrapper -->
 
 @include('includes.expert.reply-popup')
+@include('includes.expert.consultant-reply-popup')
 @include('includes.common_js_bottom')
+<span class="current_expert_id" rel="{{$currentExpertId}}">&nbsp;</span>
 {{HTML::script(asset("/public/js/site/expert/patient-requests.js"))}}
 {{HTML::script(asset("/public/js/site/jquery.simplemodal.js"))}}
 <script type="text/javascript">

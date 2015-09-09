@@ -4,7 +4,8 @@ $(function(){
 
 function doLogin(){
 
-    $("#form-login").find('.message').html('');
+    $('.message').html('');
+    $('.message').show();
 
     if(isExpertLoginFormValid()){
 
@@ -18,11 +19,11 @@ function doLogin(){
             success: function(result){
 
                 if(result.message.indexOf('invalid')>-1)
-                    $("#form-login").find('.message').show().html('Invalid username or password');
+                    $('.message').html('Invalid username or password');
                 else if(result.message.indexOf('correct')>-1)
                     window.location.replace(root + '/expert-section');
                 else
-                    $("#form-expert-login").find('.message').show().html('Server returned error : ' + result.message);
+                    $('.message').html('Server returned error : ' + result.message);
             }
         });
     }

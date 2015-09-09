@@ -6,6 +6,6 @@
 
         <hr/>
 
-        <input type="button" name="btn-reply-request" value=" Assign "/> &nbsp; <span class="message message-assign"></span>
+        <input type="button" name="btn-reply-request" value=" Reply "/> &nbsp; <span class="message message-assign"></span>
     </form>
 </div>

@@ -6,7 +6,7 @@ class ExpertController extends BaseController {
     {
         View::share('root', URL::to('/'));
 
-        $id = Session::get('admin_id');
+        $id = Session::get('expert_id');
 
         if(isset($id)){
             $expert = Expert::find($id);
@@ -16,11 +16,21 @@ class ExpertController extends BaseController {
     }
 
     public function expertSection(){
+
+        $expertId = Session::get('expert_id');
+        if(!isset($expertId))
+            return Redirect::to('/');
+
         return View::make('expert.expert-section');
     }
 
     public function requests(){
-        return View::make('expert.requests');
+
+        $expertId = Session::get('expert_id');
+        if(!isset($expertId))
+            return Redirect::to('/');
+
+        return View::make('expert.requests')->with('currentExpertId', $expertId);
     }
 
     public function manage(){
@@ -29,8 +39,6 @@ class ExpertController extends BaseController {
 
         if(!isset($expertId))
             return Redirect::to('/');
-
-        $expert = Expert::find($expertId);
 
         $appointment_count = Appointment::where('expert_id', '=', $expertId)
                                         ->where('status','=','booked')
@@ -45,16 +53,15 @@ class ExpertController extends BaseController {
                     ->with('availability_count', $availability_count);
     }
 
-    public function getExpertRequests($type = 'incoming')
-    {
+    public function getExpertRequests($type = 'incoming'){
 
-        $adminId = Session::get('admin_id');
-        if (!isset($adminId))
+        $expertId = Session::get('expert_id');
+        if (!isset($expertId))
             return json_encode(array('message' => 'not logged'));
 
         if($type=='incoming') {
-            if (isset($adminId))
-                $patientRequests = PatientRequest::where('consultant_id', $adminId)->with('Patient')->with('senderInstitute')->with('receiverInstitute')->get();
+            if (isset($expertId))
+                $patientRequests = PatientRequest::whereIn('status', array('assigned', 'consultant replied', 'expert replied'))->with('Patient')->with('senderInstitute')->with('receiverInstitute')->get();
             else
                 $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('receiverInstitute')->get();
         }
@@ -71,10 +78,24 @@ class ExpertController extends BaseController {
             return json_encode(array('message' => 'empty'));
     }
 
+    public function getConsultantRequestReply($requestId){
+
+        $expertId = Session::get('expert_id');
+        if (!isset($expertId))
+            return json_encode(array('message' => 'not logged'));
+
+        $requestReply = PatientRequestReply::where('request_id', $requestId)->where('reply_from', 'consultant')->first();
+
+        if (isset($requestReply)) {
+            return json_encode(array('message' => 'found', 'requestReply' => $requestReply->toArray()));
+        } else
+            return json_encode(array('message' => 'empty'));
+    }
+
     public function addRequestReply(){
 
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
+        $expertId = Session::get('expert_id');
+        if(!isset($expertId))
             return json_encode(array('message'=>'not logged'));
 
         $requestId = Input::get('id');
@@ -85,10 +106,19 @@ class ExpertController extends BaseController {
 
             if (isset($patientRequest)) {
 
+                if($patientRequest->status == "consultant replied") {
+                    $patientRequest->status = 'expert replied';
+                    $replyFrom = "expert";
+                }
+                else if($patientRequest->status == "assigned") {
+                    $patientRequest->status = 'consultant replied';
+                    $replyFrom = "consultant";
+                }
+
                 $patientRequestReply = new PatientRequestReply();
 
                 $patientRequestReply->request_id = $requestId;
-                $patientRequestReply->reply_from = 'consultant';
+                $patientRequestReply->reply_from = $replyFrom;
                 $patientRequestReply->expert_id = Session::get('expert_id');
                 $patientRequestReply->comment = Input::get('reply');
 
@@ -99,7 +129,6 @@ class ExpertController extends BaseController {
 
                 $patientRequestReply->save();
 
-                $patientRequest->status = 'consultant replied';
                 $patientRequest->save();
 
                 return json_encode(array('message' => 'done'));
@@ -115,5 +144,52 @@ class ExpertController extends BaseController {
         $expert = Expert::find($id);
 
         return $expert;
+    }
+
+    function viewPatient($id)
+    {
+        
+        $expertId = Session::get('expert_id');
+        if (!isset($expertId))
+            return json_encode(array('message' => 'not logged'));
+
+        $patientRequest = PatientRequest::find($id);
+
+        if(isset($patientRequest)) {
+
+            $patient = Patient::find($patientRequest->patient_id);
+
+            if (isset($patient)) {
+
+                return View::make('expert.view-patient')->with('found', true)->with('patient', $patient);
+            } else
+                return View::make('expert.view-patient')->with('found', false);
+        }
+        else
+            return View::make('expert.view-patient')->with('found', false);
+    }
+
+    function viewInstitute($id)
+    {
+
+        $expertId = Session::get('expert_id');
+        if (!isset($expertId))
+            return json_encode(array('message' => 'not logged'));
+
+        $patientRequest = PatientRequest::find($id);
+
+        if(isset($patientRequest)) {
+
+            $institute = Institute::find($patientRequest->connection_id);
+
+            if (isset($institute)) {
+
+                return View::make('expert.view-institute')->with('found', true)->with('institute', $institute);
+            }
+            else
+                return View::make('expert.view-institute')->with('found', false);
+        }
+        else
+            return View::make('expert.view-institute')->with('found', false);
     }
 }

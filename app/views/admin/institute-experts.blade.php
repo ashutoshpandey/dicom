@@ -36,8 +36,6 @@
         <!-- Main content -->
         <section class="content">
 
-            @if($found)
-
             <div class='tab-container'>
                 <ul class='tabs'>
                     <li><a href='#tab-list'>List</a></li>
@@ -88,6 +86,20 @@
                                 <div class='clear'></div>
                             </div>
                             <div class='form-row'>
+                                <div class='form-label'>Password</div>
+                                <div class='form-data'>
+                                    <input type='password' name='password'/>
+                                </div>
+                                <div class='clear'></div>
+                            </div>
+                            <div class='form-row'>
+                                <div class='form-label'>Confirm Password</div>
+                                <div class='form-data'>
+                                    <input type='password' name='confirm_password'/>
+                                </div>
+                                <div class='clear'></div>
+                            </div>
+                            <div class='form-row'>
                                 <div class='form-label'>&nbsp;</div>
                                 <div class='form-data-full'>
                                     <input type='button' name='btn-create' value="Create Expert" class='half'/> <span
@@ -99,12 +111,6 @@
                     </div>
                 </div>
             </div>
-
-            @else
-
-                You have not added any categories
-
-            @endif
 
         </section>
         <!-- /.content -->

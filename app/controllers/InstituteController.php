@@ -5,8 +5,18 @@ class InstituteController extends BaseController {
     public function __construct(){
 
         $this->beforeFilter(function(){
-            View::share('name', Session::get('name'));
             View::share('root', URL::to('/'));
+
+            $adminType = Session::get('admin_type');
+
+            if(isset($adminType)) {
+                View::share('adminType', Session::get('admin_type'));
+
+                $id = Session::get('admin_id');
+                $user = User::find($id);
+                View::share('name', $user->name);
+                View::share('userType', $user->user_type);
+            }
         });
     }
 
@@ -84,7 +94,7 @@ class InstituteController extends BaseController {
 
                 if($categories && count($categories)>0) {
 
-                    Session::put('current_institute', $id);
+                    Session::put('institute_id', $id);
 
                     return View::make('admin.institute-experts')->with('found', true)->with('institute', $institute)->with('categories', $categories);
                 }
@@ -104,9 +114,9 @@ class InstituteController extends BaseController {
         if(!isset($adminId))
             return json_encode(array('message'=>'not logged'));
 
-        $instituteId = Session::get('current_institute');
+        $instituteId = Session::get('institute_id');
         if(!isset($instituteId))
-            return Redirect::to('/');
+            return json_encode(array('message'=>'invalid'));
 
         $expert = new Expert();
 
@@ -114,6 +124,7 @@ class InstituteController extends BaseController {
         $expert->name = Input::get('name');
         $expert->contact_number = Input::get('contact_number');
         $expert->email = Input::get('email');
+        $expert->password = Input::get('password');
         $expert->gender = Input::get('gender');
         $expert->highest_qualification = Input::get('highest_qualification');
         $expert->status = 'active';
@@ -134,7 +145,7 @@ class InstituteController extends BaseController {
 
             if(isset($expert)){
 
-                Session::put('expert_id', $id);
+                Session::put('current_expert_id', $id);
 
                 if($expert->gender=='male'){
                     $male_checked = 'checked="checked"';
@@ -163,10 +174,7 @@ class InstituteController extends BaseController {
         if(!isset($adminId))
             return json_encode(array('message'=>'not logged'));
 
-        $instituteId = Session::get('current_institute');
-        if(!isset($instituteId))
-            return json_encode(array('message'=>'invalid'));
-
+        $instituteId = Session::get('institute_id');
         $experts = Expert::where('status','=',$status)->where('institute_id', $instituteId)->get();
 
         if(isset($experts) && count($experts)>0){
@@ -281,37 +289,52 @@ class InstituteController extends BaseController {
 
     public function updateExpert(){
 
-        $institute_id = Session::get('institute_id');
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'done'));
 
-        if(!isset($institute_id))
-            return 'not logged';
+        $currentExpertId = Session::get('current_expert_id');
+        if(!isset($currentExpertId))
+            return json_encode(array('message'=>'invalid'));
 
         $email = Input::get('email');
 
         if($this->isDuplicateExpert($email)==='no'){
 
-            $expert = new Expert;
+            $expert = Expert::find($currentExpertId);
 
-            $expert->email = $email;
-            $expert->password = Input::get('password');
-            $expert->first_name = Input::get('first_name');
-            $expert->last_name = Input::get('last_name');
-            $expert->city = Input::get('city');
-            $expert->about = "";
-            $expert->status = "active";
-            $expert->created_at = date("Y-m-d h:i:s");
-            $expert->updated_at = date("Y-m-d h:i:s");
+            if(isset($expert)) {
 
-            $expert->save();
+                $password = Input::get('password');
 
-            return 'done';
+                $expert->name = Input::get('name');
+                $expert->contact_number = Input::get('contact_number');
+                $expert->email = Input::get('email');
+
+                if(strlen(trim($password))>0)
+                    $expert->password = Input::get('password');
+
+                $expert->gender = Input::get('gender');
+                $expert->highest_qualification = Input::get('highest_qualification');
+
+                $expert->save();
+
+                return json_encode(array('message'=>'done'));
+            }
+            else
+                return json_encode(array('message'=>'invalid'));
         }
         else
-            return 'duplicate';
+            return json_encode(array('message'=>'duplicate'));
     }
 
-    public function setExpertAppointments(){
-        return View::make('institute.set-appointments');
+    public function isDuplicateExpert()
+    {
+        $email = Input::get('email');
+
+        $expert = Expert::where('email', '=', $email)->first();
+
+        return is_null($expert) ? "no" : "yes";
     }
 
     public function profile(){

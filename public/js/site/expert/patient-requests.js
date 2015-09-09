@@ -41,6 +41,7 @@ function showGrid(data){
                     <th data-column-id="date">Date</th> \
                     <th data-column-id="status">Status</th> \
                     <th data-formatter="link">Action</th> \
+                    <th data-formatter="extra"></th> \
                 </tr> \
             </thead> \
             <tbody>';
@@ -67,6 +68,7 @@ function showGrid(data){
                     <td>' + request.created_at + '</td> \
                     <td>' + status + '</td> \
                     <td></td> \
+                    <td>' + request.patient_id + ':' + request.consultant_id + ':' + request.expert_id + '</td> \
                 </tr>';
             }
 

@@ -4,6 +4,7 @@ $(function(){
 
     expertId = $('#expert_id').attr('rel');
 
+    $("input[name='btn-update-expert']").click(updateExpert);
     $("input[name='btn-create-service']").click(createService);
     $("input[name='btn-create-category']").click(createCategory);
     $("input[name='btn-create-qualification']").click(createQualification);
@@ -435,4 +436,27 @@ function showQualifications(data){
     else
         $('#qualification-list').html('No qualification found');
 
+}
+
+function updateExpert(){
+
+    var data = $("#form-update-expert").serialize();
+
+    $.ajax({
+        url: root + '/update-institute-expert',
+        type: 'post',
+        data: data,
+        dataType: 'json',
+        success: function(result) {
+
+            if (result.message.indexOf('not logged') > -1)
+                window.location.replace(root);
+            else if (result.message.indexOf('done') > -1)
+                $('.message-update').html("Expert updated successfully");
+            else if (result.message.indexOf('duplicate') > -1)
+                $('.message-update').html("Email is already used");
+            else
+                $('.message-update').html("Server returned error");
+        }
+    });
 }

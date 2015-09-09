@@ -5,7 +5,17 @@ class UserController extends BaseController {
 
 	function __construct(){
 		View::share('root', URL::to('/'));
-		View::share('name', Session::get('name'));
+
+		$adminType = Session::get('admin_type');
+
+		if(isset($adminType)) {
+			View::share('adminType', Session::get('admin_type'));
+
+			$id = Session::get('admin_id');
+			$user = User::find($id);
+			View::share('name', $user->name);
+			View::share('userType', $user->user_type);
+		}
 	}
 
 	public function manageUsers(){
@@ -143,7 +153,12 @@ class UserController extends BaseController {
 			$user->email = $email;
 			$user->password = hash('sha256', $password);
 			$user->contact_number = Input::get('contact_number');
-			$user->institute_id = Session::get('institute_id');
+
+			$institute_id = Input::get('institute');
+			if(!isset($institute_id))
+				$user->institute_id = Session::get('institute_id');
+			else
+				$user->institute_id = $institute_id;
 
 			$user->status = "active";
 			$user->created_at = date("Y-m-d h:i:s");
@@ -198,7 +213,7 @@ class UserController extends BaseController {
 			return json_encode(array('message'=>'empty'));
 	}
 
-	function removeUser($id){
+	function remove($id){
 
 		$adminId = Session::get('admin_id');
 		if(!isset($adminId))

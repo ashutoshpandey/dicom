@@ -26,6 +26,14 @@
                     <span>Categories</span>
                 </a>
             </li>
+            @if($userType=='Administrator')
+            <li class="users">
+                <a href="{{$root}}/admin-users">
+                    <i class="fa fa-laptop"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+            @endif
             <li class="logout">
                 <a href="{{$root}}/logout">
                     <i class="fa fa-table"></i> <span>Logout</span>

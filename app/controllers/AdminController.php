@@ -5,15 +5,18 @@ class AdminController extends BaseController {
     public function __construct(){
 
         $this->beforeFilter(function(){
-            $id = Session::get('admin_id');
 
             View::share('root', URL::to('/'));
 
-            if(isset($id)){
-                $user = User::find($id);
+            $adminType = Session::get('admin_type');
 
-                View::share('name', $user->name);
+            if(isset($adminType)) {
                 View::share('adminType', Session::get('admin_type'));
+
+                $id = Session::get('admin_id');
+                $user = User::find($id);
+                View::share('name', $user->name);
+                View::share('userType', $user->user_type);
             }
         });
     }
@@ -353,22 +356,6 @@ class AdminController extends BaseController {
         return View::make('admin.experts');
     }
 
-    public function listExperts($status, $page){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $experts = Expert::where('status','=',$status)->get();
-
-        if(isset($experts) && count($experts)>0){
-
-            return json_encode(array('message'=>'found', 'experts' => $experts->toArray()));
-        }
-        else
-            return json_encode(array('message'=>'empty'));
-    }
-
     public function saveExpert(){
 
         $adminId = Session::get('admin_id');
@@ -386,12 +373,8 @@ class AdminController extends BaseController {
             $expert->last_name = Input::get('last_name');
             $expert->gender = Input::get('gender');
             $expert->country = 'India';
-            $expert->title = Input::get('title');
             $expert->highest_qualification = Input::get('highest_qualification');
-            $expert->about = Input::get('about');
-            $expert->experience = Input::get('experience');
             $expert->contact_number = Input::get('contact_number');
-            $expert->extension_number = Input::get('extension_number');
 
             $expert->status = "active";
             $expert->created_at = date("Y-m-d h:i:s");
@@ -456,85 +439,6 @@ class AdminController extends BaseController {
         return View::make('admin.edit-expert')->with('expert', $expert)
             ->with('categories',$categories)
             ->with('ardate',$ardate);
-    }
-
-    public function updateExpert(){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $id = Session::get('expert_id');
-
-        $expert = Expert::find($id);
-
-        if(is_null($expert))
-            return json_encode(array('message'=>'invalid'));
-        else{
-
-            if (Input::hasFile('image') && Input::file('image')->isValid())
-            {
-                $image_name = Input::file('image')->getClientOriginalName();
-
-                $destinationPath = public_path() . "/uploads/experts/" . $expert->id;
-                if(!file_exists($destinationPath))
-                    mkdir($destinationPath);
-
-                Input::file('image')->move($destinationPath, $image_name);
-                $expert->image_name = $image_name;
-            }
-
-            if (Input::hasFile('banner_image') && Input::file('banner_image')->isValid())
-            {
-                $banner_image_name = Input::file('banner_image')->getClientOriginalName();
-
-                $destinationPath = public_path() . "/uploads/experts/" . $expert->id;
-                if(!file_exists($destinationPath))
-                    mkdir($destinationPath);
-
-                Input::file('banner_image')->move($destinationPath, $banner_image_name);
-                $expert->banner_image_name = $banner_image_name;
-            }
-
-            $expert->email = Input::get('email');
-            $expert->contact_number = Input::get('contact_number');
-            $expert->password = Input::get('password');
-            $expert->first_name = Input::get('first_name');
-            $expert->last_name = Input::get('last_name');
-            $expert->gender = Input::get('gender');
-            $expert->country = 'India';
-            $expert->status = "active";
-            $expert->about = Input::get('about');
-            $expert->experience = Input::get('experience');
-            $expert->contact_number = Input::get('contact_number');
-            $expert->extension_number = Input::get('extension_number');
-            $expert->title = Input::get('title');
-            $expert->highest_qualification = Input::get('highest_qualification');
-
-            $expert->status = "active";
-            $expert->updated_at = date("Y-m-d h:i:s");
-
-            $expert->save();
-
-            return json_encode(array('message'=>'done'));
-        }
-    }
-
-    public function removeExpert($id){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        $expert = Expert::find($id);
-
-        if(is_null($expert))
-            return json_encode(array('message'=>'invalid'));
-        else{
-            $expert->delete();
-
-            return json_encode(array('message'=>'done'));
-        }
     }
 
     public function removeExpertQualification($id){

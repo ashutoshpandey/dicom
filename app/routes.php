@@ -24,7 +24,7 @@ Route::get('/institute/{id}', 'SearchController@home');
 Route::get('/login', 'AuthenticationController@userLogin');
 Route::get('/expert-login', 'AuthenticationController@expertLogin');
 Route::post('/is-valid-user', 'AuthenticationController@isValidUser');
-Route::get('/remove-user/{id}', 'PatientController@remove');
+Route::get('/remove-user/{id}', 'UserController@remove');
 
 /********************** expert urls ************************/
 Route::get('/expert-login', 'AuthenticationController@expertLogin');
@@ -46,7 +46,7 @@ Route::post('/is-valid-admin', 'AuthenticationController@isValidAdmin');
 
 Route::get('/admin-section', 'AdminController@adminSection');
 Route::get('/admin-institutes', 'AdminController@institutes');
-Route::get('/admin-institute-experts/{id}', 'InstituteController@instituteExperts');
+Route::get('/admin-institute-experts/{id}/{status?}', 'InstituteController@instituteExperts');
 Route::get('/admin-patients', 'PatientController@patients');
 Route::get('/admin-locations', 'LocationController@locations');
 Route::get('/admin-connections', 'ConnectionController@manageConnections');
@@ -81,11 +81,12 @@ Route::get('/admin-view-user/{id}', 'UserController@viewUser');
 
 Route::post('/save-institute', 'InstituteController@save');
 Route::post('/save-institute-expert', 'InstituteController@saveExpert');
+Route::post('/update-institute-expert', 'InstituteController@updateExpert');
 Route::get('/edit-institute', 'InstituteController@edit');
 Route::post('/update-institute', 'InstituteController@update');
 Route::get('/get-institute/{id}', 'InstituteController@getInstitute');
 Route::get('/list-institutes/{page?}/{city?}/{country?}', 'InstituteController@listInstitutes');
-Route::get('/admin-list-institute-experts/{page?}/{status?}', 'InstituteController@listExperts');
+Route::get('/admin-list-institute-experts/{id}/{page?}/{status?}', 'InstituteController@listExperts');
 Route::get('/admin-view-institute-expert/{id}', 'InstituteController@viewExpert');
 Route::get('/remove-institute/{id}', 'InstituteController@remove');
 Route::get('/remove-institute-expert/{id}', 'InstituteController@removeExpert');

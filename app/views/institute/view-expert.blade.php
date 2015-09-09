@@ -37,22 +37,15 @@
 
                 <div id='tab-edit'>
                     <div id='form-container'>
-                        <form id='form-create-book'>
+                        <form id='form-update-expert'>
                             <div class='form-row'>
                                 <div class='form-label'>Name</div>
                                 <div class='form-data'>
-                                    <input type='text' name='first_name' value="{{$expert->name}}"/>
+                                    <input type='text' name='name' value="{{$expert->name}}"/>
                                 </div>
-                                <div class='clear'></div>
-                            </div>
-                            <div class='form-row'>
                                 <div class='form-label'>Email</div>
                                 <div class='form-data'>
                                     <input type='text' name='email' value="{{$expert->email}}"/>
-                                </div>
-                                <div class='form-label'>Contact Number</div>
-                                <div class='form-data'>
-                                    <input type='text' name='contact_number' value="{{$expert->contact_number}}"/>
                                 </div>
                                 <div class='clear'></div>
                             </div>
@@ -64,6 +57,10 @@
                                         <option>Female</option>
                                     </select>
                                 </div>
+                                <div class='form-label'>Contact Number</div>
+                                <div class='form-data'>
+                                    <input type='text' name='contact_number' value="{{$expert->contact_number}}"/>
+                                </div>
                                 <div class='clear'></div>
                             </div>
                             <div class='form-row'>
@@ -74,9 +71,20 @@
                                 <div class='clear'></div>
                             </div>
                             <div class='form-row'>
+                                <div class='form-label'>Password</div>
+                                <div class='form-data'>
+                                    <input type='password' name='password'/>
+                                </div>
+                                <div class='form-label'>Confirm Password</div>
+                                <div class='form-data'>
+                                    <input type='password' name='confirm_password'/>
+                                </div>
+                                <div class='clear'></div>
+                            </div>
+                            <div class='form-row'>
                                 <div class='form-label'>&nbsp;</div>
                                 <div class='form-data-full'>
-                                    <input type='submit' value="Update Expert" class='half'/> <span
+                                    <input type="button" name="btn-update-expert" value="Update Expert" class='half'/> <span
                                             class='message'></span>
                                 </div>
                                 <div class='clear'></div>

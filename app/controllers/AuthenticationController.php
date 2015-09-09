@@ -34,7 +34,7 @@ class AuthenticationController extends BaseController {
         $username = Input::get('username');
         $password = Input::get('password');
 
-        $admin = Admin::where('username', '=', $username)
+        $admin = User::where('username', '=', $username)
                         ->where('password','=',$password)->first();
 
         if(is_null($admin))
@@ -42,12 +42,7 @@ class AuthenticationController extends BaseController {
         else{
             Session::put('admin_id', $admin->id);
 
-            if($admin->institute_id==0)
-                Session::put('admin_type', 'super');
-            else{
-                Session::put('admin_type', 'institute');
-                Session::put('institute_id', $admin->institute_id);
-            }
+            Session::put('admin_type', 'super');
 
             return json_encode(array("message"=>"correct"));
         }
@@ -58,6 +53,8 @@ class AuthenticationController extends BaseController {
         $username = Input::get('username');
         $password = Input::get('password');
 
+        $password = hash('sha256', $password);
+
         $user = User::where('username', $username)
                     ->where('password','=',$password)->first();
 
@@ -65,10 +62,15 @@ class AuthenticationController extends BaseController {
             return json_encode(array("message"=>"invalid"));
         }
         else{
-            Session::put('admin_type', 'institute');
+            if($user->institute_id==0)
+                Session::put('admin_type', 'super');
+            else {
+                Session::put('admin_type', 'institute');
+                Session::put('institute_id', $user->institute_id);
+            }
+
+            Session::put('user_type', $user->user_type);
             Session::put('admin_id', $user->id);
-            Session::put('institute_id', $user->institute_id);
-            Session::put('login_type', 'user');
 
             return json_encode(array("message"=>"correct"));
         }
@@ -85,7 +87,7 @@ class AuthenticationController extends BaseController {
             return json_encode(array("message"=>"invalid"));
         else{
             Session::put('expert_id', $expert->id);
-            Session::put('login_type', 'expert');
+            Session::put('admin_type', 'expert');
 
             $ar = array("message" => "correct");
 

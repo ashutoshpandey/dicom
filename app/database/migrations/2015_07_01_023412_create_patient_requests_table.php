@@ -18,6 +18,9 @@ class CreatePatientRequestsTable extends Migration {
 
 			$table->integer('patient_id')->unsigned();
 			$table->integer('institute_id')->unsigned();
+			$table->integer('connection_id')->unsigned();
+			$table->integer('consultant_id')->unsigned();
+			$table->integer('expert_id')->unsigned();
 
             $table->string('status', 50);
 

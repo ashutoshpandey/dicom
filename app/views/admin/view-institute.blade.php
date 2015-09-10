@@ -17,7 +17,7 @@
 <div class="wrapper">
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="margin-left: 0px !important;">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>

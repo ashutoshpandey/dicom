@@ -21,7 +21,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Expert: {{$expert->first_name}} {{$expert->last_name}}
+                Expert: {{$expert->name}}
             </h1>
         </section>
 

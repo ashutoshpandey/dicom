@@ -16,12 +16,8 @@
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
 
-    @include('includes.admin.header')
-
-    @include('includes.admin.super-menu')
-
             <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="margin-left: 0px !important;">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>

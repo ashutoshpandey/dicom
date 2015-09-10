@@ -557,4 +557,23 @@ class InstituteController extends BaseController {
 
         return $appointments;
     }
+
+    public function viewInstitute($id)
+    {
+        $adminId = Session::get('admin_id');
+        if (!isset($adminId))
+            return Redirect::to('/');
+
+        if (isset($id)) {
+            $institute = Institute::find($id);
+
+            if (isset($institute)) {
+
+                return View::make('institute.view-institute')
+                    ->with('institute', $institute);
+            } else
+                return Redirect::to('/');
+        } else
+            return Redirect::to('/');
+    }
 }

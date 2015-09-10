@@ -619,4 +619,17 @@ class AdminController extends BaseController {
 
         return View::make('admin.quotation');
     }
+
+    public function manageRequests(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return Redirect::to('/');
+
+        $categories = Category::where('status', 'active')->get();
+
+        $found = isset($categories) && count($categories)>0;
+
+        return View::make('requests.manage')->with('found', $found)->with('categories', $categories);
+    }
 }

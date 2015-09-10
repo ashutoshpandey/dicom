@@ -26,7 +26,7 @@
                     <span>Categories</span>
                 </a>
             </li>
-            @if($userType=='Administrator')
+            @if($adminType=='Administrator')
             <li class="users">
                 <a href="{{$root}}/admin-users">
                     <i class="fa fa-laptop"></i>

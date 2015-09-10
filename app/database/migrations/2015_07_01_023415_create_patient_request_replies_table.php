@@ -20,6 +20,7 @@ class CreatePatientRequestForwardRepliesTable extends Migration {
 			$table->integer('request_forward_id')->unsigned();
 			$table->integer('expert_id')->unsigned();
 			$table->string('comment', 255);
+			$table->string('reply_from', 50);
             $table->string('status', 50);
 
             $table->timestamps();

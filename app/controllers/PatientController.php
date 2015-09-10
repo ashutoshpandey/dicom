@@ -417,20 +417,8 @@ class PatientController extends BaseController
 
             if (isset($patient)) {
 
-                Session::put('patient_id', $id);
-
-                if ($patient->gender == 'male') {
-                    $male_checked = 'checked="checked"';
-                    $female_checked = '';
-                } else {
-                    $female_checked = 'checked="checked"';
-                    $male_checked = '';
-                }
-
-                return View::make('admin.view-patient')
-                    ->with('patient', $patient)
-                    ->with('male_checked', $male_checked)
-                    ->with('female_checked', $female_checked);
+                return View::make('patient.view-patient')
+                    ->with('patient', $patient);
             } else
                 return Redirect::to('/');
         } else

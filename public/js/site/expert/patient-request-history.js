@@ -8,8 +8,6 @@ $(function(){
 
     listPatientRequests(1);
 
-    $("input[name='btn-reply-request']").click(replyRequest);
-
     currentExpertId = $(".current_expert_id").attr('rel');
 });
 
@@ -18,7 +16,7 @@ function listPatientRequests(page){
     var status = 'active';
 
     $.getJSON(
-        root + '/get-expert-requests',
+        root + '/get-expert-request-history',
         function(result){
 
             if(result.message.indexOf('not logged')>-1)
@@ -62,9 +60,9 @@ function showGrid(data){
                 else if(status=="assigned")
                     status = "Please reply";
                 else if(status=="consultant replied")
-                    status = "Consultant Replied";
+                    status = "Replied";
                 else if(status=="expert replied")
-                    status = "Expert Replied";
+                    status = "Complete";
 
                 str = str + '<tr> \
                     <td>' + request.id + '</td> \
@@ -86,9 +84,9 @@ function showGrid(data){
         formatters: {
             'link': function(column, row)
             {
-                var str = "<a target='_blank' href='" + root + "/view-patient/" + row.id + "'><img src='" + root + "/public/images/patient.png' title='View Patient Information' class='table-icon'/></a>&nbsp;&nbsp; ";
-                str += "<a target='_blank' href='" + root + "/view-institute/" + row.id + "'><img src='" + root + "/public/images/institute.png' title='View Sender Institute Information' class='table-icon'/></a>&nbsp;&nbsp; ";
-                str += "<a class='view' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Consultant Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
+                var str = "<a target='_blank' href='" + root + "/expert-view-patient/" + row.id + "'><img src='" + root + "/public/images/patient.jpg' title='View Patient Information' class='table-icon'/></a>&nbsp;&nbsp; ";
+                str += "<a target='_blank' href='" + root + "/expert-view-institute/" + row.id + "'><img src='" + root + "/public/images/institute.jpg' title='View Sender Institute Information' class='table-icon'/></a>&nbsp;&nbsp; ";
+                str += "<a class='view' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.jpg' title='View Consultant Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
 
                 if(row.status=="Please reply")
                     str += '<a class="reply" href="#" rel="' + row.id + '">Reply</a>';
@@ -130,35 +128,4 @@ function showGrid(data){
     }
     else
         $('#request-list').html('No requests found');
-}
-
-function replyRequest(){
-
-    var data = $("#form-reply-request").serialize();
-
-    data = data + '&id=' + requestId;
-
-    $.ajax({
-        url: root + '/reply-request',
-        type: 'post',
-        data: data,
-        dataType: 'json',
-        success: function(result){
-
-            if(result.message != undefined){
-
-                if(result.message.indexOf("not logged")>-1) {
-                    alert("You are logged out");
-                    window.location.replace = root;
-                }
-                else if(result.message.indexOf("done")>-1) {
-                    $(".message-assign").html("Reply added successfully");
-                    listPatientRequests(1);
-                }
-            }
-            else {
-                alert("Invalid result returned by server");
-            }
-        }
-    });
 }

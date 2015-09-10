@@ -44,11 +44,11 @@
                     <span>Users</span>
                 </a>
             </li>
-            <li class="locations">
-                <a href="{{$root}}/admin-locations">
-                    <i class="fa fa-edit"></i> <span>Locations</span>
-                </a>
-            </li>
+            {{--<li class="locations">--}}
+                {{--<a href="{{$root}}/admin-locations">--}}
+                    {{--<i class="fa fa-edit"></i> <span>Locations</span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
             <li class="logout">
                 <a href="{{$root}}/logout">
                     <i class="fa fa-table"></i> <span>Logout</span>

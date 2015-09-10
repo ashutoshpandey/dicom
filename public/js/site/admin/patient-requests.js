@@ -1,5 +1,8 @@
 var assignId;
 
+var patientIds = Array();
+var instituteIds = Array();
+
 $(function(){
 
     listPatientRequests(1);
@@ -129,6 +132,9 @@ function showGrid(data){
 
                 var status = request.status;
 
+                patientIds[request.id] = request.patient.id;
+                instituteIds[request.id] = request.institute_id;
+
                 if(status=="consultation")
                     status = "Not assigned";
                 else if(status=="assigned")
@@ -157,14 +163,14 @@ function showGrid(data){
         formatters: {
             'link': function(column, row)
             {
-                var str = '<a target="_blank" href="' + root + '/admin-view-institute-patient/' + row.patient_id + '">Patient</a>&nbsp;&nbsp; ';
-                str += '<a target="_blank" href="' + root + '/admin-view-institute/' + row.institute_id + '">Institute</a>&nbsp;&nbsp; ';
+                var str = "<a target='_blank' href='" + root + "/view-patient/" + patientIds[request.id] + "'><img src='" + root + "/public/images/patient.png' title='View Patient Information' class='table-icon'/></a>&nbsp;&nbsp; ";
+                str += "<a target='_blank' href='" + root + "/view-institute/" + instituteIds[request.id] + "'><img src='" + root + "/public/images/institute.png' title='View Sender Institute Information' class='table-icon'/></a>&nbsp;&nbsp; ";
 
                 if(row.status=="Not assigned")
                     str += '<a class="assign" href="#" rel="' + row.id + '">Assign</a>';
 
                 else if(row.status=="Expert Replied")
-                    str += '<a target="_blank" href="' + root + '/quotation/' + row.id + '">Quotation</a>&nbsp;&nbsp; ';
+                    str += "<a target='_blank' href='" + root + "/quotation/" + row.id + "'><img src='" + root + "/public/images/quotation.png' title='View Quotation' class='table-icon'/></a>&nbsp;&nbsp; ";
 
                 return str;
             }

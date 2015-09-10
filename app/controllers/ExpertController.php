@@ -36,6 +36,15 @@ class ExpertController extends BaseController {
         return View::make('expert.requests')->with('currentExpertId', $expertId);
     }
 
+    public function requestHistory(){
+
+        $expertId = Session::get('expert_id');
+        if(!isset($expertId))
+            return Redirect::to('/');
+
+        return View::make('expert.requests-history')->with('currentExpertId', $expertId);
+    }
+
     public function manage(){
 
         $expertId = Session::get('expert_id');
@@ -74,6 +83,23 @@ class ExpertController extends BaseController {
             else
                 $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('receiverInstitute')->get();
         }
+
+        if (isset($patientRequests) && count($patientRequests) > 0) {
+            return json_encode(array('message' => 'found', 'patientRequests' => $patientRequests->toArray()));
+        } else
+            return json_encode(array('message' => 'empty'));
+    }
+
+    public function getExpertRequestHistory(){
+
+        $expertId = Session::get('expert_id');
+        if (!isset($expertId))
+            return json_encode(array('message' => 'not logged'));
+
+        $patientRequests = PatientRequest::where('status', 'completed')
+                        ->where(function($query) use($expertId){
+                            $query->where('consultant_id', $expertId)->orWhere('expert_id', $expertId);
+                        })->with('Patient')->with('senderInstitute')->with('receiverInstitute')->get();
 
         if (isset($patientRequests) && count($patientRequests) > 0) {
             return json_encode(array('message' => 'found', 'patientRequests' => $patientRequests->toArray()));

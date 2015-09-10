@@ -18,7 +18,7 @@
 
     @include('includes.admin.header')
 
-    @include('includes.admin.super-menu')
+    @include('includes.menu')
 
             <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">

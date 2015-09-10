@@ -15,7 +15,7 @@
                 </a>
             </li>
             <li class="history">
-                <a href="{{$root}}/expert-history">
+                <a href="{{$root}}/expert-request-history">
                     <i class="fa fa-edit"></i> <span>History</span>
                 </a>
             </li>

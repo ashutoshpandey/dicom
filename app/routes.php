@@ -33,6 +33,8 @@ Route::post('/is-valid-expert', 'AuthenticationController@isValidExpert');
 Route::get('/expert-section', 'ExpertController@expertSection');
 Route::get('/expert-requests', 'ExpertController@requests');
 Route::get('/get-expert-requests', 'ExpertController@getExpertRequests');
+Route::get('/expert-request-history', 'ExpertController@requestHistory');
+Route::get('/get-expert-request-history', 'ExpertController@getExpertRequestHistory');
 
 /********************** patient urls ************************/
 Route::post('/save-patient', 'PatientController@savePatient');
@@ -50,7 +52,7 @@ Route::get('/admin-institute-experts/{id}/{status?}', 'InstituteController@insti
 Route::get('/admin-patients', 'PatientController@patients');
 Route::get('/admin-locations', 'LocationController@locations');
 Route::get('/admin-connections', 'ConnectionController@manageConnections');
-Route::get('/admin-requests', 'RequestController@manageRequests');
+Route::get('/admin-requests', 'AdminController@manageRequests');
 
 Route::get('/admin-get-connections/{status?}/{page?}', 'ConnectionController@getConnections');
 Route::post('/save-connection', 'ConnectionController@save');
@@ -134,7 +136,7 @@ Route::get('/patient-request-forward-replies', 'PatientController@patientRequest
 Route::get('/get-category-consultants/{id}', 'CategoryController@getCategoryConsultants');
 Route::get('/get-category-experts/{id}', 'CategoryController@getCategoryExperts');
 
-Route::get('/expert-view-patient/{id}', 'ExpertController@viewPatient');
-Route::get('/expert-view-institute/{id}', 'ExpertController@viewInstitute');
+Route::get('/view-patient/{id}', 'PatientController@viewPatient');
+Route::get('/view-institute/{id}', 'InstituteController@viewInstitute');
 
 Route::get('/quotation/{id}', 'AdminController@quotation');

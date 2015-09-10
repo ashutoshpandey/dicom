@@ -614,4 +614,9 @@ class AdminController extends BaseController {
         else
             return json_encode(array('message' => 'invalid'));
     }
+
+    function quotation($id){
+
+        return View::make('admin.quotation');
+    }
 }

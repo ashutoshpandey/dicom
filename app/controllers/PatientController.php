@@ -553,7 +553,7 @@ class PatientController extends BaseController
             if (isset($institute_id))
                 $patientRequests = PatientRequest::where('institute_id', $institute_id)->with('Patient')->with('senderInstitute')->get();
             else
-                $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('Institute')->get();
+                $patientRequests = PatientRequest::whereIn('status', array('active', 'consultant replied', 'expert replied'))->with('Patient')->with('senderInstitute')->get();
         }
         else if($type=='outgoing'){
             if (isset($institute_id))

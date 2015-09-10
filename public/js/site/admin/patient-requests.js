@@ -164,7 +164,7 @@ function showGrid(data){
                     str += '<a class="assign" href="#" rel="' + row.id + '">Assign</a>';
 
                 else if(row.status=="Expert Replied")
-                    str += '<a class="quotation" href="#" rel="' + row.id + '">Quotation</a>';
+                    str += '<a target="_blank" href="' + root + '/quotation/' + row.id + '">Quotation</a>&nbsp;&nbsp; ';
 
                 return str;
             }

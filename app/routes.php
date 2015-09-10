@@ -136,3 +136,5 @@ Route::get('/get-category-experts/{id}', 'CategoryController@getCategoryExperts'
 
 Route::get('/expert-view-patient/{id}', 'ExpertController@viewPatient');
 Route::get('/expert-view-institute/{id}', 'ExpertController@viewInstitute');
+
+Route::get('/quotation/{id}', 'AdminController@quotation');

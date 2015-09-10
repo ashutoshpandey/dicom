@@ -53,7 +53,7 @@ class AuthenticationController extends BaseController {
         $username = Input::get('username');
         $password = Input::get('password');
 
-        $password = hash('sha256', $password);
+       // $password = hash('sha256', $password);
 
         $user = User::where('username', $username)
                     ->where('password','=',$password)->first();

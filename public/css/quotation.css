@@ -1,0 +1,71 @@
+.quotation-container{
+    font-size: 12px !important;
+}
+
+.floatleft {
+    float: left;
+}
+
+.floatright {
+    float: right;
+}
+
+.controlpadding {
+    padding: 4px;
+}
+
+.row-quot{
+    margin-bottom: 10px;
+}
+
+.column50 {
+    width: 50px;
+    margin-right: 10px;
+}
+
+.column100 {
+    width: 100px;
+    margin-right: 10px;
+}
+.column150 {
+    width: 150px;
+    margin-right: 10px;
+}
+.column200 {
+    width: 200px;
+    margin-right: 10px;
+}
+.column250{
+    width: 250px;
+    margin-right: 10px;
+}
+.column300 {
+    width: 300px;
+    margin-right: 10px;
+}
+.column360 {
+    width: 363px;
+    height: 430px;
+    border-left: solid 1px black;
+}
+.column500{
+    width: 500px;
+}
+.txt200{
+    line-height: 30px;
+    width: 200px;
+    margin-right: 10px;
+}
+
+textarea[name='clinical_summary']{
+    width: 100%;
+    min-height: 200px;
+}
+
+.estimated{
+    margin: 20px 0;
+}
+
+h5{
+    font-weight: bold;
+}

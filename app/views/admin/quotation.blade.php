@@ -20,7 +20,7 @@
     @include('includes.admin.header')
 
             <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="margin-left: 0px !important;">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
@@ -38,7 +38,7 @@
             <div class='tab-container'>
 
                     <div id='form-container'>
-                        @include('includes.quotation')
+                        @include('includes.quotation', array('quoted' => $quoted))
                     </div>
 
             </div>
@@ -53,7 +53,7 @@
 <!-- ./wrapper -->
 
 @include('includes/common_js_bottom')
-{{HTML::script(asset("/public/js/site/admin/institutes.js"))}}
+{{HTML::script(asset("/public/js/site/admin/quotation.js"))}}
 <script type="text/javascript">
     $(function () {
         $(".institutes").addClass('active');

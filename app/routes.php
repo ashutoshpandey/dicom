@@ -140,3 +140,4 @@ Route::get('/view-patient/{id}', 'PatientController@viewPatient');
 Route::get('/view-institute/{id}', 'InstituteController@viewInstitute');
 
 Route::get('/quotation/{id}', 'AdminController@quotation');
+Route::post('/save-quotation', 'AdminController@saveQuotation');

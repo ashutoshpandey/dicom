@@ -14,6 +14,12 @@
                     <span>Patients</span>
                 </a>
             </li>
+            <li class="patients">
+                <a href="{{$root}}/admin-experts">
+                    <i class="fa fa-files-o"></i>
+                    <span>Experts</span>
+                </a>
+            </li>
             <li class="requests">
                 <a href="{{$root}}/admin-requests">
                     <i class="fa fa-files-o"></i>

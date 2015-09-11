@@ -114,9 +114,11 @@ class InstituteController extends BaseController {
         if(!isset($adminId))
             return json_encode(array('message'=>'not logged'));
 
-        $instituteId = Session::get('institute_id');
-        if(!isset($instituteId))
-            return json_encode(array('message'=>'invalid'));
+//        $instituteId = Session::get('institute_id');
+//        if(!isset($instituteId))
+//            return json_encode(array('message'=>'invalid'));
+
+        $instituteId = 1;
 
         $expert = new Expert();
 

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatientRequestForwardRepliesTable extends Migration {
+class CreatePatientRequestRepliesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreatePatientRequestForwardRepliesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('patient_request_forward_replies', function(Blueprint $table)
+		Schema::create('patient_request_replies', function(Blueprint $table)
 		{
             $table->increments('id');
 
@@ -34,7 +34,7 @@ class CreatePatientRequestForwardRepliesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('patient_request_forward_replies', function(Blueprint $table)
+		Schema::table('patient_request_replies', function(Blueprint $table)
 		{
 			//
 		});

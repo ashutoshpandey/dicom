@@ -617,7 +617,88 @@ class AdminController extends BaseController {
 
     function quotation($id){
 
-        return View::make('admin.quotation');
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return Redirect::to('/');
+
+        if(isset($id)) {
+            $patientRequest = PatientRequest::find($id);
+
+            if (isset($patientRequest)) {
+
+                $quotation = Quotation::where('request_id', $id)->first();
+
+                Session::set('current_request_id', $id);
+
+                return View::make('admin.quotation')->with('quoted', isset($quotation))->with('quotation', $quotation);
+            }
+        }
+    }
+
+    public function saveQuotation(){
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return json_encode(array('message'=>'not logged'));
+
+        $requestId = Session::get('current_request_id');
+        if(!isset($requestId))
+            return json_encode(array('message'=>'not logged'));
+
+        $patientRequest = PatientRequest::find($requestId);
+
+        if(isset($patientRequest)) {
+
+            $quotation = new Quotation();
+
+            $quotation->request_id = $requestId;
+            $quotation->kind_attention = Input::get('kind_attention');
+            $quotation->dated = Input::get('dated');
+            $quotation->file_number = Input::get('file_number');
+            $quotation->hostpial_reference = Input::get('hospital_reference');
+            $quotation->patient_age = Input::get('patient_age');
+            $quotation->sex = Input::get('sex');
+            $quotation->nationality = Input::get('nationality');
+            $quotation->medical_speciality = Input::get('medical_speciality');
+            $quotation->referring_party = Input::get('referring_party');
+            $quotation->treating_doctor = Input::get('treating_doctor');
+
+            $quotation->treatment_protocols = Input::get('treatment_protocols');
+            $quotation->clinical_success_rate = Input::get('clinical_success_rate');
+
+            $quotation->pre_evaluation_prescribed = Input::get('pre_evaluation_prescribed');
+            $quotation->pre_evaluation_cost = Input::get('pre_evaluation_cost');
+            $quotation->pre_evolution_duration = Input::get('pre_evolution_duration');
+            $quotation->surgery1_prescribed = Input::get('surgery1_prescribed');
+            $quotation->surgery1_cost = Input::get('surgery1_cost');
+            $quotation->surgery1_duration = Input::get('surgery1_duration');
+            $quotation->surgery1_prescribed = Input::get('surgery1_prescribed');
+            $quotation->surgery2_cost = Input::get('surgery2_cost');
+            $quotation->surgery2_duration = Input::get('surgery2_duration');
+            $quotation->followup_post_discharge_prescribed = Input::get('followup_post_discharge_prescribed');
+            $quotation->followup_post_discharge_cost = Input::get('followup_post_discharge_cost');
+            $quotation->followup_post_discharge_duration = Input::get('followup_post_discharge_duration');
+            $quotation->total_prescribed = Input::get('total_prescribed');
+            $quotation->total_cost = Input::get('total_cost');
+            $quotation->total_duration = Input::get('total_duration');
+
+            $quotation->status = "active";
+
+            $quotation->created_at = date("Y-m-d h:i:s");
+            $quotation->created_at = date("Y-m-d h:i:s");
+
+            $quotation->save();
+
+            $patientRequest->status = 'complete';
+
+            $patientRequest->updated_at = date('Y-m-d h:i:s');
+
+            $patientRequest->save();
+
+            return json_encode(array('message' => 'done'));
+        }
+        else
+            return json_encode(array('message' => 'invalid'));
     }
 
     public function manageRequests(){

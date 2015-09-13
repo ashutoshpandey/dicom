@@ -8,18 +8,18 @@
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
-            <li class="patients">
-                <a href="{{$root}}/admin-patients">
-                    <i class="fa fa-files-o"></i>
-                    <span>Patients</span>
-                </a>
-            </li>
-            <li class="requests">
-                <a href="{{$root}}/admin-requests">
-                    <i class="fa fa-files-o"></i>
-                    <span>Requests</span>
-                </a>
-            </li>
+            {{--<li class="patients">--}}
+                {{--<a href="{{$root}}/admin-patients">--}}
+                    {{--<i class="fa fa-files-o"></i>--}}
+                    {{--<span>Patients</span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
+            {{--<li class="requests">--}}
+                {{--<a href="{{$root}}/admin-requests">--}}
+                    {{--<i class="fa fa-files-o"></i>--}}
+                    {{--<span>Requests</span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
             <li class="institutes">
                 <a href="{{$root}}/admin-institutes">
                     <i class="fa fa-files-o"></i>
@@ -32,12 +32,12 @@
                     <span>Connections</span>
                 </a>
             </li>
-            <li class="categories">
-                <a href="{{$root}}/admin-categories">
-                    <i class="fa fa-laptop"></i>
-                    <span>Categories</span>
-                </a>
-            </li>
+            {{--<li class="categories">--}}
+                {{--<a href="{{$root}}/admin-categories">--}}
+                    {{--<i class="fa fa-laptop"></i>--}}
+                    {{--<span>Categories</span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
             <li class="users">
                 <a href="{{$root}}/admin-users">
                     <i class="fa fa-laptop"></i>

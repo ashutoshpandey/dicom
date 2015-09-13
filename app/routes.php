@@ -93,6 +93,8 @@ Route::get('/admin-view-institute-expert/{id}', 'InstituteController@viewExpert'
 Route::get('/remove-institute/{id}', 'InstituteController@remove');
 Route::get('/remove-institute-expert/{id}', 'InstituteController@removeExpert');
 
+Route::get('/manage-experts', 'InstituteController@manageExperts');
+
 Route::get('/logout', 'AuthenticationController@logout');
 
 Route::get('/admin-get-cities/{state}', 'AdminController@getCities');

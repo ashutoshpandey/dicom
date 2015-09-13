@@ -78,7 +78,39 @@ class InstituteController extends BaseController {
         }
     }
 
-    public function instituteExperts($id){
+    public function manageExperts(){             // for institutes
+
+        $adminId = Session::get('admin_id');
+        if(!isset($adminId))
+            return Redirect::to('/');
+
+        $instituteId = Session::get('institute_id');
+        if(!isset($instituteId))
+            return Redirect::to('/');
+
+        if(isset($instituteId)){
+
+            $institute = Institute::find($instituteId);
+
+            $categories = Category::where('status', 'active')->get();
+
+            if(isset($institute)){
+
+                if($categories && count($categories)>0) {
+
+                    return View::make('institute.experts')->with('found', true)->with('institute', $institute)->with('categories', $categories);
+                }
+                else
+                    return View::make('institute.experts')->with('found', false)->with('institute', $institute);
+            }
+            else
+                return Redirect::to('/');
+        }
+        else
+            return Redirect::to('/');
+    }
+
+    public function instituteExperts($id){            // for admin
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))
@@ -114,11 +146,9 @@ class InstituteController extends BaseController {
         if(!isset($adminId))
             return json_encode(array('message'=>'not logged'));
 
-//        $instituteId = Session::get('institute_id');
-//        if(!isset($instituteId))
-//            return json_encode(array('message'=>'invalid'));
-
-        $instituteId = 1;
+        $instituteId = Session::get('institute_id');
+        if(!isset($instituteId))
+            return json_encode(array('message'=>'invalid'));
 
         $expert = new Expert();
 
@@ -126,7 +156,7 @@ class InstituteController extends BaseController {
         $expert->name = Input::get('name');
         $expert->contact_number = Input::get('contact_number');
         $expert->email = Input::get('email');
-        $expert->password = Input::get('password');
+        $expert->password = md5(Input::get('password'));
         $expert->gender = Input::get('gender');
         $expert->highest_qualification = Input::get('highest_qualification');
         $expert->status = 'active';
@@ -371,7 +401,7 @@ class InstituteController extends BaseController {
                 $expert->email = Input::get('email');
 
                 if(strlen(trim($password))>0)
-                    $expert->password = Input::get('password');
+                    $expert->password = md5(Input::get('password'));
 
                 $expert->gender = Input::get('gender');
                 $expert->highest_qualification = Input::get('highest_qualification');

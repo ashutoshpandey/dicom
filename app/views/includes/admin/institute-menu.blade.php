@@ -14,8 +14,8 @@
                     <span>Patients</span>
                 </a>
             </li>
-            <li class="patients">
-                <a href="{{$root}}/admin-experts">
+            <li class="experts">
+                <a href="{{$root}}/manage-experts">
                     <i class="fa fa-files-o"></i>
                     <span>Experts</span>
                 </a>

@@ -34,8 +34,10 @@ class AuthenticationController extends BaseController {
         $username = Input::get('username');
         $password = Input::get('password');
 
-        $admin = User::where('username', '=', $username)
-                        ->where('password','=',$password)->first();
+        $password = md5($password);
+
+        $admin = User::where('username', $username)
+                        ->where('password', $password)->first();
 
         if(is_null($admin))
             return json_encode(array("message"=>"invalid"));
@@ -53,7 +55,7 @@ class AuthenticationController extends BaseController {
         $username = Input::get('username');
         $password = Input::get('password');
 
-       // $password = hash('sha256', $password);
+       $password = md5($password);
 
         $user = User::where('username', $username)
                     ->where('password','=',$password)->first();
@@ -80,6 +82,8 @@ class AuthenticationController extends BaseController {
     {
         $email = Input::get('email');
         $password = Input::get('password');
+
+        $password = md5($password);
 
         $expert = Expert::where('email', '=', $email)->where('password','=', $password)->first();
 

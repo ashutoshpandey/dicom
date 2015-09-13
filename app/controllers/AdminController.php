@@ -92,7 +92,11 @@ class AdminController extends BaseController {
         if(!isset($adminId))
             return json_encode(array('message'=>'not logged'));
 
-        $categories = Category::where('status','=','active')->get();
+        $instituteId = Session::get('institute_id');
+        if(!isset($instituteId))
+            return json_encode(array('message'=>'invalid'));
+
+        $categories = Category::where('status','=','active')->where('institute_id', $instituteId)->get();
 
         if(isset($categories) && count($categories)>0)
             return json_encode(array('message'=>'found', 'categories' => $categories->toArray()));
@@ -106,6 +110,10 @@ class AdminController extends BaseController {
         if(!isset($adminId))
             return json_encode(array('message'=>'not logged'));
 
+        $instituteId = Session::get('institute_id');
+        if(!isset($instituteId))
+            return json_encode(array('message'=>'invalid'));
+
         $name = Input::get('name');
 
         $tempCategory = Category::where('name', $name)->where('status', 'active')->get();
@@ -115,6 +123,7 @@ class AdminController extends BaseController {
             $category = new Category();
 
             $category->name = $name;
+            $category->institute_id = $instituteId;
             $category->created_at = date("Y-m-d h:i:s");
             $category->status = "active";
 
@@ -347,98 +356,14 @@ class AdminController extends BaseController {
     }
 
 /************************** experts *************************/
-    public function experts(){
+
+    public function experts(){                  // for admin
 
         $adminId = Session::get('admin_id');
         if(!isset($adminId))
             return Redirect::to('/');
 
         return View::make('admin.experts');
-    }
-
-    public function saveExpert(){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return json_encode(array('message'=>'not logged'));
-
-        if($this->isDuplicateExpert()==="no"){
-
-            $expert = new Expert;
-
-            $expert->email = Input::get('email');
-            $expert->contact_number = Input::get('contact_number');
-            $expert->password = Input::get('password');
-            $expert->first_name = Input::get('first_name');
-            $expert->last_name = Input::get('last_name');
-            $expert->gender = Input::get('gender');
-            $expert->country = 'India';
-            $expert->highest_qualification = Input::get('highest_qualification');
-            $expert->contact_number = Input::get('contact_number');
-
-            $expert->status = "active";
-            $expert->created_at = date("Y-m-d h:i:s");
-            $expert->updated_at = date("Y-m-d h:i:s");
-
-            $expert->save();
-
-            if (Input::hasFile('image'))
-            {
-                $image_name = Input::file('image')->getClientOriginalName();
-
-                $destinationPath = public_path() . "/uploads/experts/" . $expert->id;
-                if(!file_exists($destinationPath))
-                    mkdir($destinationPath);
-
-                Input::file('image')->move($destinationPath, $image_name);
-
-                $expert->image_name = $image_name;
-            }
-
-            if (Input::hasFile('banner_image'))
-            {
-                $banner_image_name = Input::file('banner_image')->getClientOriginalName();
-
-                $destinationPath = public_path() . "/uploads/experts/" . $expert->id;
-                if(!file_exists($destinationPath))
-                    mkdir($destinationPath);
-
-                Input::file('banner_image')->move($destinationPath, $banner_image_name);
-
-                $expert->banner_image_name = $banner_image_name;
-            }
-
-            $expert->save();
-
-            return json_encode(array('message'=>'done'));
-        }
-        else
-            return json_encode(array('message'=>'duplicate'));
-    }
-
-    public function isDuplicateExpert()
-    {
-        $email = Input::get('email');
-
-        $expert = Expert::where('email', '=', $email)->first();
-
-        return is_null($expert) ? "no" : "yes";
-    }
-
-    public function editExpert($id){
-
-        $adminId = Session::get('admin_id');
-        if(!isset($adminId))
-            return Redirect::to('/');
-
-        $expert = Expert::find($id);
-        $categories = Category::where('status','=','active')->get();
-
-        $ardate = explode("-", $expert->date_of_birth);
-
-        return View::make('admin.edit-expert')->with('expert', $expert)
-            ->with('categories',$categories)
-            ->with('ardate',$ardate);
     }
 
     public function removeExpertQualification($id){

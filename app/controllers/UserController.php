@@ -116,10 +116,15 @@ class UserController extends BaseController {
 			if(isset($userByEmail) && $userByEmail->id != $user->id)
 				echo 'duplicate';
 			else{
+				$password = Input::get('password');
+
 				$user->id = $userId;
 				$user->email = $email;
 				$user->name = Input::get('name');
-				$user->password = Input::get('password');
+
+				if(strlen(trim($password))>0)
+					$user->password = md5($password);
+
 				$user->user_type = Input::get('user_type');
 
 				$user->save();
@@ -147,11 +152,10 @@ class UserController extends BaseController {
 
 			$user->username = Input::get('username');
 			$user->user_type = Input::get('user_type');
-			$user->password = Input::get('password');
 			$user->name = Input::get('name');
 			$user->gender = Input::get('gender');
 			$user->email = $email;
-			$user->password = hash('sha256', $password);
+			$user->password = md5($password);
 			$user->contact_number = Input::get('contact_number');
 
 			$institute_id = Input::get('institute');

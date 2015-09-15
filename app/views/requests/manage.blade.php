@@ -51,6 +51,9 @@
 
 @include('includes.admin.assign-popup')
 @include('includes.common_js_bottom')
+@include('includes.expert.consultant-reply-popup')
+@include('includes.expert.expert-reply-popup')
+<span id="currentInstitute" rel="{{$currentInstitute}}">&nbsp;</span>
 {{HTML::script(asset("/public/js/site/jquery.simplemodal.js"))}}
 {{HTML::script(asset("/public/js/site/admin/patient-requests.js"))}}
 <script type="text/javascript">

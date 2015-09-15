@@ -409,19 +409,23 @@ class PatientController extends BaseController
     {
 
         $adminId = Session::get('admin_id');
-        if (!isset($adminId))
-            return Redirect::to('/');
+        $expertId = Session::get('expert_id');
 
-        if (isset($id)) {
-            $patient = Patient::find($id);
+        if (isset($adminId) || isset($expertId)) {
 
-            if (isset($patient)) {
+            if (isset($id)) {
+                $patient = Patient::find($id);
 
-                return View::make('patient.view-patient')
-                    ->with('patient', $patient);
+                if (isset($patient)) {
+
+                    return View::make('patient.view-patient')
+                        ->with('patient', $patient);
+                } else
+                    return Redirect::to('/');
             } else
                 return Redirect::to('/');
-        } else
+        }
+        else
             return Redirect::to('/');
     }
 
@@ -537,6 +541,12 @@ class PatientController extends BaseController
 
         $institute_id = Session::get('institute_id');
 
+        if (isset($institute_id))
+            $patientRequests = PatientRequest::where('institute_id', $institute_id)->orWhere('connection_id', $institute_id)->with('Patient')->with('senderInstitute')->get();
+        else
+            $patientRequests = PatientRequest::whereIn('status', array('active', 'consultant replied', 'expert replied'))->with('Patient')->with('senderInstitute')->get();
+
+/*
         if($type=='incoming') {
             if (isset($institute_id))
                 $patientRequests = PatientRequest::where('institute_id', $institute_id)->with('Patient')->with('senderInstitute')->get();
@@ -549,7 +559,7 @@ class PatientController extends BaseController
             else
                 $patientRequests = PatientRequest::where('status', 'active')->with('Patient')->with('Institute')->get();
         }
-
+*/
         if (isset($patientRequests) && count($patientRequests) > 0) {
             return json_encode(array('message' => 'found', 'patientRequests' => $patientRequests->toArray()));
         } else

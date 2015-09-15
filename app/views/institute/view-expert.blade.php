@@ -31,8 +31,8 @@
                 <ul class='tabs'>
                     <li><a href='#tab-edit'>Edit</a></li>
                     <li><a href='#tab-categories'>Categories</a></li>
-                    <li><a href='#tab-services'>Services</a></li>
-                    <li><a href='#tab-qualification'>Qualification</a></li>
+<!--                    <li><a href='#tab-services'>Services</a></li>
+                    <li><a href='#tab-qualification'>Qualification</a></li> -->
                 </ul>
 
                 <div id='tab-edit'>
@@ -103,6 +103,7 @@
                             </div>
                             <div class='clear'></div>
                         </div>
+<!--
                         <div class='form-row'>
                             <div class='form-label'>Sub Category</div>
                             <div class='form-data'>
@@ -110,6 +111,7 @@
                             </div>
                             <div class='clear'></div>
                         </div>
+-->
                         <div class='form-row'>
                             <div class='form-label'>&nbsp;</div>
                             <div class='form-data'>
@@ -123,7 +125,7 @@
                     <div id='category-list' class='list-container'></div>
 
                 </div>
-
+<!--
                 <div id='tab-services'>
 
                     <form id='form-create-service'>
@@ -184,6 +186,7 @@
                     <div id='qualification-list' class='list-container'></div>
 
                 </div>
+-->
             </div>
 
         </section>

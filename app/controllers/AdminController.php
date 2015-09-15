@@ -298,33 +298,61 @@ class AdminController extends BaseController {
         $categoryId = Input::get('category');
         $subcategoryId = Input::get('subcategory');
 
-        $category = Category::find($categoryId);
-        $subcategory = SubCategory::find($subcategoryId);
+        if(isset($categoryId) && isset($subcategoryId)) {
 
-        if(isset($category) && isset($subcategory)){
+            $category = Category::find($categoryId);
+            $subcategory = SubCategory::find($subcategoryId);
 
-            $expertId = Session::get('current_expert_id');
+            if (isset($category) && isset($subcategory)) {
 
-            $tempExpertCategory = ExpertCategory::where('category_id', $categoryId)->where('subcategory_id', $subcategoryId)->where('expert_id', $expertId)->where('status', 'active')->get();
+                $expertId = Session::get('current_expert_id');
 
-            if(isset($tempExpertCategory) && count($tempExpertCategory)>0){
-                return json_encode(array('message' => 'duplicate'));
-            }
-            else {
-                $expertCategory = new ExpertCategory();
+                $tempExpertCategory = ExpertCategory::where('category_id', $categoryId)->where('subcategory_id', $subcategoryId)->where('expert_id', $expertId)->where('status', 'active')->get();
 
-                $expertCategory->category_id = $categoryId;
-                $expertCategory->subcategory_id = $subcategoryId;
-                $expertCategory->expert_id = $expertId;
-                $expertCategory->status = "active";
+                if (isset($tempExpertCategory) && count($tempExpertCategory) > 0) {
+                    return json_encode(array('message' => 'duplicate'));
+                } else {
+                    $expertCategory = new ExpertCategory();
 
-                $expertCategory->save();
+                    $expertCategory->category_id = $categoryId;
+                    $expertCategory->subcategory_id = $subcategoryId;
+                    $expertCategory->expert_id = $expertId;
+                    $expertCategory->status = "active";
 
-                return json_encode(array('message' => 'done'));
-            }
+                    $expertCategory->save();
+
+                    return json_encode(array('message' => 'done'));
+                }
+            } else
+                return json_encode(array('message' => 'invalid'));
         }
-        else
-            return json_encode(array('message'=>'invalid'));
+        else if(isset($categoryId)){
+
+            $category = Category::find($categoryId);
+
+            if (isset($category)) {
+
+                $expertId = Session::get('current_expert_id');
+
+                $tempExpertCategory = ExpertCategory::where('category_id', $categoryId)->where('expert_id', $expertId)->where('status', 'active')->get();
+
+                if (isset($tempExpertCategory) && count($tempExpertCategory) > 0) {
+                    return json_encode(array('message' => 'duplicate'));
+                } else {
+                    $expertCategory = new ExpertCategory();
+
+                    $expertCategory->category_id = $categoryId;
+                    $expertCategory->subcategory_id = -1;
+                    $expertCategory->expert_id = $expertId;
+                    $expertCategory->status = "active";
+
+                    $expertCategory->save();
+
+                    return json_encode(array('message' => 'done'));
+                }
+            } else
+                return json_encode(array('message' => 'invalid'));
+        }
     }
 
     public function removeExpertCategory($id){
@@ -632,10 +660,14 @@ class AdminController extends BaseController {
         if(!isset($adminId))
             return Redirect::to('/');
 
+        $currentInstituteId = Session::get('institute_id');
+        if(!isset($currentInstituteId))
+            return Redirect::to('/');
+
         $categories = Category::where('status', 'active')->get();
 
         $found = isset($categories) && count($categories)>0;
 
-        return View::make('requests.manage')->with('found', $found)->with('categories', $categories);
+        return View::make('requests.manage')->with('found', $found)->with('categories', $categories)->with('currentInstitute', $currentInstituteId);
     }
 }

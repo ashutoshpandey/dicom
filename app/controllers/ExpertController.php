@@ -121,6 +121,20 @@ class ExpertController extends BaseController {
             return json_encode(array('message' => 'empty'));
     }
 
+    public function getExpertRequestReply($requestId){
+
+        $expertId = Session::get('expert_id');
+        if (!isset($expertId))
+            return json_encode(array('message' => 'not logged'));
+
+        $requestReply = PatientRequestReply::where('request_id', $requestId)->where('reply_from', 'expert')->first();
+
+        if (isset($requestReply)) {
+            return json_encode(array('message' => 'found', 'requestReply' => $requestReply->toArray()));
+        } else
+            return json_encode(array('message' => 'empty'));
+    }
+
     public function addRequestReply(){
 
         $expertId = Session::get('expert_id');

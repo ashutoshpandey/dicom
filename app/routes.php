@@ -125,6 +125,10 @@ Route::get('/add-patient-request', 'PatientController@addPatientRequest');
 Route::post('/assign-request', 'PatientController@assignPatientRequest');
 Route::post('/reply-request', 'ExpertController@addRequestReply');
 Route::get('/get-consultant-request-reply/{id}', 'ExpertController@getConsultantRequestReply');
+Route::get('/get-expert-request-reply/{id}', 'ExpertController@getExpertRequestReply');
+
+Route::get('/get-admin-consultant-request-reply/{id}', 'InstituteController@getConsultantRequestReply');
+Route::get('/get-admin-expert-request-reply/{id}', 'InstituteController@getExpertRequestReply');
 
 Route::get('/patient-requests/{status?}', 'PatientController@patientRequests');
 

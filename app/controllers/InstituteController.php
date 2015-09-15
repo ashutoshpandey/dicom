@@ -608,4 +608,32 @@ class InstituteController extends BaseController {
         } else
             return Redirect::to('/');
     }
+
+    public function getConsultantRequestReply($requestId){
+
+        $adminId = Session::get('admin_id');
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
+
+        $requestReply = PatientRequestReply::where('request_id', $requestId)->where('reply_from', 'consultant')->first();
+
+        if (isset($requestReply)) {
+            return json_encode(array('message' => 'found', 'requestReply' => $requestReply->toArray()));
+        } else
+            return json_encode(array('message' => 'empty'));
+    }
+
+    public function getExpertRequestReply($requestId){
+
+        $adminId = Session::get('admin_id');
+        if (!isset($adminId))
+            return json_encode(array('message' => 'not logged'));
+
+        $requestReply = PatientRequestReply::where('request_id', $requestId)->where('reply_from', 'expert')->first();
+
+        if (isset($requestReply)) {
+            return json_encode(array('message' => 'found', 'requestReply' => $requestReply->toArray()));
+        } else
+            return json_encode(array('message' => 'empty'));
+    }
 }

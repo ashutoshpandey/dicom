@@ -57,14 +57,24 @@ function showGrid(data){
 
                 var status = request.status;
 
-                if(status=="consultation")
-                    status = "Not assigned";
-                else if(status=="assigned")
-                    status = "Please reply";
-                else if(status=="consultant replied")
-                    status = "Consultant Replied";
-                else if(status=="expert replied")
-                    status = "Expert Replied";
+                if(consultantIds[request.id]==currentExpertId){     // consultant login
+                    if (status == "assigned")
+                        status = "Please reply";
+                    else if (status == "consultant replied")
+                        status = "Replied";
+                    else if (status == "expert replied")
+                        status = "Replied";
+                }
+                else {
+                    if (status == "consultation")
+                        status = "Not assigned";
+                    else if (status == "assigned")
+                        status = "Please reply";
+                    else if (status == "consultant replied")
+                        status = "Consultant Replied";
+                    else if (status == "expert replied")
+                        status = "Replied";
+                }
 
                 str = str + '<tr> \
                     <td>' + request.id + '</td> \
@@ -86,15 +96,26 @@ function showGrid(data){
         formatters: {
             'link': function(column, row)
             {
-                var str = "<a target='_blank' href='" + root + "/view-patient/" + row.id + "'><img src='" + root + "/public/images/patient.png' title='View Patient Information' class='table-icon'/></a>&nbsp;&nbsp; ";
-                str += "<a target='_blank' href='" + root + "/view-institute/" + row.id + "'><img src='" + root + "/public/images/institute.png' title='View Sender Institute Information' class='table-icon'/></a>&nbsp;&nbsp; ";
-                str += "<a class='view' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Consultant Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
+                var str = "<a target='_blank' href='" + root + "/view-patient/" + patientIds[row.id] + "'><img src='" + root + "/public/images/patient.png' title='View Patient Information' class='table-icon'/></a>&nbsp;&nbsp; ";
+//                str += "<a target='_blank' href='" + root + "/view-institute/" + row.id + "'><img src='" + root + "/public/images/institute.png' title='View Sender Institute Information' class='table-icon'/></a>&nbsp;&nbsp; ";
 
                 if(row.status=="Please reply")
                     str += '<a class="reply" href="#" rel="' + row.id + '">Reply</a>';
 
-                else if(row.status=="Replied" && consultantIds[row.id] != currentExpertId) {
-                    str += '<a class="reply" href="#" rel="' + row.id + '">Reply</a>';
+                if(consultantIds[row.id] != currentExpertId) {                  // if expert logged in
+                    if (row.status == "Consultant Replied") {
+                        str += "<a class='view-consultant' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Consultant Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
+                        str += '<a class="reply" href="#" rel="' + row.id + '">Reply</a>';
+                    }
+                    else if (row.status == "Replied") {
+                        str += "<a class='view-consultant' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Consultant Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
+                        str += "<a class='view-expert' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Expert Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
+                    }
+                }
+                else{           // consultant logged in
+                    if (row.status == "Replied") {
+                        str += "<a class='view-consultant' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Consultant Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
+                    }
                 }
 
                 return str;
@@ -102,7 +123,7 @@ function showGrid(data){
         }
     }).on("loaded.rs.jquery.bootgrid", function()
         {
-            $(".view").click(function(){
+            $(".view-consultant").click(function(){
 
                 var id = $(this).attr('rel');
 
@@ -115,6 +136,27 @@ function showGrid(data){
                         $(".consultant-reply-date").html(result.requestReply.created_at);
 
                         $("#consultant-reply-popup").modal();
+                    }
+                });
+            });
+
+            $(".view-expert").click(function(){
+
+                var id = $(this).attr('rel');
+
+                $.ajax({
+                    url: root + '/get-expert-request-reply/' + id,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(result){
+
+                        var str = result.requestReply.comment;
+                        str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
+                        $(".expert-reply").html(str);
+                        $(".expert-reply-date").html(result.requestReply.created_at);
+
+                        $("#expert-reply-popup").modal();
                     }
                 });
             });

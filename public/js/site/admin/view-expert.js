@@ -5,17 +5,17 @@ $(function(){
     expertId = $('#expert_id').attr('rel');
 
     $("input[name='btn-update-expert']").click(updateExpert);
-    $("input[name='btn-create-service']").click(createService);
     $("input[name='btn-create-category']").click(createCategory);
-    $("input[name='btn-create-qualification']").click(createQualification);
+
+    //$("input[name='btn-create-service']").click(createService);
+    //$("input[name='btn-create-qualification']").click(createQualification);
 
     getCategories();
 
-    listServices(1);
-
     listCategories(1);
 
-    listQualifications(1);
+//    listServices(1);
+//    listQualifications(1);
 });
 
 
@@ -98,7 +98,6 @@ function showCategories(result){
                 <tr> \
                     <th data-column-id="id" data-type="numeric">Id</th> \
                     <th data-column-id="category">Category</th> \
-                    <th data-column-id="subcategory">SubCategory</th> \
                     <th data-formatter="link">Action</th> \
                 </tr> \
             </thead> \
@@ -111,7 +110,6 @@ function showCategories(result){
             str = str + '<tr> \
                     <td>' + data.id + '</td> \
                     <td>' + data.category.name + '</td> \
-                    <td>' + data.subcategory.name + '</td> \
                     <td></td> \
                 </tr>';
         }

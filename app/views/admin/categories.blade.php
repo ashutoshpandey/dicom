@@ -33,9 +33,9 @@
         <section class="content">
 
             <div class='tab-container'>
-                <ul class='tabs'>
-                    <li><a href='#tab-category'>Categories</a></li>
-                    <li><a href='#tab-subcategory'>Sub-Categories</a></li>
+                <!--<ul class='tabs'>
+                        <li><a href='#tab-category'>Categories</a></li>
+                        <li><a href='#tab-subcategory'>Sub-Categories</a></li> -->
                 </ul>
                 <div id='tab-category'>
                     <div id='form-container'>
@@ -66,6 +66,7 @@
                     </div>
                     <div id='category-list' class='list-container'></div>
                 </div>
+<!--
                 <div id='tab-subcategory'>
                     <div id='form-container'>
                         <form id='form-create-subcategory'>
@@ -102,6 +103,7 @@
                     </div>
                     <div id='subcategory-list' class='list-container'></div>
                 </div>
+-->
             </div>
 
         </section>

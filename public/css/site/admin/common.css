@@ -11,6 +11,7 @@ select{ padding: 5px; }
 #assign-popup {display:none; }
 #reply-popup {display:none; }
 #consultant-reply-popup{ display: none;}
+#expert-reply-popup{ display: none;}
 
 /* Overlay */
 #simplemodal-overlay {background-color:#000; cursor:wait;}

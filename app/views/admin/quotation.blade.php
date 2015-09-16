@@ -17,8 +17,6 @@
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
 
-    @include('includes.admin.header')
-
             <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" style="margin-left: 0px !important;">
         <!-- Content Header (Page header) -->
@@ -26,10 +24,6 @@
             <h1>
                 Quotation
             </h1>
-            <ol class="breadcrumb">
-                <li><a href="{{$root}}/admin-section"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Institutes</li>
-            </ol>
         </section>
 
         <!-- Main content -->

@@ -154,9 +154,11 @@ function showGrid(data){
                         status = "Pending from expert";
                     else if (status == "expert replied")
                         status = "Expert Replied";
+                    else if (status == "complete")
+                        status = "Complete";
                 }
                 else{
-                    if(status!="quotation")
+                    if(status!="complete")
                         status = "Pending";
                     else
                         status = "Complete";
@@ -189,15 +191,18 @@ function showGrid(data){
                     if (row.status == "Not assigned")
                         str += '<a class="assign" href="#" rel="' + row.id + '">Assign</a>';
 
-                    else if (row.status == "Expert Replied") {
+                    else if (row.status == "Expert Replied" || row.status == "Complete") {
                         str += "<a class='view-consultant' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Consultant Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
                         str += "<a class='view-expert' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Expert Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
                         str += "<a target='_blank' href='" + root + "/quotation/" + row.id + "'><img src='" + root + "/public/images/quotation.png' title='View Quotation' class='table-icon'/></a>&nbsp;&nbsp; ";
                     }
                 }
                 else{
-                    if (row.status == "Complete")
+                    if (row.status == "Complete") {
+                        str += "<a class='view-consultant' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Consultant Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
+                        str += "<a class='view-expert' href='#' rel='" + row.id + "'><img src='" + root + "/public/images/consultant.png' title='View Expert Reply' class='table-icon'/></a>&nbsp;&nbsp; ";
                         str += "<a target='_blank' href='" + root + "/quotation/" + row.id + "'><img src='" + root + "/public/images/quotation.png' title='View Quotation' class='table-icon'/></a>&nbsp;&nbsp; ";
+                    }
                 }
 
                 return str;

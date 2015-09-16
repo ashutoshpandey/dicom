@@ -64,12 +64,12 @@
         </div>
     </div>
     <div class="row-quot">
-        <div class="column250 floatleft"><h3>Treatment Protocols &nbsp;-</h3></div>
+        <div class="column250 floatleft"><h3>Clinical Summary &nbsp;-</h3></div>
         <div class="clear"></div>
     </div>
     <div class="txt800">
         <div class="column500 floatleft">
-            <textarea name="treatment_protocols" style="resize: none; width: 100%; height: 100px;"></textarea>
+            <textarea name="clinical_summary" style="resize: none; width: 100%; height: 100px;"></textarea>
         </div>
         <div class="clear"></div>
     </div>
@@ -313,31 +313,22 @@
 <div class="clear"></div>
 </div>
 
-<div class="row-quot">
-<div class="column200 floatleft">Referring Party</div>
-<div class="column250 floatleft">{{$quotation->referring_party}}</div>
-<div class="column50 floatleft">&nbsp;</div>
-<div class="column200 floatleft">Treating Doctor</div>
-<div class="column250 floatleft">{{$quotation->treating_doctor}}</div>
-<div class="clear"></div>
-</div>
-</div>
-<div class="row-quot">
-<div class="column250 floatleft"><h3>Treatment Protocols &nbsp;-</h3></div>
-<div class="clear"></div>
-</div>
-<div class="txt800">
-<div class="column500 floatleft">
-    {{$quotation->treatment_protocols}}
-</div>
-<div class="clear"></div>
-</div>
+    <div class="row-quot">
+        <div class="column200 floatleft">Referring Party</div>
+        <div class="column250 floatleft">{{$quotation->referring_party}}</div>
+        <div class="column50 floatleft">&nbsp;</div>
+        <div class="column200 floatleft">Treating Doctor</div>
+        <div class="column250 floatleft">{{$quotation->treating_doctor}}</div>
+        <div class="clear"></div>
+        </div>
+    </div>
+
 
         <div class="row-quot">
             <div class="column250 floatleft"><h3>Clinical Summary &nbsp;-</h3></div>
             <div class="clear"></div>
         </div>
-        <div class="txt800">
+        <div class="row-quot">
             <div class="column500 floatleft">
                 {{$quotation->clinical_summary}}
             </div>

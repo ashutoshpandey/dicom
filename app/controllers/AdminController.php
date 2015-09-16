@@ -608,7 +608,7 @@ class AdminController extends BaseController {
             $quotation->kind_attention = Input::get('kind_attention');
             $quotation->dated = Input::get('dated');
             $quotation->file_number = Input::get('file_number');
-            $quotation->hostpial_reference = Input::get('hospital_reference');
+            $quotation->hospital_reference = Input::get('hospital_reference');
             $quotation->patient_age = Input::get('patient_age');
             $quotation->sex = Input::get('sex');
             $quotation->nationality = Input::get('nationality');
@@ -616,8 +616,9 @@ class AdminController extends BaseController {
             $quotation->referring_party = Input::get('referring_party');
             $quotation->treating_doctor = Input::get('treating_doctor');
 
-            $quotation->treatment_protocols = Input::get('treatment_protocols');
+            $quotation->clinical_summary = Input::get('clinical_summary');
             $quotation->clinical_success_rate = Input::get('clinical_success_rate');
+            $quotation->length_of_stay = Input::get('length_of_stay');
 
             $quotation->pre_evaluation_prescribed = Input::get('pre_evaluation_prescribed');
             $quotation->pre_evaluation_cost = Input::get('pre_evaluation_cost');
@@ -625,7 +626,7 @@ class AdminController extends BaseController {
             $quotation->surgery1_prescribed = Input::get('surgery1_prescribed');
             $quotation->surgery1_cost = Input::get('surgery1_cost');
             $quotation->surgery1_duration = Input::get('surgery1_duration');
-            $quotation->surgery1_prescribed = Input::get('surgery1_prescribed');
+            $quotation->surgery2_prescribed = Input::get('surgery2_prescribed');
             $quotation->surgery2_cost = Input::get('surgery2_cost');
             $quotation->surgery2_duration = Input::get('surgery2_duration');
             $quotation->followup_post_discharge_prescribed = Input::get('followup_post_discharge_prescribed');
